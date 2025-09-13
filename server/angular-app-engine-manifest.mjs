@@ -1,6 +1,6 @@
 
 export default {
-  basePath: '/',
+  basePath: '/learning',
   supportedLocales: {
   "en-US": ""
 },
