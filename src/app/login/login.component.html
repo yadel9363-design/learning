@@ -1,0 +1,62 @@
+<form [formGroup]="loginForm" #f="ngForm" (ngSubmit)="submit(f)">
+  <div class="card flex justify-center mt-6">
+    <div pFocusTrap class="w-full flex flex-column justify-content-center align-items-center sm:w-80">
+      <div class="flex flex-column  gap-3">
+
+      <div class="flex flex-column">
+        <p-iconfield>
+          <p-inputicon>
+            <i class="pi pi-envelope"></i>
+          </p-inputicon>
+          <input pInputText formControlName="Email" required name="email" type="email"
+            placeholder="Email" />
+        </p-iconfield>
+              @if (getControl('Email')?.touched && getControl('Email')?.invalid) {
+                <small>{{ getErrorMessage('Email') }}</small>
+              }
+              @if ( getControl('Email')?.pending) {
+               <img class="mt-3" width="200" height="100" src="https://cdn.dribbble.com/users/3742211/screenshots/9195657/media/6796a544d6f9ef1293d8d8d9e60d38d5.gif" alt="imgLoading">
+              }
+      </div>
+
+      <div class="flex flex-column">
+        <p-iconfield>
+          <p-inputicon>
+            <i class="pi pi-user"></i>
+          </p-inputicon>
+          <input pInputText formControlName="username" required name="username" type="text"
+            placeholder="username" />
+        </p-iconfield>
+                @if (getControl('username')?.touched && getControl('username')?.invalid) {
+                  <small>{{ getErrorMessage('username') }}</small>
+                }
+      </div>
+
+
+
+      <div class="flex flex-column">
+        <p-iconfield>
+          <p-inputicon>
+            <i class="pi pi-key"> </i>
+          </p-inputicon>
+          <input minlength="8" maxlength="15" pInputText formControlName="password" required name="password"
+            type="password" placeholder="Password" />
+        </p-iconfield>
+
+              @if (getControl('password')?.touched && getControl('password')?.invalid) {
+                <small>{{ getErrorMessage('password') }}</small>
+              }
+
+
+      </div>
+      </div>
+
+      <div class="flex items-center gap-2 mt-5">
+        <p-checkbox id="accept" name="accept" value="Accept" />
+        <label for="accept">I agree to the terms and conditions.</label>
+      </div>
+
+      <p-button [disabled]="loginForm.invalid" type="submit" label="Login" class="mt-2" />
+    </div>
+  </div>
+</form>

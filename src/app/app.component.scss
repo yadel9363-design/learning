@@ -1,0 +1,15 @@
+::ng-deep .p-button {
+    width: 100%;
+}
+
+::ng-deep {
+    .p-dataview-content {
+        background: white !important;
+        color: black !important;
+      }
+}
+.card {
+    width: 500px;
+    margin: auto;
+    margin-top: 2rem;
+}

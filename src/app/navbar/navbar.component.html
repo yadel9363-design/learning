@@ -1,0 +1,16 @@
+<div class="card">
+    <p-menubar [model]="items">
+        <ng-template #item let-item let-root="root">
+            <a pRipple [routerLink]="item.routerLink" class="flex items-center p-menubar-item-link">
+                <span>{{ item.label }}</span>
+                <i *ngIf="item.items" [ngClass]="['ml-auto pi', root ? 'pi-angle-down' : 'pi-angle-right']"></i>
+            </a>
+        </ng-template>
+        <ng-template #end>
+            <div class="flex items-center gap-2">
+                <input type="text" pInputText placeholder="Search" class="w-36" />
+                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+            </div>
+        </ng-template>
+    </p-menubar>
+</div>
