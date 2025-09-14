@@ -1,0 +1,21 @@
+<div class="card h-full">
+  <p-menubar [model]="items">
+    <ng-template #end>
+      <div class="flex items-center gap-2">
+        <ng-container>
+          <p> hello, {{ username?.displayName }} </p>
+          <img src="https://images.vexels.com/content/216748/preview/e-learning-logo-design-d42848.png" alt="" class="logo">
+        </ng-container>
+
+
+        <ng-container *ngIf="photoURL">
+          <p-avatar
+            [image]="photoURL"
+            shape="circle"
+            style="width: 40px; height: 40px;"
+          ></p-avatar>
+        </ng-container>
+      </div>
+    </ng-template>
+  </p-menubar>
+</div>

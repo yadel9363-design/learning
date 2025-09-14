@@ -1,0 +1,28 @@
+.user-img {
+  width: 32px;
+  height: 32px;
+}
+::ng-deep {
+  .p-menubar-mobile {
+    height: 100%;
+}
+.p-menubar {
+  height: 100%;
+  background: #eeeeee87 !important;
+}
+.p-menubar-end, .p-menubar-end > div  {
+    height: 100%;
+      display: flex !important;
+      align-items: center;
+      .logo {
+        width: auto;
+        height: 80px;
+      }
+}
+}
+@media (max-width: 500px) {
+::ng-deep .p-menubar-end .logo, .p-menubar-end > div .logo {
+    width: auto;
+    height: 40px !important;
+}
+}

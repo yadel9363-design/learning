@@ -1,5 +1,5 @@
-<form [formGroup]="loginForm" #f="ngForm" (ngSubmit)="submit(f)">
-  <div class="card flex justify-center mt-6">
+<form [formGroup]="loginForm"  (ngSubmit)="submit()">
+  <div class="card flex justify-center pt-6">
     <div pFocusTrap class="w-full flex flex-column justify-content-center align-items-center sm:w-80">
       <div class="flex flex-column  gap-3">
 
@@ -19,7 +19,7 @@
               }
       </div>
 
-      <div class="flex flex-column">
+      <!-- <div class="flex flex-column">
         <p-iconfield>
           <p-inputicon>
             <i class="pi pi-user"></i>
@@ -30,7 +30,7 @@
                 @if (getControl('username')?.touched && getControl('username')?.invalid) {
                   <small>{{ getErrorMessage('username') }}</small>
                 }
-      </div>
+      </div> -->
 
 
 
@@ -55,8 +55,10 @@
         <p-checkbox id="accept" name="accept" value="Accept" />
         <label for="accept">I agree to the terms and conditions.</label>
       </div>
-
+      <div class="flex flex-column align-items-center gap-1 mt-6">
       <p-button [disabled]="loginForm.invalid" type="submit" label="Login" class="mt-2" />
+      <a (click)="signInWithGoogle()" class="mt-2 cursor-pointer" style="color: rgba(0, 0, 255, 0.40); text-decoration: underline;"> Are You Have Account With Google?</a>
+      </div>
     </div>
   </div>
 </form>

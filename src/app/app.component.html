@@ -1,4 +1,16 @@
+<script src="https://www.gstatic.com/firebasejs/5.4.0/firebase.js"></script>
 
-<app-navbar />
+<div class="flex align-items-center container w-full">
+  <div class="sidebar flex align-items-center justify-content-center bg-black">
+    <app-sidebar />
+  </div>
+  <div class="content">
+    <div class="navbar">
+      <app-navbar />
+    </div>
+<div class="content-router w-full">
+  <router-outlet />
+</div>
+  </div>
 
-<router-outlet />
+</div>
