@@ -3,10 +3,9 @@
     <ng-template #end>
       <div class="flex items-center gap-2">
         <ng-container>
-          <p> hello, {{ username?.displayName }} </p>
+          <p *ngIf="username"> hello, {{ username?.displayName }} </p>
           <img src="https://images.vexels.com/content/216748/preview/e-learning-logo-design-d42848.png" alt="" class="logo">
         </ng-container>
-
 
         <ng-container *ngIf="photoURL">
           <p-avatar
