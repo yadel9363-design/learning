@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, inject, NgZone } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject, NgZone, Inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
 import { FocusTrapModule } from 'primeng/focustrap';
 import { ButtonModule } from 'primeng/button';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +10,7 @@ import { AutoFocusModule } from 'primeng/autofocus';
 import { CommonModule } from '@angular/common';
 import { UniquenessValidator } from '../shared/DTO/unique.validators';
 import { ToastModule } from 'primeng/toast';
+import { PLATFORM_ID } from '@angular/core';
 
 import {
   Auth,
@@ -17,11 +18,13 @@ import {
   GoogleAuthProvider,
   getRedirectResult,
   UserCredential,
-  signInWithPopup
+  signInWithPopup,
+  User
 } from '@angular/fire/auth';
 
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -37,54 +40,30 @@ import { MessageService } from 'primeng/api';
     AutoFocusModule,
     CommonModule,
     ReactiveFormsModule,
-    ToastModule,
+    ToastModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   providers: [MessageService],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   @Output() loginSuccess = new EventEmitter<boolean>();
+
+  user: User | null = null;
 
   loginForm = new FormGroup({
     Email: new FormControl('', [Validators.required, Validators.email], UniquenessValidator.CheckUniqueValidator),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
 
-  constructor(private auth: Auth,private router:Router, private zone: NgZone,
-    private messageService: MessageService
+  constructor(    private router: Router,
+    private zone: NgZone,
+    private auth: Auth,
+    private authService: AuthService
    ){
 
   }
-
-ngOnInit() {
-  this.zone.run(() => {
-    getRedirectResult(this.auth)
-      .then((result: UserCredential | null) => {
-        if (result?.user || this.auth.currentUser) {
-          this.router.navigate(['/products']);
-        } else {
-          this.messageService.add({
-            severity: 'info',
-            summary: 'No User',
-            detail: 'No user signed in',
-            life: 3000
-          });
-        }
-      })
-      .catch((error) => {
-        console.error('Redirect error:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Login Error',
-          detail: error.message || 'Error during login',
-          life: 3000
-        });
-      });
-  });
-}
-
   submit() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -121,30 +100,23 @@ ngOnInit() {
     }
     return '';
   }
-
-signInWithGoogle() {
+async signInWithGoogle() {
   const provider = new GoogleAuthProvider();
-  signInWithPopup(this.auth, provider)
-    .then((result) => {
-      if (result.user) {
-        this.zone.run(() => this.router.navigate(['/products']));
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Welcome',
-          detail: `Logged in as ${result.user.email}`,
-          life: 3000
-        });
-      }
-    })
-    .catch((error) => {
-      console.error('Popup login error:', error);
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Login Failed',
-        detail: error.message || 'Popup login error',
-        life: 3000
-      });
-    });
-}
+  const result = await signInWithPopup(this.auth, provider);
 
+  this.zone.run(() => {
+    this.user = result.user;
+
+    // 1️⃣ ضبط الـ BehaviorSubject مباشرة
+    this.authService.setUser(result.user);
+
+    // 2️⃣ حفظ بيانات المستخدم في localStorage لتجنب إعادة التوجيه عند refresh
+    localStorage.setItem('user', JSON.stringify(result.user));
+
+    // 3️⃣ إعادة التوجيه بعد تسجيل الدخول
+    const returnUrl = localStorage.getItem('returnUrl') || '/products';
+    this.router.navigateByUrl(returnUrl);
+    localStorage.removeItem('returnUrl');
+  });
+}
 }

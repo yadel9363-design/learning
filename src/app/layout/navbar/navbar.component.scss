@@ -19,6 +19,10 @@
         height: 80px;
       }
 }
+p-avatar {
+  width: 40px;
+  height: 40px;
+}
 }
 @media (max-width: 500px) {
 ::ng-deep .p-menubar-end .logo, .p-menubar-end > div .logo {

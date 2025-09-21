@@ -3,15 +3,19 @@
     <ng-template #end>
       <div class="flex items-center gap-2">
         <ng-container>
-          <p *ngIf="username"> hello, {{ username?.displayName }} </p>
-          <img src="https://images.vexels.com/content/216748/preview/e-learning-logo-design-d42848.png" alt="" class="logo">
+          <p *ngIf="username"> hello, {{ username.displayName }} </p>
+          <img
+           alt="LOGO" class="logo"
+             srcset="https://images.vexels.com/content/216748/preview/e-learning-logo-design-d42848.png 200w,
+          https://images.vexels.com/content/216748/preview/e-learning-logo-design-d42848.png 400w,
+          https://images.vexels.com/content/216748/preview/e-learning-logo-design-d42848.png 800w"
+  sizes="(max-width: 600px) 200px, 400px">
         </ng-container>
 
         <ng-container *ngIf="photoURL">
           <p-avatar
             [image]="photoURL"
             shape="circle"
-            style="width: 40px; height: 40px;"
           ></p-avatar>
         </ng-container>
       </div>

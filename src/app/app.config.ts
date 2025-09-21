@@ -8,7 +8,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { firebaseProviders } from './shared/DTO/firebase.config';
-import { APP_INITIALIZER, importProvidersFrom } from '@angular/core';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideServerRendering } from '@angular/ssr';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -17,10 +21,13 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     providePrimeNG({
-      theme: {
-        preset: Aura
-      }
+      theme: { preset: Aura }
     }),
+    provideServerRendering(),
+
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideAuth(() => getAuth()),
+
     ...firebaseProviders,
   ],
 };

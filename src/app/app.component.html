@@ -1,16 +1,20 @@
 <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase.js"></script>
-
-<div class="flex align-items-center container w-full">
-  <div class="sidebar flex align-items-center justify-content-center bg-black">
+  <div class="flex align-items-center container w-full">
+    <div *ngIf="user$ | async as user" class="sidebar flex align-items-center justify-content-center bg-black">
     <app-sidebar />
   </div>
-  <div class="content">
+  <div [ngClass]="{ 'content': (user$ | async), 'isLoggedIn': !(user$ | async) }">
     <div class="navbar">
       <app-navbar />
     </div>
 <div class="content-router w-full">
+
+<p class="custom-date p-3" *ngIf="user$ | async as user">
+  Last Sign In: <span>{{ user?.metadata?.lastSignInTime | date:'medium' }}</span>
+</p>
+
   <router-outlet />
 </div>
-  </div>
+</div>
 
 </div>

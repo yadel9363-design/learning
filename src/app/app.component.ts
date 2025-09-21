@@ -1,24 +1,53 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, NgZone, Inject, PLATFORM_ID, OnInit } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './layout/navbar/navbar.component';
-import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './layout/sidebar/component/sidebar.component';
-import { User } from '@angular/fire/auth';
-
+import { AuthService } from './shared/services/auth.service';
+import { User } from 'firebase/auth';
+import { Observable } from 'rxjs';
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    NavbarComponent,
-    RouterOutlet,
-    SidebarComponent
-],
   selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule, NavbarComponent, RouterOutlet, SidebarComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'learning';
-  username: User | null = null;
+  user$: Observable<User | null>;
+  lastSignInDate: Date | null = null;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private zone: NgZone,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.user$ = this.authService.user$;
+  }
+
+  ngOnInit(): void {
+    this.user$.subscribe(user => {
+      if (user?.metadata?.lastSignInTime) {
+        this.lastSignInDate = new Date(user.metadata.lastSignInTime);
+      }
+
+      // إعادة توجيه من login إذا المستخدم موجود
+      if (user && this.router.url === '/login') {
+        this.router.navigateByUrl('/products');
+      }
+    });
+  }
+
+  async signInWithGoogle() {
+    const result = await this.authService.loginWithGoogle();
+    this.zone.run(() => this.authService.setUser(result.user));
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }
