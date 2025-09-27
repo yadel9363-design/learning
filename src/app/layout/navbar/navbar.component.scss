@@ -54,6 +54,9 @@
 .round .p-button {
   border-radius: 50% !important;
 }
+.p-button:focus-visible {
+    outline:none !important;
+}
 }
 ::ng-deep .isMobile {
   display: none;
