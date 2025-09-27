@@ -1,6 +1,6 @@
 <p-menubar [model]="items">
   <ng-template #start>
-    <div class="isMobile">
+    <div class="isMobile" *ngIf="username">
       <p-menu #menu [popup]="true" [model]="itemsMobile"></p-menu>
 
       <div class="flex gap-3">
@@ -8,7 +8,7 @@
         type="button"
         class="username"
         (click)="menu.toggle($event)">
-        {{ username?.displayName ? 'hello, ' + username?.displayName : '' }}
+        {{ username.displayName ? 'hello, ' + username.displayName : '' }}
         <i class="pi pi-chevron-down ml-2"></i>
       </p-button>
 
@@ -29,5 +29,12 @@
         <p-avatar [image]="photoURL" shape="circle"></p-avatar>
       </ng-container>
     </div>
+  <ng-container *ngIf="!username">
+    <div class="w-full px-3 flex justify-content-center">
+    <img
+    alt="LOGO"
+    srcset="https://cdn-icons-png.flaticon.com/512/10151/10151521.png">
+    </div>
+  </ng-container>
   </ng-template>
 </p-menubar>

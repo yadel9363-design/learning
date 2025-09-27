@@ -9,8 +9,8 @@
     </div>
 <div class="content-router w-full">
 
-<div class="custom-date p-3 mx-3" *ngIf="lastSignInDate">
-<p class="custom-date" *ngIf="user$ | async as user">
+<div class="custom-date p-3 mx-3" *ngIf="lastSignInDate && user$ | async as user">
+<p class="custom-date">
   Last Sign In: <span>{{ user?.metadata?.lastSignInTime | date:'medium' }}</span>
 </p>
 </div>
