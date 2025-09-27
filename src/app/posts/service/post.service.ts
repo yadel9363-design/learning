@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 export class PostService {
   private url: string = 'https://jsonplaceholder.typicode.com/posts';
 
-  // data هنا نخزن ال 
+  // data هنا نخزن ال
   private postsSubject = new BehaviorSubject<any[]>([]);
 
   // هنا تقدر تتابع ال data فى اي مكان عن طريق (asObservable)

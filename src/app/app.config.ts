@@ -4,7 +4,7 @@ import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { firebaseProviders } from './shared/DTO/firebase.config';
@@ -16,14 +16,14 @@ import { provideServerRendering } from '@angular/ssr';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(),
+    provideHttpClient(withFetch()),   // ✅ keep only this one
     provideAnimations(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     providePrimeNG({
       theme: { preset: Aura }
     }),
-    provideServerRendering(),
+    provideServerRendering(),         // ✅ SSR provider here only
 
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),

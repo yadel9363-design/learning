@@ -10,10 +10,9 @@ export const firebaseConfig = {
   messagingSenderId: "586497491028",
   appId: "1:586497491028:web:b1d175afa1a661585aadc1",
   measurementId: "G-4BKENBTF5P",
-  databaseURL: "https://learning-823-default-rtdb.firebaseio.com" // أضف هذا السطر
+  databaseURL: "https://learning-823-default-rtdb.firebaseio.com"
 };
 
-// ✅ هذا هو الشكل الصحيح لـ firebaseProviders
 export const firebaseProviders = [
   provideFirebaseApp(() => {
     if (!getApps().length) {

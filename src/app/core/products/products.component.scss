@@ -1,0 +1,32 @@
+::ng-deep {
+  .buttons-container .p-button-icon-only  {
+  background-color: var(--primary-color) !important;
+  .p-ripple {
+    padding: 0 !important;
+    border: none !important;
+  }
+}
+.p-carousel-indicator-active .p-carousel-indicator-button {
+    background: var(--primary-color) !important;
+}
+.p-carousel-item-list {
+  // gap: 5px !important;
+  justify-content: flex-start !important;
+}
+.p-carousel-viewport {
+  padding: 15px !important;
+}
+}
+.border {
+  background: #fff; // الخلفية بيضاء
+  border-radius: 16px; // حواف ناعمة
+  padding: 2rem; // مسافة داخلية
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); // ظل خفيف
+  transition: all 0.3s ease-in-out;
+  border: 1px solid #f1f1f1;
+
+  &:hover {
+    transform: translateY(-6px); // يتحرك لفوق عند الهوفر
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+  }
+}

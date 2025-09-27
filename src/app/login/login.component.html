@@ -1,7 +1,12 @@
-<form [formGroup]="loginForm"  (ngSubmit)="submit()">
-  <div class="card flex justify-center pt-6">
+<div class="login-container">
+  <h2 class="w-full text-center mb-0"> Sign In </h2>
+
+
+
+  <form [formGroup]="loginForm"  (ngSubmit)="submit()">
+  <div class="card flex justify-center pt-5">
     <div pFocusTrap class="w-full flex flex-column justify-content-center align-items-center sm:w-80">
-      <div class="flex flex-column  gap-3">
+      <div class="flex flex-column  gap-3 w-full">
 
       <div class="flex flex-column">
         <p-iconfield>
@@ -15,7 +20,9 @@
                 <small>{{ getErrorMessage('Email') }}</small>
               }
               @if ( getControl('Email')?.pending) {
-               <img class="mt-3" width="200" height="100" src="https://cdn.dribbble.com/users/3742211/screenshots/9195657/media/6796a544d6f9ef1293d8d8d9e60d38d5.gif" alt="imgLoading">
+                <p class="w-full flex justify-content-center">
+                  <img class="mt-3" width="50%" height="100" src="https://cdn.dribbble.com/users/3742211/screenshots/9195657/media/6796a544d6f9ef1293d8d8d9e60d38d5.gif" alt="imgLoading">
+                </p>
               }
       </div>
 
@@ -55,10 +62,15 @@
         <p-checkbox id="accept" name="accept" value="Accept" />
         <label for="accept">I agree to the terms and conditions.</label>
       </div>
-      <div class="flex flex-column align-items-center gap-1 mt-6">
-      <p-button [disabled]="loginForm.invalid" type="submit" label="Login" class="mt-2" />
-      <a (click)="signInWithGoogle()" class="mt-2 cursor-pointer"> Are You Have Account With Google?</a>
+      <div class="flex flex-column align-items-center gap-1 mt-2">
+        <div class="flex gap-3 align-items-center">
+          <p-button [disabled]="loginForm.invalid" type="submit" label="Login" class="mt-2" />
+          <a (click)="signInWithGoogle()" class="mt-2 cursor-pointer"> Sign in With Google?</a>
+        </div>
+      <a (click)="RedirectToRegister()" class="mt-5 register cursor-pointer"> Are you Not Have an Account?</a>
       </div>
     </div>
   </div>
 </form>
+
+</div>

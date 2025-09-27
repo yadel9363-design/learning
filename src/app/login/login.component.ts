@@ -64,14 +64,24 @@ export class LoginComponent {
    ){
 
   }
-  submit() {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
-    }
-    console.log('📨 Manual login data:', this.loginForm.value);
-    // يمكنك إضافة منطق تسجيل الدخول اليدوي هنا إذا لزم
+
+  async submit() {
+  if (this.loginForm.invalid) {
+    this.loginForm.markAllAsTouched();
+    return;
   }
+
+  const { Email, password } = this.loginForm.value;
+
+  try {
+    const user = await this.authService.loginWithEmail(Email!, password!);
+    console.log("✅ Logged in user:", user);
+
+    this.router.navigateByUrl('/products');
+  } catch (error: any) {
+    console.error("❌ Login error:", error.message);
+  }
+}
 
   getControl(controlName: string) {
     return this.loginForm.get(controlName);
@@ -118,5 +128,9 @@ async signInWithGoogle() {
     this.router.navigateByUrl(returnUrl);
     localStorage.removeItem('returnUrl');
   });
+}
+
+RedirectToRegister(){
+    this.router.navigateByUrl('/register');
 }
 }

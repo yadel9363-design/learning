@@ -1,6 +1,6 @@
 <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase.js"></script>
   <div class="flex align-items-center container w-full">
-    <div *ngIf="user$ | async as user" class="sidebar flex align-items-center justify-content-center bg-black">
+    <div *ngIf="user$ | async as user" class=" flex align-items-center justify-content-center">
     <app-sidebar />
   </div>
   <div [ngClass]="{ 'content': (user$ | async), 'isLoggedIn': !(user$ | async) }">
@@ -9,11 +9,15 @@
     </div>
 <div class="content-router w-full">
 
-<p class="custom-date p-3" *ngIf="user$ | async as user">
+<div class="custom-date p-3 mx-3" *ngIf="lastSignInDate">
+<p class="custom-date" *ngIf="user$ | async as user">
   Last Sign In: <span>{{ user?.metadata?.lastSignInTime | date:'medium' }}</span>
 </p>
+</div>
 
-  <router-outlet />
+  <div class="m-3">
+      <router-outlet />
+  </div>
 </div>
 </div>
 

@@ -1,18 +1,42 @@
 @media (min-width: 991px) {
-.sidebar {
+.sidebar , ::ng-deep .sidebar-mobile .p-drawer-left {
   width: 300px;
-  max-height: auto;
   min-height: 100vh;
-  background: rgba(238, 238, 238, 0.5294117647) !important;
-  border: 1px solid #e2e8f0;
+  border-right: 1px solid rgba(226, 232, 240, 0.2117647059);
   overflow: auto;
   color: #000;
-  justify-content: center;
-  display: flex;
-  padding: 20px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 50px;
+  padding: 20px !important;
+  background: var(--main-gradient-sidebar) !important;
+  img {
+    width: 150px;
+    height: 150px;
+  }
+  p a {
+    text-align: center;
+    color: #000;
+    font-size: 20px;
+    outline: none;
+  }
 }
 .sidebar-mobile {
 display: none;
+}
+  ::ng-deep {
+  .p-drawer {
+    display: none !important;
+}
+.p-overlay-mask-enter {
+    display: none !important;
+}
+.sidebar p a.item-active {
+  color: #fff !important;
+  background-color: var(--primary-color);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
 }
 }
 @media (max-width: 991px) {
@@ -20,18 +44,56 @@ display: none;
 display: none;
 }
 .sidebar-mobile {
-  position: absolute;
-  width: 300px;
-  min-height: 100vh;
-  background: rgba(238, 238, 238, 0.5294117647) !important;
-  border: 1px solid #e2e8f0;
-  z-index: 99;
-  max-height: 100vh;
-  top: 0;
-  overflow: auto;
-  color: #000;
-  justify-content: center;
-  display: none;
-  padding: 20px;
+display: block;
 }
+::ng-deep {
+.p-drawer-left {
+    background: var(--main-gradient-navbar) !important;
+    border: none !important;
+    border-radius: 0 !important;
+    .p-drawer-header {
+    padding: 10px !important;
+        img {
+      width: 80px;
+      height: 80px;
+    }
+    }
+    .p-button-text.p-button-secondary {
+    background: var(--primary-color) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+}
+}
+.p-drawer p a {
+  color: #000 !important;
+  background-color: transparent;
+  border-radius: 6px;
+  padding: 8px 12px;
+  text-align: center;
+}
+.p-drawer p a.item-active {
+  color: #fff !important;
+  background-color: var(--primary-color);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+.p-drawer-content {
+  margin-top: 30px;
+      &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--primary-color);
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+}
+}
+
 }

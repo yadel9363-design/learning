@@ -16,3 +16,21 @@ input.ng-invalid.ng-touched {
 .cursor-pointer {
   color: rgba(0, 0, 255, 0.40); text-decoration: underline;
 }
+.register {
+  background-color: var(--primary-color);
+  color: #fff;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 10px;
+}
+.login-container {
+    max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  input {
+    width: 100%;
+  }
+}

@@ -3,6 +3,9 @@ import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { User } from 'firebase/auth';
+import { UserService } from './user.service';
+import { Database } from '@angular/fire/database';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
@@ -18,4 +21,5 @@ export class AuthGuard implements CanActivate {
       })
     );
   }
+
 }

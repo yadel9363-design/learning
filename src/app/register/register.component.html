@@ -1,0 +1,62 @@
+<div class="register-container">
+  <h2> Register Account </h2>
+
+  <form [formGroup]="registerForm" (ngSubmit)="register()">
+    <!-- الاسم -->
+    <div class="form-group">
+      <label for="displayName">Name</label>
+      <input
+      pInputText
+        id="displayName"
+        type="text"
+        formControlName="displayName"
+        placeholder="your name"
+      />
+      <div class="error" *ngIf="registerForm.get('displayName')?.touched && registerForm.get('displayName')?.invalid">
+        name Should be more than 3 character
+      </div>
+    </div>
+
+    <!-- الإيميل -->
+    <div class="form-group">
+      <label for="email"> Email </label>
+      <input
+      pInputText
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="example@email.com"
+      />
+      <div class="error" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
+        email not valid
+      </div>
+    </div>
+
+    <!-- الباسورد -->
+    <div class="form-group">
+      <label for="password"> Password </label>
+      <input
+      pInputText
+        id="password"
+        type="password"
+        formControlName="password"
+      />
+      <div class="error" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
+        password should be more than 6 character
+      </div>
+    </div>
+
+    <!-- رسالة الخطأ -->
+    <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <!-- زر التسجيل -->
+    <button type="submit" [disabled]="registerForm.invalid">
+      {{ loading ? 'جارٍ التسجيل...' : 'إنشاء حساب' }}
+    </button>
+  </form>
+
+  <p>
+    Are you already have account?
+    <a (click)="GoToLogin()"> Sign In </a>
+  </p>
+</div>

@@ -8,25 +8,62 @@
 }
 .p-menubar {
   height: 100%;
-  background: #eeeeee87 !important;
+  background: var(--main-gradient-navbar) !important;
+  border: none !important;
+  border-radius: 0 !important;
+.p-menubar-root-list > .p-menubar-item > .p-menubar-item-content {
+      border-radius: var(--radius);
+  .p-menubar-item-link {
+  color: #fff;
+  background: var(--primary-color);
+  border-radius: var(--radius);
+  border: none !important;
+  outline: none !important;
+    &:hover {
+      background-color: var(--primary-color);
+      border-radius: var(--radius) !important;
+    }
+}
+}
+.p-menubar-submenu-icon {
+    color: #fff !important;
+}
 }
 .p-menubar-end, .p-menubar-end > div  {
     height: 100%;
-      display: flex !important;
-      align-items: center;
+    display: flex !important;
+    align-items: center;
+    width: 60px;
       .logo {
         width: auto;
         height: 80px;
       }
 }
-p-avatar {
-  width: 40px;
-  height: 40px;
+.p-avatar img {
+  width: 60px !important;
+  height: 60px !important;
+  object-fit: cover;
+}
+.p-menubar-mobile .p-menubar-button {
+    display: none !important;
+}
+.username .p-button {
+  background-color: var(--primary-color) !important;
+  border-radius: 10px !important;
+}
+.round .p-button {
+  border-radius: 50% !important;
 }
 }
-@media (max-width: 500px) {
+::ng-deep .isMobile {
+  display: none;
+}
+@media (max-width: 991px) {
 ::ng-deep .p-menubar-end .logo, .p-menubar-end > div .logo {
     width: auto;
     height: 40px !important;
+}
+.isMobile {
+  display: block;
 }
 }

@@ -1,15 +1,44 @@
-<ul class="m-0 p-0 sidebar">
-  <li>
-    @for (item of itemsList; track item) {
-      {{ item.label }}
-    }
-    </li>
-</ul>
+  <div class="sidebar">
+    <div class="flex justify-content-center flex-column m-0 p-0">
 
-<div class="sidebar-mobile d-none">
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-        aliquip ex ea commodo consequat.
+              <ng-container>
+                <div class="w-full flex justify-content-center">
+              <img
+                alt="LOGO" class="logo"
+                srcset="https://cdn-icons-png.flaticon.com/512/10151/10151521.png">
+              </div>
+            </ng-container>
+
+      <p class="flex mt-5 gap-3 flex-column">
+        @for (item of itemsList; track item) {
+          <a   [routerLink]="item.routerLink"
+      routerLinkActive="item-active"
+      [routerLinkActiveOptions]="{ exact: true }">
+            {{ item.label }}
+          </a>
+        }
+        </p>
+    </div>
+  </div>
+
+  <div class="sidebar-mobile">
+<p-drawer #list [(visible)]="visible">
+  <ng-template pTemplate="header">
+    <img
+    alt="LOGO" class="logo"
+    srcset="https://cdn-icons-png.flaticon.com/512/10151/10151521.png">
+  </ng-template>
+
+  <p class="flex gap-3 flex-column">
+    @for (item of itemsList; track item) {
+      <a   [routerLink]="item.routerLink"
+  routerLinkActive="item-active"
+  (click)="closeDrawer()"
+  [routerLinkActiveOptions]="{ exact: true }">
+        {{ item.label }}
+      </a>
+    }
     </p>
-</div>
+</p-drawer>
+
+  </div>

@@ -42,12 +42,10 @@ export class AppComponent implements OnInit {
   }
 
   async signInWithGoogle() {
-    const result = await this.authService.loginWithGoogle();
-    this.zone.run(() => this.authService.setUser(result.user));
+    await this.authService.loginWithGoogle();
   }
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/login']);
   }
 }

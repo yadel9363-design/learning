@@ -7,6 +7,8 @@ import { NotFoundComponent } from './core/not-found/not-found.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './core/home/home.component';
 import { AuthGuard } from './shared/services/auth-guard.service';
+import { UserAuthGuard } from './shared/services/user-auth-guard.service';
+import { RegisterComponent } from './register/register.component';
 
 
 export const routes: Routes = [
@@ -14,8 +16,11 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'orders', component: MyOrdersComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
-    { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [AuthGuard] },
-    { path: 'admin/products', component: AdminProductsComponent, canActivate: [AuthGuard] },
+    { path: 'register', component: RegisterComponent },
+    { path: 'admin/orders', component: AdminOrdersComponent,
+       canActivate: [AuthGuard, UserAuthGuard] },
+    { path: 'admin/products', component: AdminProductsComponent,
+       canActivate: [AuthGuard, UserAuthGuard] },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '**', component: NotFoundComponent, canActivate: [AuthGuard] } // not found page
 ];

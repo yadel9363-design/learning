@@ -26,7 +26,7 @@ import { CommonModule } from '@angular/common';
 export class MyOrdersComponent implements OnInit {
 
   data: any;
-  
+
   selectedPost: any = null;
 isEditDialogVisible: boolean = false;
 newTitle: string = '';
@@ -66,7 +66,7 @@ user: any;
 
   saveUpdatedPost() {
     if (!this.newTitle.trim()) return;
-  
+
     const updatedPost = { ...this.selectedPost, title: this.newTitle };
     this.postService.updatePost(updatedPost);
     this.isEditDialogVisible = false;

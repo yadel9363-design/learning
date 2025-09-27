@@ -1,21 +1,18 @@
 @media (min-width: 991px) {
 .content{
-  margin-left: 300px;
-  max-height: 100%;
-  min-height: 100vh;
   width: calc(100% - 300px);
-}
-.sidebar-mobile {
-  display: none;
 }
 }
 @media (max-width: 991px) {
 .content{
   width: 100%;
+}
+}
+.content {
+  background: var(--main-bg-content);
+  color: var(--main-text-content);
   max-height: 100%;
   min-height: 100vh;
-
-}
 }
 .container {
   max-height: 100%;
@@ -27,15 +24,11 @@
 .content-router {
   min-height: calc(100vh - 100px);
   max-height: 100%;
-}
-.sidebar {
-  position: absolute;
-  top: 0;
+  padding-top: 20px;
 }
 .custom-date {
   background-color: #ccc;
   border-radius: 10px;
-  margin: 15px 15px 0 15px;
   span {
     color: #fff;
   }
