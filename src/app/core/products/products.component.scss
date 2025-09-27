@@ -30,3 +30,54 @@
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
   }
 }
+// تعديلات للموبايل فقط
+@media (max-width: 768px) {
+  ::ng-deep {
+
+    .border {
+      padding: 1rem !important;
+      text-align: center;
+      min-height: 350px;
+      max-height: auto !important;
+      min-width: 200px !important;
+      img {
+        height: 200px !important;
+        max-height: 200px;
+        width: 100% !important;
+        object-fit: inherit;
+      }
+
+      .mb-4 {
+        margin-bottom: 1rem !important;
+      }
+
+      .buttons-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 0.5rem;
+
+        .p-button {
+          width: 2.5rem;
+          height: 2.5rem;
+          padding: 0;
+
+          .pi {
+            font-size: 1rem;
+          }
+        }
+
+        .ml-2 {
+          margin-left: 0.5rem !important;
+        }
+      }
+
+      .font-medium {
+        font-size: 1rem !important;
+      }
+
+      .text-xl {
+        font-size: 1.1rem !important;
+      }
+    }
+  }
+}

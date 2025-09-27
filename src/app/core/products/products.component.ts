@@ -17,4 +17,16 @@ export class ProductsComponent {
     { name: 'English Courses', price: 50, image: 'https://cdn.prod.website-files.com/60c39415644232ae43326cc1/65118ba485fd40b7409f8442_Free%20english%20courses%20on%20Heylama.png' },
     { name: 'Machien Learning Courses', price: 90, image: 'https://media.assettype.com/analyticsinsight/2024-07/dd2f16e2-d3dc-432c-938a-9ed62ea3f11b/Top_Machine_Learning_Certificate_Courses_to_Enroll_in_2022.jpg' }
   ];
+  responsiveOptions = [
+  {
+    breakpoint: '768px',   // عند الشاشات أقل من 768
+    numVisible: 1,
+    numScroll: 1
+  },
+  {
+    breakpoint: '1024px',  // عند التابلت
+    numVisible: 2,
+    numScroll: 1
+  }
+];
 }

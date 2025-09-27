@@ -1,10 +1,11 @@
 <div class="card">
     <p-carousel
-      [value]="products"
-      [numVisible]="3"
-      [numScroll]="1"
-      [circular]="true"
-      [autoplayInterval]="3000">
+  [value]="products"
+  [numVisible]="4"
+  [numScroll]="1"
+  [circular]="true"
+  [autoplayInterval]="3000"
+  [responsiveOptions]="responsiveOptions">
 
       <ng-template pTemplate="item" let-product>
         <div class="border rounded p-2 mx-2">

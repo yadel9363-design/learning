@@ -75,7 +75,6 @@ export class LoginComponent {
 
   try {
     const user = await this.authService.loginWithEmail(Email!, password!);
-    console.log("✅ Logged in user:", user);
 
     this.router.navigateByUrl('/products');
   } catch (error: any) {

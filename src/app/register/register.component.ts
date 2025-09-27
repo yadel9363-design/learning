@@ -43,11 +43,9 @@ async register() {
     // 🟢 ابعت displayName للـ service عشان يتسجل صح
     const user = await this.authService.registerWithEmail(email, password, displayName);
 
-    console.log("🆕 Registered user:", user);
     this.router.navigateByUrl('/products');
   } catch (error: any) {
     this.errorMessage = error.message;
-    console.error("❌ Register error:", error);
   } finally {
     this.loading = false;
   }

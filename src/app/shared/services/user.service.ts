@@ -12,7 +12,6 @@ export class UserService {
   private envInjector = inject(EnvironmentInjector);
   private auth: Auth = inject(Auth);
 
-  // ✅ حفظ أو تحديث بيانات المستخدم
   async save(user: User) {
     const userData = {
       uid: user.uid,
@@ -31,7 +30,6 @@ export class UserService {
 
         if (snapshot.exists()) {
           const existingData = snapshot.val();
-          console.log("✅ User exists → updating data");
 
           await set(userRef, {
             ...existingData,
@@ -39,7 +37,6 @@ export class UserService {
             isAdmin: existingData.isAdmin ?? false
           });
         } else {
-          console.log("🆕 New user → added to DB");
           await set(userRef, userData);
         }
       } catch (error) {
