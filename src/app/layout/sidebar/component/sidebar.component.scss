@@ -97,3 +97,11 @@ display: block;
 }
 
 }
+::ng-deep .p-dialog {
+  z-index: 9999 !important;
+}
+
+::ng-deep .p-dialog-mask {
+  z-index: 9998 !important;
+  display: flex !important;
+}

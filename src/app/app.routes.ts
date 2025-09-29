@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { ProductsComponent } from './core/products/products.component';
-import { MyOrdersComponent } from './core/my-orders/my-orders.component';
+import { ProductsComponent } from './core/products/component/products.component';
+import { MyOrdersComponent } from './core/my-orders/component/my-orders.component';
 import { AdminOrdersComponent } from './core/admin/admin-orders/admin-orders.component';
 import { AdminProductsComponent } from './core/admin/admin-products/admin-products.component';
 import { NotFoundComponent } from './core/not-found/not-found.component';

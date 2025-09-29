@@ -61,7 +61,7 @@
 ::ng-deep .isMobile {
   display: none;
 }
-@media (max-width: 991px) {
+@media (max-width: 960px) {
 ::ng-deep .p-menubar-end .logo, .p-menubar-end > div .logo {
     width: auto;
     height: 40px !important;

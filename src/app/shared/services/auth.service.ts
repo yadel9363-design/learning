@@ -1,4 +1,4 @@
-import { Injectable, NgZone, Inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, NgZone, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import {
   Auth,
   GoogleAuthProvider,
@@ -17,7 +17,7 @@ import { updateProfile } from 'firebase/auth';
 
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class AuthService implements OnInit {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public user$: Observable<User | null> = this.currentUserSubject.asObservable();
 
@@ -44,6 +44,20 @@ export class AuthService {
         this.currentUserSubject.next(JSON.parse(savedUser));
       }
     }
+  }
+
+  ngOnInit(): void {
+  if (isPlatformBrowser(this.platformId)) {
+    authState(this.auth).subscribe((user) => {
+      this.zone.run(() => {
+        this.currentUserSubject.next(user);
+        if (user) {
+          localStorage.setItem('user', JSON.stringify(user));
+          this.userService.save(user);
+        }
+      });
+    });
+  }
   }
 
   setUser(user: User) {

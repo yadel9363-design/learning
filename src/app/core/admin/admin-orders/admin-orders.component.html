@@ -1,1 +1,57 @@
-<p>admin-orders works!</p>
+<div class="mb-4">
+  <p-button label="Add New Category"
+            icon="pi pi-plus"
+            (click)="showAddCategoryDialog()"
+            severity="success"></p-button>
+</div>
+
+<!-- نمرر الداتا للـ child component -->
+<app-my-orders [coursesAdmin]="courses"></app-my-orders>
+
+<p-dialog header="Add New Category"
+          [(visible)]="isAddCategoryDialogVisible"
+          [modal]="true"
+          [closable]="true"
+          [dismissableMask]="true"
+          [style]="{ width: '400px' }">
+
+  <div>
+    <label class="block mb-2 font-bold">Category Title</label>
+    <input type="text"
+           pInputText
+           [(ngModel)]="newCategoryTitle"
+           placeholder="Enter category title"
+           class="w-full mb-3" />
+
+    <label class="block mb-2 font-bold">Courses</label>
+
+    <div *ngFor="let course of newCourses; let i = index; trackBy: trackByIndex" class="flex gap-2 mb-2">
+      <input pInputText
+             [(ngModel)]="newCourses[i]"
+             placeholder="Enter course name"
+             class="w-full" />
+      <p-button icon="pi pi-trash"
+                (click)="deleteNewCourse(i)"
+                severity="danger"
+                size="small"></p-button>
+    </div>
+
+    <p-button label="Add Course"
+              icon="pi pi-plus"
+              (click)="addNewCourse()"
+              severity="success"
+              class="mb-3"></p-button>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel"
+              icon="pi pi-times"
+              (click)="cancelAddCategory()"
+              class="p-button-text"></p-button>
+    <p-button label="Save"
+              icon="pi pi-check"
+              (click)="saveNewCategory()"
+              [disabled]="isSaveDisabled()"
+              severity="primary"></p-button>
+  </ng-template>
+</p-dialog>

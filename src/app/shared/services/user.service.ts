@@ -12,6 +12,11 @@ export class UserService {
   private envInjector = inject(EnvironmentInjector);
   private auth: Auth = inject(Auth);
 
+  /** ✅ helper عام */
+  private runInCtx<T>(fn: () => T): T {
+    return runInInjectionContext(this.envInjector, fn);
+  }
+
   async save(user: User) {
     const userData = {
       uid: user.uid,
@@ -22,15 +27,13 @@ export class UserService {
       isAdmin: false
     };
 
-    runInInjectionContext(this.envInjector, async () => {
+    return this.runInCtx(async () => {
       const userRef = ref(this.db, `users/${user.uid}`);
-
       try {
-        const snapshot = await get(userRef);
+        const snapshot = await get(userRef); // ✅ دلوقتي جوه Context
 
         if (snapshot.exists()) {
           const existingData = snapshot.val();
-
           await set(userRef, {
             ...existingData,
             ...userData,
@@ -45,29 +48,30 @@ export class UserService {
     });
   }
 
-  private objectValInContext<T>(path: string): Observable<T | null> {
-    return runInInjectionContext(this.envInjector, () => {
+private objectValInContext<T>(path: string): Observable<T | null> {
+  return new Observable<T | null>((subscriber) => {
+    return this.runInCtx(() => {
       const userRef = ref(this.db, path);
-      return objectVal<T>(userRef);
+      return objectVal<T>(userRef).subscribe(subscriber);
     });
-  }
+  });
+}
 
-  private userInContext(): Observable<User | null> {
-    return runInInjectionContext(this.envInjector, () => user(this.auth));
-  }
 
-  // ✅ بيانات المستخدم الحالي
+private userInContext(): Observable<User | null> {
+  return new Observable<User | null>((subscriber) => {
+    return this.runInCtx(() => user(this.auth).subscribe(subscriber));
+  });
+}
+
   getCurrentUserData(): Observable<AppUser | null> {
     return this.userInContext().pipe(
       switchMap((u) => {
-        console.log("Auth UID:", u?.uid);
         if (!u) return of(null);
 
         return this.objectValInContext<AppUser>(`users/${u.uid}`).pipe(
           map(userProfile => {
-            console.log("User Profile from DB:", userProfile);
             if (!userProfile) return null;
-
             return {
               ...userProfile,
               isAdmin: userProfile.isAdmin ?? false
@@ -78,7 +82,6 @@ export class UserService {
     );
   }
 
-  // ✅ بيانات مستخدم بالـ UID
   getUserProfile(uid: string): Observable<AppUser | null> {
     return this.objectValInContext<AppUser>(`users/${uid}`);
   }

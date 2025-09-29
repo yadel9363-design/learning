@@ -1,0 +1,76 @@
+::ng-deep {
+  .p-datatable-tbody > tr > td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    .p-button {
+      width: 100% !important;
+    }
+}
+::ng-deep .p-table {
+  width: 100%;
+  table-layout: fixed;
+
+  th, td {
+    vertical-align: top;
+    padding: 1rem;
+    word-wrap: break-word;
+  }
+
+  th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  td {
+    border-top: 1px solid #eee;
+  }
+
+  // Ensure each row is properly spaced
+  tr {
+    min-height: 60px;
+  }
+
+  // Tags should wrap nicely
+  .p-tag {
+    white-space: nowrap;
+  }
+
+  .flex-wrap {
+    flex-wrap: wrap !important;
+  }
+
+  // Ensure rows stretch to fit tags
+  .flex.flex-wrap {
+    align-items: flex-start;
+  }
+
+  // Fix action button spacing
+  .actions-column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .p-button {
+    padding: 0.5rem !important;
+    min-width: 2rem;
+    min-height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.custom-dialog-width {
+  width: 450px !important;
+
+  @media (max-width: 960px) {
+    width: 350px !important;
+  }
+}
+
+}

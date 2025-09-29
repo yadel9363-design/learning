@@ -1,22 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
-import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { Auth, authState } from '@angular/fire/auth';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private auth: Auth, private router: Router) {}
+  private auth = inject(Auth);
+  private router = inject(Router);
+  private injector = inject(EnvironmentInjector);
 
-  canActivate(): Promise<boolean | UrlTree> {
-    return new Promise((resolve) => {
-      onAuthStateChanged(this.auth, (user) => {
-        if (user) {
-          resolve(true);
-        } else {
-          resolve(this.router.createUrlTree(['/login']));
-        }
-      });
-    });
+  async canActivate(): Promise<boolean | UrlTree> {
+    // نشغّل authState داخل Injection Context لتجنّب التحذيرات المتعلقة بالـ Zone/Injection
+    const user = await runInInjectionContext(this.injector, () =>
+      firstValueFrom(authState(this.auth))
+    );
+
+    return user ? true : this.router.createUrlTree(['/login']);
   }
 }
