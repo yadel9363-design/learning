@@ -24,9 +24,9 @@
   </ng-template>
 
   <ng-template #end>
-    <div class="flex items-center gap-2">
+    <div class="flex photoUser items-center gap-2">
       <ng-container *ngIf="photoURL">
-        <p-avatar [image]="photoURL" shape="circle"></p-avatar>
+        <img [src]="photoURL" shape="circle" alt="LOGO">
       </ng-container>
     </div>
   <ng-container *ngIf="!username">

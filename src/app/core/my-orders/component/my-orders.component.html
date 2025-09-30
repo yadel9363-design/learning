@@ -84,6 +84,7 @@
               severity="secondary"></p-button>
     <p-button label="Save"
               icon="pi pi-check"
+              [disabled]="CheckIsValid()"
               (click)="saveUpdatedCategory()"
               severity="primary"></p-button>
   </ng-template>

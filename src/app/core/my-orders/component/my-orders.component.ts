@@ -34,9 +34,10 @@ export class MyOrdersComponent implements OnInit {
   newTitle: string = '';
   newCourses: { name: string, saved: boolean }[] = [];
   isAdmin: boolean = false;
-@Input() set coursesAdmin(value: any) {
-  this.courses = value;
-}
+
+  @Input() set coursesAdmin(value: any) {
+    this.courses = value;
+  }
 
   private courseService = inject(CourseService);
   private userService = inject(UserService);
@@ -80,6 +81,10 @@ trackByIndex(index: number): number {
 
 addCourse() {
   this.newCourses.push({ name: '', saved: false });
+}
+
+CheckIsValid(){
+  return !this.newCourses.some(course => !course.saved && course.name.trim().length > 0);
 }
 
 saveUpdatedCategory() {

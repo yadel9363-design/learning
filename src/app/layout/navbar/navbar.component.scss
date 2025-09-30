@@ -39,10 +39,11 @@
         height: 80px;
       }
 }
-.p-avatar img {
+.photoUser img {
   width: 60px !important;
   height: 60px !important;
   object-fit: cover;
+  border-radius: 50% !important;
 }
 .p-menubar-mobile .p-menubar-button {
     display: none !important;
