@@ -104,9 +104,9 @@ async registerWithEmail(email: string, password: string, displayName?: string) {
     const profile = await firstValueFrom(this.userService.getUserProfile(user.uid));
     this.zone.run(() => {
       if (profile?.isAdmin) {
-        this.router.navigate(['/admin/products']);
+        this.router.navigate(['/home']);
       } else {
-        this.router.navigate(['/products']);
+        this.router.navigate(['/home']);
       }
     });
 

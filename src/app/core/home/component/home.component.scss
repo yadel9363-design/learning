@@ -1,0 +1,11 @@
+@media (max-width: 991px) {
+  ::ng-deep .p-chart canvas {
+  min-width: 100%;
+  min-height: 100%;
+}
+}
+.card-smallChart {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+}

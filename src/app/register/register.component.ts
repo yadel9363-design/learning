@@ -43,7 +43,7 @@ async register() {
     // 🟢 ابعت displayName للـ service عشان يتسجل صح
     const user = await this.authService.registerWithEmail(email, password, displayName);
 
-    this.router.navigateByUrl('/products');
+    this.router.navigateByUrl('/home');
   } catch (error: any) {
     this.errorMessage = error.message;
   } finally {

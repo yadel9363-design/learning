@@ -76,7 +76,7 @@ export class LoginComponent {
   try {
     const user = await this.authService.loginWithEmail(Email!, password!);
 
-    this.router.navigateByUrl('/products');
+    this.router.navigateByUrl('/home');
   } catch (error: any) {
     console.error("❌ Login error:", error.message);
   }
@@ -123,7 +123,7 @@ async signInWithGoogle() {
     localStorage.setItem('user', JSON.stringify(result.user));
 
     // 3️⃣ إعادة التوجيه بعد تسجيل الدخول
-    const returnUrl = localStorage.getItem('returnUrl') || '/products';
+    const returnUrl = localStorage.getItem('returnUrl') || '/home';
     this.router.navigateByUrl(returnUrl);
     localStorage.removeItem('returnUrl');
   });

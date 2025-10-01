@@ -48,6 +48,7 @@ export class SidebarComponent implements OnInit {
 
   private buildMenu() {
     this.itemsList = [
+      { label: 'Activities', routerLink: 'home' },
       { label: 'Products', routerLink: 'products' },
       { label: 'Orders', routerLink: 'orders' },
     ];

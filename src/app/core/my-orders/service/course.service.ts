@@ -5,7 +5,6 @@ import { deleteField } from '@angular/fire/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class CourseService {
-
   constructor(private firestore: Firestore) {}
 
 public getDocRef(): DocumentReference {

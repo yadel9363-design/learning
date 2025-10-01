@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
 
       // إعادة توجيه من login إذا المستخدم موجود
       if (user && this.router.url === '/login') {
-        this.router.navigateByUrl('/products');
+        this.router.navigateByUrl('/home');
       }
     });
   }

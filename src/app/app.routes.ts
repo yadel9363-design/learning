@@ -5,7 +5,7 @@ import { AdminOrdersComponent } from './core/admin/admin-orders/admin-orders.com
 import { AdminProductsComponent } from './core/admin/admin-products/admin-products.component';
 import { NotFoundComponent } from './core/not-found/not-found.component';
 import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './core/home/home.component';
+import { HomeComponent } from './core/home/component/home.component';
 import { AuthGuard } from './shared/services/auth-guard.service';
 import { UserAuthGuard } from './shared/services/user-auth-guard.service';
 import { RegisterComponent } from './register/register.component';
