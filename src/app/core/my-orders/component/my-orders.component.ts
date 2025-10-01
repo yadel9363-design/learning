@@ -3,7 +3,7 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 import { CourseService } from '../service/course.service';
@@ -31,22 +31,35 @@ export class MyOrdersComponent implements OnInit {
   courses: any = {};
   selectedCategory: any = null;
   isEditDialogVisible: boolean = false;
-  newTitle: string = '';
-  newCourses: { name: string, saved: boolean }[] = [];
   isAdmin: boolean = false;
+
+  editForm!: FormGroup;
+
+  private courseService = inject(CourseService);
+  private userService = inject(UserService);
+  private fb = inject(FormBuilder);
 
   @Input() set coursesAdmin(value: any) {
     this.courses = value;
   }
-
-  private courseService = inject(CourseService);
-  private userService = inject(UserService);
 
   @ViewChild('titleInput') titleInput!: ElementRef;
 
   ngOnInit() {
     this.loadCourses();
     this.checkIfAdmin();
+    this.initForm();
+  }
+
+  initForm() {
+    this.editForm = this.fb.group({
+      title: [{value: '', disabled: !this.isAdmin}, Validators.required],
+      courses: this.fb.array([])
+    });
+  }
+
+  get coursesArray(): FormArray {
+    return this.editForm.get('courses') as FormArray;
   }
 
   loadCourses() {
@@ -56,65 +69,86 @@ export class MyOrdersComponent implements OnInit {
     });
   }
 
-openEditDialog(category: any) {
-  console.log('Editing category:', category); // <== تحقق هل يصل هنا
+  openEditDialog(category: any) {
+    this.selectedCategory = category;
 
-  this.selectedCategory = category;
-  this.newTitle = category.key;
+    this.editForm.reset();
+    this.coursesArray.clear();
 
-  this.newCourses = (category.value || []).map((course: string) => ({
-    name: course,
-    saved: true
-  }));
+    // set values
+    this.editForm.patchValue({ title : category.key });
 
-  console.log('newCourses:', this.newCourses); // <== تحقق من البيانات
+    (category.value || []).forEach((course: string) => {
+  const control = this.fb.control(
+    { value: course, disabled: !this.isAdmin }, // لو مش admin disable
+    Validators.required
+  );
+  (control as any).fromFirebase = true; // نحط علامة إنه من Firebase
+  this.coursesArray.push(control);
+    });
 
-  this.isEditDialogVisible = true;
+
+if (!this.isAdmin) {
+  this.editForm.get('title')?.disable();
+  this.coursesArray.controls.forEach(c => {
+    if ((c as any).fromFirebase) {
+      c.disable();   // disable فقط لو جاي من Firebase
+    } else {
+      c.enable();    // اللي مضاف جديد نخليه editable
+    }
+  });
+} else {
+  this.editForm.get('title')?.enable();
+  this.coursesArray.controls.forEach(c => c.enable());
 }
 
-  deleteCourse(index: number) {
-    this.newCourses.splice(index, 1);
+
+
+    this.isEditDialogVisible = true;
   }
-trackByIndex(index: number): number {
-  return index;
-}
 
 addCourse() {
-  this.newCourses.push({ name: '', saved: false });
+  const control = this.fb.control('', Validators.required);
+  (control as any).fromFirebase = false;
+  this.coursesArray.push(control);
 }
 
-CheckIsValid(){
-  return !this.newCourses.some(course => !course.saved && course.name.trim().length > 0);
-}
 
-saveUpdatedCategory() {
-  if (!this.newTitle.trim()) return;
+  deleteCourse(index: number) {
+    this.coursesArray.removeAt(index);
+  }
 
-  this.courseService.updateCategory(this.selectedCategory.key, {
-    key: this.newTitle,
-    value: this.newCourses.map(c => c.name)
-  }).then(() => {
-    this.loadCourses();
-    this.cancelEdit();
-  });
-}
+  saveUpdatedCategory() {
+    if (this.editForm.invalid) return;
+
+    const updated = {
+      key: this.editForm.value.title,
+      value: this.editForm.value.courses
+    };
+
+    this.courseService.updateCategory(this.selectedCategory.key, updated).then(() => {
+      this.loadCourses();
+      this.cancelEdit();
+    });
+  }
 
   cancelEdit() {
     this.isEditDialogVisible = false;
     this.selectedCategory = null;
   }
 
-deleteCategoryFromDB(categoryKey: string) {
-  this.courseService.deleteCategory(categoryKey).then(() => {
-    delete this.courses[categoryKey];
-    this.courses = { ...this.courses };
-  });
-}
-checkIfAdmin() {
-  this.userService.getCurrentUserData().pipe(take(1)).subscribe((userData: AppUser | null) => {
-    if (userData?.isAdmin) {
-      this.isAdmin = true;
-    }
-  });
-}
+  deleteCategoryFromDB(categoryKey: string) {
+    this.courseService.deleteCategory(categoryKey).then(() => {
+      delete this.courses[categoryKey];
+      this.courses = { ...this.courses };
+    });
+  }
+
+  checkIfAdmin() {
+    this.userService.getCurrentUserData().pipe(take(1)).subscribe((userData: AppUser | null) => {
+      if (userData?.isAdmin) {
+        this.isAdmin = true;
+      }
+    });
+  }
 }

@@ -2,6 +2,8 @@
   <p-table *ngIf="courses && (courses | keyvalue) as categories"
            [value]="categories"
            [paginator]="true"
+           stripedRows
+            class="p-table"
            [rows]="5">
     <ng-template pTemplate="header">
       <tr>
@@ -22,14 +24,14 @@
         <td class="flex gap-2">
           <p-button icon="pi pi-pencil"
                     class="col-6 p-0"
-                    severity="primary"
+                    severity="info"
                     (click)="openEditDialog(category)">
           </p-button>
 
           <p-button *ngIf="isAdmin"
                     icon="pi pi-trash"
                     class="col-6 p-0"
-                    severity="danger"
+                    severity="primary"
                     (click)="deleteCategoryFromDB(category.key)">
           </p-button>
         </td>
@@ -46,36 +48,38 @@
   [dismissableMask]="true"
   styleClass="custom-dialog-width">
 
-  <div>
+  <form [formGroup]="editForm" class="w-full">
+
+    <!-- Category Title -->
     <label for="categoryTitle" class="block mb-2 font-bold">Category Title</label>
-    <input #titleInput
-           id="categoryTitle"
+    <input id="categoryTitle"
            pInputText
-           [(ngModel)]="newTitle"
-          [disabled]="!isAdmin"
+           formControlName="title"
            placeholder="Enter category title"
            class="w-full mb-3" />
 
+    <!-- Courses -->
     <label class="block mb-2 font-bold">Courses</label>
-<div *ngFor="let course of newCourses; let i = index; trackBy: trackByIndex" class="flex gap-2 mb-2">
-  <input pInputText
-         [(ngModel)]="course.name"
-         [disabled]="!isAdmin && course.saved"
-         [attr.placeholder]="'Enter course name ' + (i + 1)"
-         class="w-full" />
+    <div formArrayName="courses">
+      <div *ngFor="let courseCtrl of coursesArray.controls; let i = index" class="flex gap-2 mb-2">
 
-  <p-button icon="pi pi-trash"
-            *ngIf="isAdmin"
-            (click)="deleteCourse(i)"
-            severity="danger"></p-button>
-</div>
+        <input pInputText
+               [formControlName]="i"
+               [attr.placeholder]="'Enter course name ' + (i + 1)"
+               class="w-full" />
 
+        <p-button icon="pi pi-trash"
+                  *ngIf="isAdmin"
+                  (click)="deleteCourse(i)"
+                  severity="primary"></p-button>
+      </div>
+    </div>
 
     <p-button label="Add Course"
               icon="pi pi-plus"
               (click)="addCourse()"
-              severity="success"></p-button>
-  </div>
+              severity="info"></p-button>
+  </form>
 
   <ng-template pTemplate="footer">
     <p-button label="Cancel"
@@ -84,8 +88,8 @@
               severity="secondary"></p-button>
     <p-button label="Save"
               icon="pi pi-check"
-              [disabled]="CheckIsValid()"
+              [disabled]="editForm.invalid"
               (click)="saveUpdatedCategory()"
-              severity="primary"></p-button>
+              severity="success"></p-button>
   </ng-template>
 </p-dialog>

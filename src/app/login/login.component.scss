@@ -16,12 +16,18 @@ input.ng-invalid.ng-touched {
 .cursor-pointer {
   color: rgba(0, 0, 255, 0.40); text-decoration: underline;
 }
-.register {
-  background-color: var(--primary-color);
+.register{
   color: #fff;
   text-decoration: none;
   padding: 10px;
   border-radius: 10px;
+  background: #fd5d93 !important;
+  border: 1px solid #fd5d93 !important;
+}
+::ng-deep .p-button-info {
+  background: var(--info-color) !important;
+  border: 1px solid var(--info-color) !important;
+  color: #fff !important;
 }
 .login-container {
     max-width: 400px;
@@ -33,5 +39,17 @@ input.ng-invalid.ng-touched {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   input {
     width: 100%;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .login-container{
+    background: var(--darkcontainer) !important;
+    border: 1px solid #3f3f46 !important;
+    input {
+      padding: 12px 12px 12px 40px !important;
+    }
+    .cursor-pointer {
+      color: #fff !important;
+    }
   }
 }

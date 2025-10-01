@@ -8,7 +8,7 @@
 }
 .p-menubar {
   height: 100%;
-  background: var(--main-gradient-navbar) !important;
+  background: transparent !important;
   border: none !important;
   border-radius: 0 !important;
 .p-menubar-root-list > .p-menubar-item > .p-menubar-item-content {
@@ -20,7 +20,7 @@
   border: none !important;
   outline: none !important;
     &:hover {
-      background-color: var(--primary-color);
+      background: var(--primary-color);
       border-radius: var(--radius) !important;
     }
 }
@@ -49,8 +49,10 @@
     display: none !important;
 }
 .username .p-button {
-  background-color: var(--primary-color) !important;
+  background: var(--primary-color) !important;
   border-radius: 10px !important;
+  color: #fff;
+  border: 1px solid var(--primary-color) !important;
 }
 .round .p-button {
   border-radius: 50% !important;

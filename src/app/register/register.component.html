@@ -50,9 +50,10 @@
     <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <!-- زر التسجيل -->
-    <button type="submit" [disabled]="registerForm.invalid">
-      {{ loading ? 'جارٍ التسجيل...' : 'إنشاء حساب' }}
-    </button>
+    <div class="w-full flex align-items-center justify-content-center">
+    <p-button severity="info" class="col-12 p-0" type="submit" label=" Create Account " [disabled]="registerForm.invalid">
+    </p-button>
+    </div>
   </form>
 
   <p>

@@ -12,15 +12,20 @@
 }
 
 :root {
-  --primary-color: rgb(36 185 204);
+  --primary-color: linear-gradient(to bottom left,#fd5d93,#ec250d,#fd5d93);
+  --info-color: #0369a1;
+  --success-color: #fd5d93;
+  --hoverprimary-color: rgb(244 67 54 / 50%);
   --secondary-color: #6c757d;
+  --boxShadow-color: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(244, 67, 54, .4);
   --danger-color: #dc3545;
   --radius: 10px;
   --main-gradient-navbar:  linear-gradient(90deg, #343a40, #0dcaf0);
   --main-gradient-sidebar: linear-gradient(135deg, #343a40, #0dcaf0);
-  --main-bg-content: #f8f9fa;
+  --main-bg-content: #eee;
   --main-text-content: #212529;
+  --darkcontainer: #212121;
 }
 body {
-  font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+  font-family: 'Montserrat','Helvetica',Arial,sans-serif;
 }

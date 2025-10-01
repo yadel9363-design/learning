@@ -13,7 +13,6 @@
   table-layout: fixed;
 
   th, td {
-    vertical-align: top;
     padding: 1rem;
     word-wrap: break-word;
   }
@@ -56,14 +55,18 @@
     flex-wrap: wrap;
   }
 
-  .p-button {
+  .p-button-danger {
     padding: 0.5rem !important;
     min-width: 2rem;
     min-height: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #fff !important;
+    background: var(--primary-color) !important;
   }
+
+
 }
 .custom-dialog-width {
   width: 450px !important;
@@ -72,5 +75,31 @@
     width: 350px !important;
   }
 }
-
+.p-dialog-footer {
+    margin-top: 20px;
+    gap: 15px !important;
 }
+}
+@media (prefers-color-scheme: dark) {
+::ng-deep {
+.p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
+    background: #555 !important;
+}
+}
+}
+::ng-deep .p-button-info {
+    background: #0369a1 !important;
+    border: 1px solid #0369a1 !important;
+    color: #fff !important;
+}
+::ng-deep .p-button-primary {
+    background: var(--primary-color) !important;
+    border: none !important;
+    color: #fff;
+}
+::ng-deep .p-button-success {
+    background: #fd5d93 !important;
+    border: none !important;
+    color: #fff;
+}
+

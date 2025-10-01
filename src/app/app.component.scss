@@ -21,7 +21,7 @@
   .content-router {
     background-image:
     linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
-    url(../assets/images/img1.png);
+    url(../assets/images/img3.png);
     background-size: inherit;
     background-position: center;
     background-repeat: no-repeat;
@@ -40,6 +40,9 @@
 }
 .navbar {
   height: 100px;
+  background: var(--boxShadow-color);
+  box-shadow: var(--boxShadow-color);
+  position: relative;
 }
 .content-router {
   min-height: calc(100vh - 100px);
@@ -66,4 +69,15 @@
 }
 .image-container-none {
   display: none;
+}
+@media (prefers-color-scheme: dark) {
+  .content {
+    background: #121212 !important;
+    color: #ffffff !important;
+  }
+
+  .custom-date {
+    background: #7777;
+    border: 1px solid #333;
+  }
 }

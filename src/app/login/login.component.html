@@ -62,7 +62,7 @@
       </div>
       <div class="flex flex-column align-items-center gap-1 mt-2">
         <div class="flex gap-3 align-items-center">
-          <p-button [disabled]="loginForm.invalid" type="submit" label="Login" class="mt-2" />
+          <p-button severity="info" [disabled]="loginForm.invalid" type="submit" label="Login" class="mt-2" />
           <a (click)="signInWithGoogle()" class="mt-2 cursor-pointer"> Sign in With Google?</a>
         </div>
       <a (click)="RedirectToRegister()" class="mt-5 register cursor-pointer"> Are you Not Have an Account?</a>

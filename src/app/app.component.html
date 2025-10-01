@@ -1,11 +1,11 @@
 <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase.js"></script>
   <div class="flex align-items-center container w-full" [ngClass]="{ 'overflow-hidden': !(user$ | async) }">
-    <div *ngIf="user$ | async as user" class="sidebar-container flex align-items-center justify-content-center">
+    <div [class.open]="(user$ | async)" *ngIf="user$ | async as user" class="sidebar-container flex align-items-center justify-content-center">
     <app-sidebar />
   </div>
 
   <div [ngClass]="{ 'image-container-none': (user$ | async), 'image-container': !(user$ | async) }">
-    <img src="assets/images/img1.png" width="100%" height="100%" alt="IMAGE">
+    <img src="assets/images/img3.png" width="100%" height="100%" alt="IMAGE">
   </div>
   <div [ngClass]="{ 'content': (user$ | async), 'isLoggedIn': !(user$ | async) }">
     <div class="navbar">
@@ -14,7 +14,7 @@
 <div class="content-router w-full">
 
 <div class="custom-date p-3 mx-3" *ngIf="lastSignInDate && user$ | async as user">
-<p class="custom-date">
+<p>
   Last Sign In: <span>{{ user?.metadata?.lastSignInTime | date:'medium' }}</span>
 </p>
 </div>

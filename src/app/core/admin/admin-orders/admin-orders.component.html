@@ -2,7 +2,7 @@
   <p-button label="Add New Category"
             icon="pi pi-plus"
             (click)="showAddCategoryDialog()"
-            severity="success"></p-button>
+            severity="info"></p-button>
 </div>
 
 <!-- نمرر الداتا للـ child component -->
@@ -32,14 +32,14 @@
              class="w-full" />
       <p-button icon="pi pi-trash"
                 (click)="deleteNewCourse(i)"
-                severity="danger"
+                severity="primary"
                 size="small"></p-button>
     </div>
 
     <p-button label="Add Course"
               icon="pi pi-plus"
               (click)="addNewCourse()"
-              severity="success"
+              severity="info"
               class="mb-3"></p-button>
   </div>
 
@@ -52,6 +52,6 @@
               icon="pi pi-check"
               (click)="saveNewCategory()"
               [disabled]="isSaveDisabled()"
-              severity="primary"></p-button>
+              severity="success"></p-button>
   </ng-template>
 </p-dialog>
