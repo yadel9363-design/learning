@@ -74,10 +74,13 @@ async saveNewCategory() {
 
     this.isAddCategoryDialogVisible = false;
 
-    // تحديث البيانات محلياً حتى تظهر في الواجهة بدون إعادة تحميل
+    // ✅ حافظ على نفس شكل Firestore
     this.courses = {
       ...this.courses,
-      [category]: filteredCourses
+      [category]: {
+        value: filteredCourses.map(c => ({ name: c, createdAt: new Date().toISOString() })),
+        createdAt: new Date().toISOString()
+      }
     };
 
     console.log('Category and courses added successfully!', category);
@@ -85,6 +88,7 @@ async saveNewCategory() {
     console.error('Error saving new category:', error);
   }
 }
+
 
 
   cancelAddCategory() {

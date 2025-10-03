@@ -87,19 +87,27 @@
 }
 }
 }
-::ng-deep .p-button-info {
+::ng-deep {
+  .p-button-info {
     background: #0369a1 !important;
     border: 1px solid #0369a1 !important;
     color: #fff !important;
 }
-::ng-deep .p-button-primary {
+.p-button-primary {
     background: var(--primary-color) !important;
     border: none !important;
     color: #fff;
 }
-::ng-deep .p-button-success {
+.p-button-success {
     background: #fd5d93 !important;
     border: none !important;
     color: #fff;
 }
-
+.custom-dialog-width{
+  i {
+    font-size: 40px;
+    color: var(--danger-color) !important;
+    padding-bottom: 20px;
+  }
+}
+}

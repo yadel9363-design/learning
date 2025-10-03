@@ -6,11 +6,12 @@ import { SidebarComponent } from './layout/sidebar/component/sidebar.component';
 import { AuthService } from './shared/services/auth.service';
 import { User } from 'firebase/auth';
 import { Observable } from 'rxjs';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, RouterOutlet, SidebarComponent],
+  imports: [CommonModule, NavbarComponent, RouterOutlet, SidebarComponent, ToastModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

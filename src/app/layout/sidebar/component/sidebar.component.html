@@ -14,8 +14,10 @@
           <a   [routerLink]="item.routerLink"
       routerLinkActive="item-active"
       [routerLinkActiveOptions]="{ exact: true }">
+            <i [class]="item.icon"></i>
             {{ item.label }}
           </a>
+
         }
         </p>
     </div>
@@ -35,6 +37,7 @@
   routerLinkActive="item-active"
   (click)="closeDrawer()"
   [routerLinkActiveOptions]="{ exact: true }">
+        <i [class]="item.icon"></i>
         {{ item.label }}
       </a>
     }

@@ -7,7 +7,7 @@
         <p-button
         type="button"
         class="username"
-        (click)="menu.toggle($event)">
+        (click)="menu.toggle($event)" >
         {{ username.displayName ? 'hello, ' + username.displayName : '' }}
         <i class="pi pi-chevron-down ml-2"></i>
       </p-button>
@@ -16,7 +16,7 @@
         class="username round"
         icon="pi pi-angle-right"
         type="button"
-        (click)="toggleDrawer()"
+        (onClick)="toggleDrawer()"
       >
       </p-button>
       </div>

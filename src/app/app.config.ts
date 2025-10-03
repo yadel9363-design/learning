@@ -16,7 +16,7 @@ import { environment } from '../environments/environment';
 import { provideServerRendering } from '@angular/ssr';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
-
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -41,5 +41,6 @@ export const appConfig: ApplicationConfig = {
     }),
 
     ...firebaseProviders,
+    MessageService
   ],
 };

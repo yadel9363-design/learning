@@ -24,7 +24,7 @@ import { UserService } from '../../../shared/services/user.service';
 export class SidebarComponent implements OnInit {
   visible = false;
   isAdmin = false;
-  itemsList: Array<{ label: string; routerLink: string }> = [];
+  itemsList: Array<{ label: string; routerLink: string; icon: string }> = [];
 
   constructor(
     private drawerService: DrawerService,
@@ -48,15 +48,15 @@ export class SidebarComponent implements OnInit {
 
   private buildMenu() {
     this.itemsList = [
-      { label: 'Activities', routerLink: 'home' },
-      { label: 'Products', routerLink: 'products' },
-      { label: 'Orders', routerLink: 'orders' },
+      { label: 'Activities', routerLink: 'home', icon: 'fa-solid fa-house' },
+      { label: 'Products', routerLink: 'products', icon: 'fa-solid fa-layer-group' },
+      { label: 'Orders', routerLink: 'orders', icon: 'fa-solid fa-server' },
     ];
 
     if (this.isAdmin) {
       this.itemsList.push(
-        { label: 'Manage Orders', routerLink: 'admin/orders' },
-        { label: 'Manage Products', routerLink: 'admin/products' }
+        { label: 'Manage Orders', routerLink: 'admin/orders', icon: 'fa-solid fa-book-tanakh' },
+        { label: 'Manage Products', routerLink: 'admin/products', icon: 'fa-solid fa-book-tanakh' }
       );
     }
   }

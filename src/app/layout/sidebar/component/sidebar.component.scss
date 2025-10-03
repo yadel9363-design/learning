@@ -14,10 +14,11 @@
     height: 100px;
   }
   p a {
-    text-align: center;
-    color: #000;
+    color: #b6b6b6;
     font-size: 20px;
     outline: none;
+    display: flex;
+    gap: 10px;
   }
 }
 .sidebar-mobile {
@@ -34,7 +35,7 @@ display: none;
   padding: 8px 12px;
   border-radius: 6px;
   transition: ease-out 0.2s;
-            &:hover {
+          &:hover {
             background: var(--hoverprimary-color) !important;
             color: #fff !important;
           }
@@ -43,9 +44,24 @@ display: none;
   color: #fff !important;
   background: var(--primary-color);
   box-shadow: var(--boxShadow-color);
-        &:hover {
-        background: var(--primary-color) !important;
-        color: #fff !important;
+  position: relative;
+  margin-left: 20px;
+  transition: 0.25s ease-out;
+            &:hover {
+            background: var(--primary-color) !important;
+            color: #fff !important;
+          }
+        &::before {
+        content: "";
+        left: -35px;
+        top: 0;
+        bottom: 0;
+        width: 10px;
+        height: 100%;
+        position: absolute;
+        background: var(--hoverprimary-color) !important;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
       }
 }
 }
@@ -74,6 +90,7 @@ display: block;
     background: #fff !important;
     border: none !important;
     border-radius: 0 !important;
+    transition: ease-in 0.4s;
     .p-drawer-header {
     padding: 10px !important;
     padding-bottom: 20px !important;
@@ -107,20 +124,37 @@ display: block;
   border-radius: 6px;
   padding: 8px 12px;
   transition: ease-out 0.2s;
-  text-align: center;
-          &:hover {
-            background: var(--hoverprimary-color) !important;
-            color: #fff !important;
-          }
+  gap: 20px;
+  display: flex;
+  margin-left: 20px;
+    &:hover {
+      background: var(--hoverprimary-color) !important;
+      color: #fff !important;
+    }
 }
 .p-drawer p a.item-active {
   color: #fff !important;
   background: var(--primary-color);
   border-radius: 6px;
   padding: 8px 12px;
-  &:hover {
-    background: var(--primary-color) !important;
-  }
+  transition: 0.25s ease-out;
+  position: relative;
+            &:hover {
+            background: var(--primary-color) !important;
+            color: #fff !important;
+          }
+        &::before {
+        content: "";
+        left: -35px;
+        top: 0;
+        bottom: 0;
+        width: 10px;
+        height: 100%;
+        position: absolute;
+        background: var(--hoverprimary-color) !important;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+      }
 }
 .p-drawer-content {
   margin-top: 30px;

@@ -1,41 +1,10 @@
-<div class="card w-full">
-<div class="flex gap-2 justify-content-center flex-wrap">
-    <div class="card-smallChart">
-    <p-chart
-      *ngIf="coursesDoughnut"
-      type="doughnut"
-      [data]="coursesDoughnut"
-      [options]="optionsDoughnut"
-      class="w-full md:w-[30rem] h-[25rem] col-4">
-    </p-chart>
-  </div>
-  <div class="card-smallChart">
-    <p-chart
-      *ngIf="coursesDoughnut"
-      type="doughnut"
-      [data]="coursesDoughnut"
-      [options]="optionsDoughnut"
-      class="w-full md:w-[30rem] h-[25rem] col-4">
-    </p-chart>
-  </div>
-  <div class="card-smallChart">
-    <p-chart
-      *ngIf="coursesDoughnut"
-      type="doughnut"
-      [data]="coursesDoughnut"
-      [options]="optionsDoughnut"
-      class="w-full md:w-[30rem] h-[25rem] col-4">
-    </p-chart>
+<div class="container">
+  <h1 class="my-4">Activities</h1>
+<div class="dashboard">
+  <div class="chart-card">
+    <h2 class="mb-4">Categories</h2>
+    <p-chart type="bar" [data]="coursesBar" [options]="optionsBar" height="300px"></p-chart>
   </div>
 </div>
 
-  <!-- <div class="card-BigChart">
-    <p-chart
-      *ngIf="coursesBar"
-      type="bar"
-      [data]="coursesBar"
-      [options]="optionsBar"
-      class="h-[30rem]">
-    </p-chart>
-  </div> -->
 </div>

@@ -1,20 +1,18 @@
 import { Component, OnInit, PLATFORM_ID, ChangeDetectorRef, inject } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { HomeService } from '../service/home.service';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { CourseService } from '../../my-orders/service/course.service';
 import { take } from 'rxjs';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-home',
   imports: [ChartModule, CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  coursesDoughnut: any = {};
-  optionsDoughnut: any;
-
   coursesBar: any = {};
   optionsBar: any;
 
@@ -29,84 +27,83 @@ export class HomeComponent implements OnInit {
   }
 
   initCharts() {
-    this.courseService.getCourses().pipe(take(1)).subscribe(data => {
-      console.log('Courses loaded:', data);
+    this.courseService.getCourses().pipe(take(1)).subscribe((data: any) => {
+      console.log('🔥 Raw Data From Backend:', JSON.stringify(data, null, 2));
 
-      const labels = Object.keys(data);
-      const courseLists = Object.values(data) as string[][];
-      const values = courseLists.map(arr => arr.length);
+      const grouped: Record<string, number> = {};
 
-      const colors = ['#42A5F5', '#66BB6A', '#FFA726', '#AB47BC'];
+      // كل كاتيجوري له createdAt
+      Object.keys(data).forEach(catKey => {
+        const category = data[catKey];
 
-      // 🎯 Doughnut chart
-      this.coursesDoughnut = {
-        labels: labels,
-        datasets: [
-          {
-            data: values,
-            backgroundColor: labels.map((_, i) => colors[i % colors.length]),
-            hoverBackgroundColor: labels.map((_, i) => colors[i % colors.length])
+        if (category && category.createdAt) {
+          const dayStr = dayjs(category.createdAt).format('YYYY-MM-DD');
+
+          if (!grouped[dayStr]) {
+            grouped[dayStr] = 0;
           }
-        ]
-      };
-
-      this.optionsDoughnut = {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '60%',
-        plugins: {
-          legend: {
-            position: 'top',
-            labels: {
-              color: '#333'
-            }
-          },
-          tooltip: {
-            callbacks: {
-              label: (context: any) => {
-                const index = context.dataIndex;
-                const courses = courseLists[index];
-                return `Courses → [${courses.join(', ')}]`;
-              }
-            }
-          }
+          grouped[dayStr]++; // كل كاتيجوري يتحسب مرة واحدة
         }
-      };
+      });
 
-      // 🎯 Bar chart
+
+      const labels = Object.keys(grouped).sort();
+      const counts = labels.map(day => grouped[day]);
+
 this.coursesBar = {
-  labels: labels, // 👈 المحور X فيه أسماء الـ categories
-  datasets: labels.map((category, i) => ({
-    label: category,  // 👈 هنا كل كاتيجوري ليه label خاص بيه
-    data: labels.map((_, j) => (i === j ? values[i] : 0)), // 👈 بار واحد لكل كاتيجوري
-    backgroundColor: colors[i % colors.length],
-    hoverBackgroundColor: colors[i % colors.length]
-  }))
+  labels: labels.map(d => dayjs(d).format('MMM DD')),
+  datasets: [
+    {
+      label: 'عدد الكاتيجوريز',
+      data: counts,
+      backgroundColor: '#42A5F5',
+      hoverBackgroundColor: '#1E88E5', // لون أغمق لما تعمل hover
+      hoverOffset: 8 ,
+      borderRadius: 6,
+      barPercentage: 0.5,
+      categoryPercentage: 0.6,
+      maxBarThickness: 25
+    }
+  ]
 };
 
 
 this.optionsBar = {
   responsive: true,
   plugins: {
+    legend: { display: false },
     tooltip: {
       callbacks: {
-        label: (context: any) => {
-          const index = context.dataIndex;
-          const courses = courseLists[index];
-          return `Courses → [${courses.join(', ')}]`;
-        }
+        label: (context: any) => `Categories: ${context.raw}`
       }
     }
   },
+  animation: {
+    duration: 600,
+    easing: 'easeOutQuart'
+  },
+  interaction: {
+    mode: 'nearest',
+    intersect: true
+  },
+  datasets: {
+    bar: {
+      hoverBackgroundColor: '#1E88E5',
+    }
+  },
   scales: {
+    x: {
+      ticks: { color: '#666' },
+      grid: { display: false }
+    },
     y: {
       beginAtZero: true,
-      ticks: {
-        stepSize: 1
-      }
+      ticks: { stepSize: 2, color: '#666' },
+      grid: { drawBorder: false }
     }
   }
 };
+
 
       this.cd.markForCheck();
     });

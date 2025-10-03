@@ -9,3 +9,40 @@
   padding: 20px;
   border-radius: 15px;
 }
+.dashboard {
+  display: flex;
+  border-radius: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+
+  .chart-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    width: 100%;
+  }
+
+  .gauges {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 30%;
+    .gauge-card {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      text-align: center;
+
+      h4 { margin: 0; font-weight: 600; }
+      h2 { margin: 0.5rem 0; font-size: 1.8rem; }
+      p { color: #666; font-size: 0.9rem; }
+    }
+  }
+}
+@media (prefers-color-scheme: dark) {
+    .chart-card {
+    background: #313131 !important;
+  }
+}
