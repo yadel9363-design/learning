@@ -1,4 +1,3 @@
-// src/app/shared/DTO/firebase.config.ts
 import { provideFirebaseApp } from '@angular/fire/app';
 import { initializeApp, getApps, getApp } from 'firebase/app';
 

@@ -10,6 +10,9 @@ import { Auth, onAuthStateChanged, signOut, User } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { MenuModule } from 'primeng/menu';
 import { DrawerService } from '../sidebar/service/sidebar.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-navbar',
@@ -33,6 +36,8 @@ export class NavbarComponent implements OnInit {
   private router = inject(Router);
   private auth = inject(Auth);
   private drawerService = inject(DrawerService);
+  private authService = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef);
 
  photoURL?: string;
 
@@ -41,15 +46,18 @@ export class NavbarComponent implements OnInit {
   }
 
   constructor() {
-  onAuthStateChanged(this.auth, (user) => {
-    this.username = user;
-    this.photoURL = user?.photoURL ?? undefined;
-    this.setupMenu();         // desktop menu
-    this.setupMenuMobile();   // mobile menu
-  });
   }
 
   ngOnInit() {
+    this.authService.user$.subscribe((user) => {
+      if (user) {
+        this.username = user;
+        this.photoURL = user.photoURL ?? undefined;
+        this.setupMenu();
+        this.setupMenuMobile();
+        this.cdr.detectChanges(); // 👈 يجبر PrimeNG على التحديث
+      }
+    });
   }
 
 Logout() {
@@ -64,13 +72,22 @@ Logout() {
       console.error('فشل تسجيل الخروج:', error);
     });
 }
-
+getProfile(){
+  this.router.navigateByUrl('/profile')
+}
 setupMenu() {
   const itemsChildren: MenuItem[] = [
     {
+      label: 'Profile',
+      command: () => this.getProfile(),
+    },
+    {
+      separator: true,
+    },
+    {
       label: 'Logout',
       command: () => this.Logout(),
-    },
+    }
   ];
 
   this.items = [];
@@ -92,6 +109,13 @@ setupMenuMobile() {
 
   if (this.username) {
     this.itemsMobile = [
+      {
+        label: 'Profile',
+        command: () => this.getProfile(),
+      },
+      {
+        separator: true,
+      },
       {
         label: 'Logout',
         command: () => this.Logout(),

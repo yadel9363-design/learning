@@ -1,8 +1,10 @@
 export interface AppUser {
   uid: string;
-  email: string | null;
-  displayName: string | null;
-  photoURL: string | null;
-  providerId: string;
-  isAdmin: boolean; 
+  displayName: string;
+  email: string;
+  photoURL?: string;
+  providerId?: string;
+  phoneNumber?: string;
+  gender?: string;
+  isAdmin?: boolean;
 }

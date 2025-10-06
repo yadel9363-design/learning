@@ -1,0 +1,137 @@
+<div class="profile-wrapper">
+  <div class="profile-header">
+    <div class="cover-photo"></div>
+    <div class="avatar-container">
+      <img
+        [src]="photoURL || 'assets/images/img4.png'"
+        alt="Profile"
+        class="avatar"
+        (click)="fileInput.click()"
+      />
+      <input
+        #fileInput
+        type="file"
+        accept="image/*"
+        hidden
+        (change)="onFileChange($event)"
+      />
+    </div>
+    <h2 class="username">
+      {{ username?.displayName || 'User' }}
+      <img
+        *ngIf="username?.isAdmin"
+        src="assets/images/verify.png"
+        alt="verified"
+        class="verified"
+      />
+    </h2>
+  </div>
+
+  <div class="profile-content glass-card">
+    <h3>Profile Details</h3>
+<div class="info-grid">
+  <!-- Email -->
+  <div class="info-item" *ngIf="username?.email">
+    <span class="label">📧 Email</span>
+    <span class="value">{{ username?.email }}</span>
+  </div>
+
+  <!-- Gender -->
+  <div class="info-item">
+    <span class="label">🚻 Gender</span>
+
+    <ng-container *ngIf="username?.gender || gender">
+      <span class="value">{{ username?.gender || gender }}</span>
+    </ng-container>
+
+    <ng-container *ngIf="!username?.gender && !gender">
+      <div class="flex gap-2 items-center">
+<div class="gender-options">
+  <div class="flex align-items-center justify-content-start flex-wrap gap-4 mt-2">
+    <div class="flex gap-2">
+    <label for="male">Male</label>
+    <p-radioButton
+      name="gender"
+      inputId="male"
+      value="Male"
+      [(ngModel)]="genderInput"
+      label="Male ♂️"
+    ></p-radioButton>
+    </div>
+    <div class="flex gap-2">
+    <label for="female">Female</label>
+    <p-radioButton
+      name="gender"
+      inputId="female"
+      value="Female"
+      [(ngModel)]="genderInput"
+      label="Female ♀️"
+    ></p-radioButton>
+    </div>
+    <div class="flex gap-2">
+    <label for="other">Other</label>
+    <p-radioButton
+      name="gender"
+      inputId="other"
+      value="Other"
+      [(ngModel)]="genderInput"
+      label="Other ⚧️"
+    ></p-radioButton>
+    </div>
+  </div>
+</div>
+
+
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Phone -->
+  <div class="info-item">
+    <span class="label">📱 Phone</span>
+
+    <ng-container *ngIf="username?.phoneNumber || phoneNumber">
+      <span class="value">{{ username?.phoneNumber || phoneNumber }}</span>
+    </ng-container>
+
+    <ng-container *ngIf="!username?.phoneNumber && !phoneNumber">
+      <input
+        type="text"
+        placeholder="Enter phone number"
+        [(ngModel)]="phoneInput"
+        class="p-inputtext p-component"
+      />
+    </ng-container>
+  </div>
+
+  <!-- Account creation -->
+  <div class="info-item" *ngIf="username?.metadata?.creationTime">
+    <span class="label">🗓️ Account Created</span>
+    <span class="value">
+      {{ username?.metadata?.creationTime | date: 'MMM d, y' }}
+    </span>
+  </div>
+
+  <!-- Last login -->
+  <div class="info-item" *ngIf="username?.metadata?.lastSignInTime">
+    <span class="label">⏰ Last Login</span>
+    <span class="value">
+      {{ username?.metadata?.lastSignInTime | date: 'MMM d, y, h:mm a' }}
+    </span>
+  </div>
+</div>
+
+<!-- Save Button -->
+<div *ngIf="genderInput || phoneInput" class="save mt-4 flex w-full justify-center">
+  <p-button
+    label="Save"
+    icon="pi pi-save"
+    class="col-4 p-0"
+    severity="info"
+    [disabled]="!genderInput || !phoneInput || loading"
+    (click)="saveExtraInfo()"
+  ></p-button>
+</div>
+
+  </div>
+</div>

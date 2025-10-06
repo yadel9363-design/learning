@@ -1,31 +1,38 @@
-import { Injectable } from '@angular/core';
-import { Firestore, doc, docData, updateDoc, arrayUnion, deleteDoc, setDoc, DocumentReference, serverTimestamp } from '@angular/fire/firestore';
+import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
+import { Firestore, doc, docData, updateDoc, arrayUnion, deleteDoc, setDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { deleteField } from '@angular/fire/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class CourseService {
-  constructor(private firestore: Firestore) {}
+  private firestore = inject(Firestore);
+  private envInjector = inject(EnvironmentInjector);
 
-  public getDocRef(): DocumentReference {
+  private runInCtx<T>(fn: () => T): T {
+    return runInInjectionContext(this.envInjector, fn);
+  }
+
+  public getDocRef() {
     return doc(this.firestore, 'categories/Courses');
   }
 
   getCourses(): Observable<any> {
-    return docData(this.getDocRef());
+    return this.runInCtx(() => docData(this.getDocRef()));
   }
 
   async createCourse(category: string, course: string) {
-    await updateDoc(this.getDocRef(), {
-      [category + '.value']: arrayUnion({ name: course, createdAt: new Date().toISOString() })
+    return this.runInCtx(async () => {
+      await updateDoc(this.getDocRef(), {
+        [category + '.value']: arrayUnion({ name: course, createdAt: new Date().toISOString() })
+      });
     });
   }
 
   async updateCategory(oldKey: string, updatedCategory: { key: string; value: string[] }) {
-    try {
+    return this.runInCtx(async () => {
       const docRef = this.getDocRef();
-
       const updatePayload: any = {};
+
       updatePayload[updatedCategory.key] = {
         value: updatedCategory.value.map(v => ({
           name: v,
@@ -40,25 +47,20 @@ export class CourseService {
 
       await setDoc(docRef, updatePayload, { merge: true });
       console.log('✅ Category updated successfully');
-    } catch (error) {
-      console.error('❌ Error updating category:', error);
-      throw error;
-    }
+    });
   }
 
   async deleteCategory(categoryKey: string) {
-    try {
-      const docRef = doc(this.firestore, 'categories/Courses');
+    return this.runInCtx(async () => {
+      const docRef = this.getDocRef();
       await updateDoc(docRef, {
         [categoryKey]: deleteField()
       });
-    } catch (error) {
-      console.error('❌ Error deleting category:', error);
-    }
+    });
   }
 
   async createCategory(title: string): Promise<void> {
-    try {
+    return this.runInCtx(async () => {
       const docRef = this.getDocRef();
       await updateDoc(docRef, {
         [title]: {
@@ -67,38 +69,28 @@ export class CourseService {
         }
       });
       console.log(`✅ Category '${title}' created successfully`);
-    } catch (error) {
-      console.error('❌ Error creating category:', error);
-      throw error;
-    }
-  }
-
-  // 🟢 Migration: تحويل البيانات القديمة إلى هيكل جديد فيه createdAt
-// course.service.ts
-async migrateCategories(oldData: any) {
-  try {
-    const docRef = this.getDocRef();
-    const updatePayload: any = {};
-
-    Object.keys(oldData).forEach(catKey => {
-      const value = oldData[catKey];
-      if (Array.isArray(value)) {
-        updatePayload[catKey] = {
-          value: value.map(v => ({
-            name: v,
-            createdAt: new Date().toISOString()
-          })),
-          createdAt: new Date().toISOString()
-        };
-      }
     });
-
-    // 🟢 مره واحدة كفاية → بعد كده ما تستخدمهاش
-    await setDoc(docRef, updatePayload, { merge: true });
-    console.log('✅ Migration Done Successfully');
-  } catch (error) {
-    console.error('❌ Migration Error:', error);
   }
-}
 
+  async migrateCategories(oldData: any) {
+    return this.runInCtx(async () => {
+      const docRef = this.getDocRef();
+      const updatePayload: any = {};
+
+      Object.keys(oldData).forEach(catKey => {
+        const value = oldData[catKey];
+        if (Array.isArray(value)) {
+          updatePayload[catKey] = {
+            value: value.map(v => ({
+              name: v,
+              createdAt: new Date().toISOString()
+            })),
+            createdAt: new Date().toISOString()
+          };
+        }
+      });
+
+      await setDoc(docRef, updatePayload, { merge: true });
+    });
+  }
 }

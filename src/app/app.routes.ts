@@ -9,6 +9,7 @@ import { HomeComponent } from './core/home/component/home.component';
 import { AuthGuard } from './shared/services/auth-guard.service';
 import { UserAuthGuard } from './shared/services/user-auth-guard.service';
 import { RegisterComponent } from './register/register.component';
+import { ProfileComponent } from './layout/profile/profile.component';
 
 
 export const routes: Routes = [
@@ -16,6 +17,7 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'orders', component: MyOrdersComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
+    { path: 'profile', component: ProfileComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'admin/orders', component: AdminOrdersComponent,
        canActivate: [AuthGuard, UserAuthGuard] },

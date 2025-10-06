@@ -15,7 +15,7 @@ export class UniquenessValidator {
       // محاكاة check في DB
       //semulation for excute check if username is already founded
       setTimeout(() => {
-        if (control.value === 'youssef@gmail.com') {
+        if (control.value === 'youssef2003@gmail.com') {
           resolve({ existname: true });
         } else {
           resolve(null);

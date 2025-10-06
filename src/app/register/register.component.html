@@ -1,63 +1,114 @@
 <div class="register-container">
-  <h2> Register Account </h2>
+  <h2>Register Account</h2>
 
   <form [formGroup]="registerForm" (ngSubmit)="register()">
     <!-- الاسم -->
     <div class="form-group">
       <label for="displayName">Name</label>
       <input
-      pInputText
+        pInputText
         id="displayName"
         type="text"
         formControlName="displayName"
-        placeholder="your name"
+        placeholder="Your name"
       />
-      <div class="error" *ngIf="registerForm.get('displayName')?.touched && registerForm.get('displayName')?.invalid">
-        name Should be more than 3 character
+      <div
+        class="error"
+        *ngIf="registerForm.get('displayName')?.touched && registerForm.get('displayName')?.invalid"
+      >
+        Name should be more than 3 characters
       </div>
     </div>
 
     <!-- الإيميل -->
     <div class="form-group">
-      <label for="email"> Email </label>
+      <label for="email">Email</label>
       <input
-      pInputText
+        pInputText
         id="email"
         type="email"
         formControlName="email"
         placeholder="example@email.com"
       />
-      <div class="error" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
-        email not valid
+      <div
+        class="error"
+        *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
+      >
+        Email not valid
+      </div>
+    </div>
+
+    <!-- رقم الهاتف -->
+    <div class="form-group">
+      <label for="phoneNumber">Phone Number</label>
+      <input
+        pInputText
+        id="phoneNumber"
+        type="text"
+        formControlName="phoneNumber"
+        placeholder="Enter phone number"
+      />
+      <div
+        class="error"
+        *ngIf="registerForm.get('phoneNumber')?.touched && registerForm.get('phoneNumber')?.invalid"
+      >
+        Phone number must be between 10 and 15 digits
+      </div>
+    </div>
+
+    <!-- الجنس -->
+    <div class="form-group">
+      <label for="gender">Gender</label>
+      <p-autoComplete
+        id="gender"
+        formControlName="gender"
+        [suggestions]="filteredGenders"
+        (completeMethod)="filterGender($event)"
+        [dropdown]="true"
+        placeholder="Select or type gender"
+      ></p-autoComplete>
+      <div
+        class="error"
+        *ngIf="registerForm.get('gender')?.touched && registerForm.get('gender')?.invalid"
+      >
+        Gender is required
       </div>
     </div>
 
     <!-- الباسورد -->
     <div class="form-group">
-      <label for="password"> Password </label>
+      <label for="password">Password</label>
       <input
-      pInputText
+        pInputText
         id="password"
         type="password"
         formControlName="password"
       />
-      <div class="error" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
-        password should be more than 6 character
+      <div
+        class="error"
+        *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid"
+      >
+        Password should be more than 6 characters
       </div>
     </div>
 
     <!-- رسالة الخطأ -->
-    <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <!-- زر التسجيل -->
-    <div class="w-full flex align-items-center justify-content-center">
-    <p-button severity="info" class="col-12 p-0" type="submit" label=" Create Account " [disabled]="registerForm.invalid">
-    </p-button>
+    <div class="w-full flex-column flex align-items-center justify-content-center">
+      <p-button
+        severity="info"
+        class="col-12 p-0"
+        type="submit"
+        label="Create Account"
+        [disabled]="registerForm.invalid || loading"
+      ></p-button>
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
     </div>
   </form>
 
   <p>
-    Are you already have account?
-    <a (click)="GoToLogin()"> Sign In </a>
+    Already have an account?
+    <a (click)="GoToLogin()">Sign In</a>
   </p>
 </div>

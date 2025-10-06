@@ -75,3 +75,9 @@
     padding: 12px !important;
   }
 }
+.error {
+  background: var(--danger-color);
+  padding: 10px;
+  border-radius: 10px;
+  color: #fff;
+}

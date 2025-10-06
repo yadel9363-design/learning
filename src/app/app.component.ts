@@ -5,8 +5,11 @@ import { NavbarComponent } from './layout/navbar/navbar.component';
 import { SidebarComponent } from './layout/sidebar/component/sidebar.component';
 import { AuthService } from './shared/services/auth.service';
 import { User } from 'firebase/auth';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
+import { UserService } from './shared/services/user.service';
+import { AppUser } from './shared/DTO/user.model';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +25,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private userService: UserService,
     private router: Router,
     private zone: NgZone,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -29,18 +33,34 @@ export class AppComponent implements OnInit {
     this.user$ = this.authService.user$;
   }
 
-  ngOnInit(): void {
-    this.user$.subscribe(user => {
-      if (user?.metadata?.lastSignInTime) {
-        this.lastSignInDate = new Date(user.metadata.lastSignInTime);
+async ngOnInit(): Promise<void> {
+  this.user$
+    .pipe(
+      switchMap((user) => {
+        if (!user) return of(null);
+        if (user.metadata?.lastSignInTime) {
+          this.lastSignInDate = new Date(user.metadata.lastSignInTime);
+        }
+
+        if (user && this.router.url === '/login') {
+          this.router.navigateByUrl('/home');
+        }
+
+        return this.userService.getCurrentUserData();
+      })
+    )
+    .subscribe((appUser: AppUser | null) => {
+      if (!appUser) {
+        return;
       }
 
-      // إعادة توجيه من login إذا المستخدم موجود
-      if (user && this.router.url === '/login') {
-        this.router.navigateByUrl('/home');
+      if (appUser.isAdmin) {
+        this.userService.updateOldUsers();
+      } else {
       }
     });
-  }
+}
+
 
   async signInWithGoogle() {
     await this.authService.loginWithGoogle();
