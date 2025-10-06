@@ -14,6 +14,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
+import { setPersistence, inMemoryPersistence } from '@angular/fire/auth';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -30,6 +31,15 @@ export class AuthService {
     if (isPlatformBrowser(this.platformId)) {
       this.initAuthListener();
     }
+    if (isPlatformBrowser(this.platformId)) {
+    // 🧠 منع Firebase من تخزين المستخدم في session/local storage
+    setPersistence(this.auth, inMemoryPersistence)
+      .then(() => {
+        console.log('✅ Firebase persistence set to in-memory (no storage)');
+        this.initAuthListener();
+      })
+      .catch((err) => console.error('❌ Failed to set persistence', err));
+  }
   }
 
   /** ✅ تهيئة authState */
