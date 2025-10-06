@@ -10,6 +10,7 @@ import { UserService } from '../../shared/services/user.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -31,14 +32,25 @@ throw new Error('Method not implemented.');
 }
   photoURL?: string;
   username: User | null = null;
-  showCropper = false;
   imageChangedEvent: any = '';
   croppedImage: string | null = null;
-  loading = false;
   phoneNumber: string = '';
+  userName: string = '';
+  emailText: string = '';
   genderInput: string = '';
   phoneInput: string = '';
   gender: string = '';
+  usernameInput: string = '';
+  genderEditInput: string = '';
+  PhoneEditInput: string = '';
+  EmailEditInput: string = '';
+
+  showCropper = false;
+  loading = false;
+  isEditingGender = false;
+  isEditingPhoneNumber = false;
+  isEditingEmail = false;
+  isEditingUsername = false;
 
   private db = inject(Database);
   private auth = inject(Auth);
@@ -46,6 +58,7 @@ throw new Error('Method not implemented.');
   private injector = inject(EnvironmentInjector);
   private userService = inject(UserService);
   private authService = inject(AuthService);
+  private messageService = inject(MessageService);
 
   async ngOnInit(): Promise<void> {
     // ✅ راقب المستخدم الحالي مباشرة من AuthService
@@ -157,12 +170,165 @@ throw new Error('Method not implemented.');
 
       this.genderInput = '';
       this.phoneInput = '';
-      alert('✅ Saved successfully!');
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: '✅ Saved successfully' });
     } catch (err) {
       console.error('❌ Error saving extra info:', err);
-      alert('Error saving info. Please try again.');
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Error saving info, Please try again.' });
     } finally {
       this.loading = false;
     }
   }
+
+  startEditGender() {
+  this.isEditingGender = true;
+  this.genderEditInput = this.username?.gender || this.gender || '';
+  }
+  cancelEditGender() {
+  this.isEditingGender = false;
+  this.genderEditInput = '';
+  }
+  async saveGenderEdit() {
+  if (!this.username || !this.genderEditInput) return;
+  this.loading = true;
+
+  try {
+    await this.userService.updateUser(this.username.uid, {
+      gender: this.genderEditInput,
+    });
+    this.gender = this.genderEditInput;
+    if (this.username) (this.username as any).gender = this.genderEditInput;
+
+    await this.authService.refreshUserData();
+
+    this.isEditingGender = false;
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: '🚻 gender updated Successfully' });
+  } catch (err) {
+    console.error('❌ Error updating gender:', err);
+    this.messageService.add({ severity: 'danger', summary: 'danger', detail: 'Error updating gender, Please try again.' });
+  } finally {
+    this.loading = false;
+  }
+  }
+
+  startEditPhoneNumber() {
+  this.isEditingPhoneNumber = true;
+  this.PhoneEditInput = this.username?.phoneNumber || this.phoneNumber || '';
+  }
+  CancelEditPhoneNumber() {
+  this.isEditingPhoneNumber = false;
+  this.PhoneEditInput = '';
+  }
+  async savePhoneEdit() {
+  if (!this.username || !this.PhoneEditInput) return;
+  this.loading = true;
+
+  try {
+    await this.userService.updateUser(this.username.uid, {
+      phoneNumber: this.PhoneEditInput,
+    });
+
+    this.phoneNumber = this.PhoneEditInput;
+    if (this.username) (this.username as any).phoneNumber = this.PhoneEditInput;
+
+    await this.authService.refreshUserData();
+
+    this.isEditingPhoneNumber = false;
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: '📱 Phone number updated successfully',
+    });
+  } catch (err) {
+    console.error('❌ Error updating phone number:', err);
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Error updating phone number, please try again.',
+    });
+  } finally {
+    this.loading = false;
+  }
+  }
+
+  startEditEmail() {
+  this.isEditingEmail = true;
+  this.EmailEditInput = this.username?.email || this.emailText || '';
+  }
+  CancelEditEmail() {
+  this.isEditingEmail = false;
+  this.EmailEditInput = '';
+  }
+  async saveEmailEdit() {
+  if (!this.username || !this.EmailEditInput) return;
+  this.loading = true;
+
+  try {
+    await this.userService.updateUser(this.username.uid, {
+      email: this.EmailEditInput,
+    });
+
+    this.emailText = this.EmailEditInput;
+    if (this.username) (this.username as any).emailText = this.EmailEditInput;
+
+    await this.authService.refreshUserData();
+
+    this.isEditingEmail = false;
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: '📧 Email updated successfully',
+    });
+  } catch (err) {
+    console.error('❌ Error updating Email:', err);
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Error updating Email, please try again.',
+    });
+  } finally {
+    this.loading = false;
+  }
+  }
+
+  startEditUsername() {
+  this.isEditingUsername = true;
+  this.usernameInput = this.username?.displayName || this.userName || '';
+  }
+  CancelEditUsername() {
+  this.isEditingUsername = false;
+  this.usernameInput = '';
+  }
+  async saveUsernameEdit() {
+  if (!this.username || !this.usernameInput) return;
+  this.loading = true;
+
+  try {
+    await this.userService.updateUser(this.username.uid, {
+      displayName: this.usernameInput,
+    });
+
+    this.userName = this.usernameInput;
+    if (this.username) (this.username as any).userName = this.usernameInput;
+
+    await this.authService.refreshUserData();
+
+    this.isEditingUsername = false;
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: '👤 username updated successfully',
+    });
+  } catch (err) {
+    console.error('❌ Error updating Email:', err);
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Error updating Email, please try again.',
+    });
+  } finally {
+    this.loading = false;
+  }
+  }
+
+
 }
