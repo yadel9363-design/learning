@@ -10,37 +10,25 @@
   height: 100%;
   border: none !important;
   border-radius: 0 !important;
-.p-menubar-root-list > .p-menubar-item > .p-menubar-item-content {
-      border-radius: var(--radius);
-  .p-menubar-item-link {
-  color: #fff;
-  background: var(--primary-color);
-  border-radius: var(--radius);
-  border: none !important;
-  outline: none !important;
-    &:hover {
-      background: var(--primary-color);
-      border-radius: var(--radius) !important;
-    }
-}
-}
 .p-menubar-submenu-icon {
     color: #fff !important;
 }
+}
+.not-username .logo {
+  width: 60px;
 }
 .p-menubar-end, .p-menubar-end > div img  {
     height: 100%;
     display: flex !important;
     align-items: center;
-    width: 60px;
       .logo {
         width: auto;
         height: 80px;
       }
 }
 .photoUser img {
-  width: 60px !important;
-  height: 60px !important;
+  width: 50px !important;
+  height: 50px !important;
   object-fit: cover;
   border-radius: 50% !important;
 }
@@ -48,10 +36,13 @@
     display: none !important;
 }
 .username .p-button {
-  background: var(--primary-color) !important;
-  border-radius: 10px !important;
-  color: #fff;
-  border: 1px solid var(--primary-color) !important;
+  background: #eee !important;
+  border-radius: 30px !important;
+  color: #212121 !important;
+  border: 1px solid #eee !important;
+  span {
+    font-weight: 500 !important;
+  }
 }
 .round .p-button {
   border-radius: 50% !important;
@@ -60,9 +51,27 @@
     outline:none !important;
 }
 }
-::ng-deep .isMobile {
+::ng-deep {
+  .isMobile {
   display: none;
 }
+.p-menubar-submenu {
+    z-index: 999 !important;
+}
+.p-menu .p-menu-separator {
+  height: 1px;
+  margin: 6px 0;
+  background: rgba(255, 255, 255, 0.2);
+}
+.p-menubar-root-list {
+  display: none !important;
+}
+ .p-menu{
+  width: 100% !important;
+  left: 0;
+}
+}
+
 @media (max-width: 960px) {
 ::ng-deep .p-menubar-end .logo, .p-menubar-end > div .logo {
     width: auto;
@@ -72,8 +81,11 @@
   display: block;
 }
 }
-::ng-deep .p-menu .p-menu-separator {
-  height: 1px;
-  margin: 6px 0;
-  background: rgba(255, 255, 255, 0.2);
+@media (prefers-color-scheme: dark) {
+::ng-deep .username .p-button{
+  background: #555 !important;
+  border-radius: 30px !important;
+  color: #fff !important;
+  border: 1px solid #555 !important;
+}
 }

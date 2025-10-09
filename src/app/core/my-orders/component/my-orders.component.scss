@@ -85,6 +85,9 @@
 .p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
     background: #555 !important;
 }
+.container-search[_ngcontent-ng-c2612971623] {
+    background: #555 !important;
+}
 }
 }
 ::ng-deep {
@@ -110,4 +113,9 @@
     padding-bottom: 20px;
   }
 }
+}
+.container-search{
+  background: #f8fafc;
+  padding: 15px 20px;
+  border-radius: 10px;
 }

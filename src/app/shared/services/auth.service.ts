@@ -1,4 +1,4 @@
-import { Injectable, NgZone, Inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, NgZone, Inject, PLATFORM_ID, runInInjectionContext, EnvironmentInjector, inject } from '@angular/core';
 import {
   Auth,
   GoogleAuthProvider,
@@ -14,12 +14,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
-import { setPersistence, inMemoryPersistence } from '@angular/fire/auth';
+import { setPersistence, browserSessionPersistence } from 'firebase/auth';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public user$: Observable<User | null> = this.currentUserSubject.asObservable();
+  private injector = inject(EnvironmentInjector);
 
   constructor(
     private auth: Auth,
@@ -33,9 +34,8 @@ export class AuthService {
     }
     if (isPlatformBrowser(this.platformId)) {
     // 🧠 منع Firebase من تخزين المستخدم في session/local storage
-    setPersistence(this.auth, inMemoryPersistence)
+      setPersistence(this.auth, browserSessionPersistence)
       .then(() => {
-        console.log('✅ Firebase persistence set to in-memory (no storage)');
         this.initAuthListener();
       })
       .catch((err) => console.error('❌ Failed to set persistence', err));
@@ -44,13 +44,10 @@ export class AuthService {
 
   /** ✅ تهيئة authState */
   private initAuthListener() {
-    authState(this.auth).subscribe(async (user) => {
-      this.zone.run(async () => {
-        if (user) {
-          await this.loadUserData(user.uid, user);
-        } else {
-          this.currentUserSubject.next(null);
-        }
+    // ✅ تأكد أن الاستدعاء يتم داخل الـ Injection Context
+    runInInjectionContext(this.injector, () => {
+      this.user$ = authState(this.auth);
+      this.user$.subscribe(user => {
       });
     });
   }

@@ -14,11 +14,13 @@
     height: 100px;
   }
   p a {
-    color: #b6b6b6;
-    font-size: 20px;
-    outline: none;
-    display: flex;
-    gap: 10px;
+  color: #66615b;
+  font-size: 20px;
+  outline: none;
+  display: flex;
+  gap: 10px;
+  font-weight: 400;
+  align-items: center;
   }
 }
 .sidebar-mobile {

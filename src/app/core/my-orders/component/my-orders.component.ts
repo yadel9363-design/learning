@@ -12,6 +12,8 @@ import { UserService } from '../../../shared/services/user.service';
 import { AppUser } from '../../../shared/DTO/user.model';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { InputGroup } from 'primeng/inputgroup';
 
 @Component({
   selector: 'app-my-orders',
@@ -25,7 +27,9 @@ import { MessageService } from 'primeng/api';
     FormsModule,
     CommonModule,
     TagModule,
-    ToastModule
+    ToastModule,
+    InputGroupAddonModule,
+    InputGroup
   ],
   templateUrl: './my-orders.component.html',
   styleUrls: ['./my-orders.component.scss']
@@ -36,7 +40,6 @@ export class MyOrdersComponent implements OnInit {
   isEditDialogVisible: boolean = false;
   isDeleteDialogVisible: boolean = false;
   isAdmin: boolean = false;
-
   editForm!: FormGroup;
 
   private courseService = inject(CourseService);
@@ -47,6 +50,7 @@ export class MyOrdersComponent implements OnInit {
   @Input() set coursesAdmin(value: any) {
     this.courses = value;
   }
+  @ViewChild('dt') dt: any;
 
   @ViewChild('titleInput') titleInput!: ElementRef;
 
@@ -198,4 +202,9 @@ noWhitespaceValidator(control: any) {
       }
     });
   }
+
+onGlobalFilter(event: Event) {
+  const value = (event.target as HTMLInputElement).value;
+  this.dt.filterGlobal(value, 'contains');
+}
 }

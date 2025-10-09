@@ -1,18 +1,7 @@
 <p-menubar [model]="items">
   <ng-template #start>
-    <div class="isMobile" *ngIf="username">
-      <p-menu #menu [popup]="true" [model]="itemsMobile"></p-menu>
-
+    <div class="isMobile" >
       <div class="flex gap-3">
-        <p-button
-          type="button"
-          class="username"
-          (click)="menu.toggle($event)"
-        >
-          {{ username.displayName ? 'hello, ' + username.displayName : '' }}
-          <i class="pi pi-chevron-down ml-2"></i>
-        </p-button>
-
         <p-button
           class="username round"
           icon="pi pi-angle-right"
@@ -25,18 +14,41 @@
   </ng-template>
 
   <ng-template #end>
-    <div class="flex photoUser items-center gap-2">
-      <ng-container *ngIf="photoURL">
-        <img [src]="photoURL" shape="circle" alt="LOGO">
-      </ng-container>
-      <ng-container *ngIf="username">
-        <img *ngIf="!photoURL" src="assets/images/img4.png" shape="circle" alt="LOGO">
-      </ng-container>
+    <div #contentButton class="flex relative photoUser items-center gap-2">
+      <div class="photourl" *ngIf="username">
+      <ng-container *ngIf="photoURL; else notphotoURL">
+            <p-button
+              type="button"
+              class="username"
+              (click)="toggleMenu($event)"
+            >
+              <img [src]="photoURL" shape="circle" alt="LOGO">
+            <span>
+                {{ username.displayName ? 'hello, ' + username.displayName : '' }}
+            </span>
+              <i [ngClass]="{'pi-chevron-down': !menuOpen, 'pi-chevron-up': menuOpen}" class="pi  ml-2"></i>
+            </p-button>
+          </ng-container>
+        <ng-template #notphotoURL>
+          <p-button
+            type="button"
+            class="username"
+            (click)="toggleMenu($event)"
+          >
+          <img *ngIf="!photoURL" src="assets/images/img4.png" shape="circle" alt="LOGO">
+          <span>
+              {{ username.displayName ? 'hello, ' + username.displayName : '' }}
+          </span>
+            <i [ngClass]="{'pi-chevron-down': !menuOpen, 'pi-chevron-up': menuOpen}" class="pi  ml-2"></i>
+          </p-button>
+      </ng-template>
+        <p-menu appendTo="contentButton" #menu [popup]="true" [model]="itemsMobile"></p-menu>
+        </div>
     </div>
 
     <ng-container *ngIf="!username">
-      <div class="w-full px-3 flex justify-content-center">
-        <img alt="LOGO" src="assets/images/img2.png">
+      <div class="not-username w-full flex justify-content-center">
+        <img class="logo" alt="LOGO" src="assets/images/img2.png">
       </div>
     </ng-container>
   </ng-template>

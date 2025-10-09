@@ -38,7 +38,8 @@ export class NavbarComponent implements OnInit {
   private drawerService = inject(DrawerService);
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
-
+  @ViewChild('menu') menu: any;
+  menuOpen = false;
  photoURL?: string;
 
   toggleDrawer() {
@@ -122,5 +123,9 @@ setupMenuMobile() {
       }
     ];
   }
+}
+toggleMenu(event: Event) {
+  this.menu.toggle(event);
+  this.menuOpen = !this.menuOpen;
 }
 }

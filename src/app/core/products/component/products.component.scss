@@ -1,6 +1,6 @@
 ::ng-deep {
 .p-carousel-indicator-active .p-carousel-indicator-button {
-    background: var(--primary-color) !important;
+  background: var(--info-color) !important;
 }
 .p-carousel-item-list {
   // gap: 5px !important;
@@ -8,6 +8,163 @@
 }
 .p-carousel-viewport {
   padding: 15px !important;
+}
+.p-button-rounded {
+    border: 1px solid #212121 !important;
+    background: transparent;
+    width: 40px !important;
+    height: 40px;
+    color: #212121 !important;
+    &:hover {
+      background: transparent !important;
+    }
+    .p-button-label {
+    font-weight: initial !important;
+  }
+}
+.p-button-outlined {
+    background: #212121 !important;
+    color: #fff !important;
+    &:hover {
+    background: #212121 !important;
+    }
+}
+/* 🌈 Modern Scrollable Tabs UI */
+.custom-tabs {
+  position: relative;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  overflow: hidden;
+}
+
+/* ===== Scrollable Tablist ===== */
+.custom-tabs .p-tablist {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scroll-behavior: smooth;
+  justify-content: flex-start !important;
+  width: 100%;
+  padding: 0.6rem 0.5rem;
+  gap: 0.75rem;
+  border-bottom: 2px solid #f0f0f0;
+  padding-right: 2rem !important;
+}
+
+/* Scrollbar Style */
+.custom-tabs .p-tablist::-webkit-scrollbar {
+  height: 6px;
+}
+.custom-tabs .p-tablist::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.3);
+  border-radius: 8px;
+}
+.custom-tabs .p-tablist::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 150, 150, 0.6);
+}
+
+/* ===== Tabs ===== */
+.custom-tab {
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+  padding: 0.6rem 1.5rem !important;
+  border-radius: 8px;
+  background: #f8f8f8 !important;
+  color: #333 !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem;
+  transition: all 0.3s ease !important;
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  &:hover {
+  background: #eee !important;
+}
+}
+.p-tablist-active-bar {
+    display: none !important;
+}
+.p-tab-active{
+  background: #eee !important;
+  color: #000 !important;
+  font-weight: bold !important;
+  border: 1px solid #eee !important;
+}
+.p-tablist-tab-list {
+  border: none !important;
+  gap: 10px;
+}
+/* ===== Active Tab ===== */
+.custom-tab.p-highlight {
+  background: linear-gradient(90deg, #ff0040, #ff7b00);
+  color: #fff !important;
+  border: none;
+  box-shadow: 0 3px 10px rgba(255, 64, 0, 0.25);
+}
+
+/* ===== Icon & Text in Tab ===== */
+.custom-tab .tab-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ===== Panel ===== */
+.p-tabpanel {
+  padding: 1.2rem 0.5rem !important;
+  background: transparent;
+}
+
+/* ===== Courses Cards inside panel ===== */
+.p-tabpanel .course-card {
+  background: #eee;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  transition: all 0.3s ease;
+  flex: 1 1 300px;
+}
+
+.p-tabpanel .course-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.p-tabpanel .course-card h4 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.p-tabpanel .course-card p {
+  color: #666;
+  font-size: 0.9rem;
+}
+.custom-tabs .p-tab:last-child {
+  margin-right: 1rem !important;
+}
+.active-btn .p-button{
+  background: #eee;
+  color: #333 !important;
+}
+.p-tablist-next-button {
+    box-shadow: none !important;
+}
+.p-tablist-content {
+  margin-right: 20px;
+}
+.p-button-text.p-button-secondary {
+  background: #0369a1 !important;
+  color: #fff !important;
+  transition: 0.3s ease-out;
+  border: 1px solid #0369a1 !important;
+  &:hover {
+    background-color: #fff !important;
+    color: #0369a1 !important;
+  }
 }
 }
 .border {
@@ -21,14 +178,13 @@ ease-in-out;
       border-top-left-radius: 15px;
       border-top-right-radius: 15px;
     }
-  &:hover {
-    transform: translateY(-6px); // يتحرك لفوق عند الهوفر
+  &:hover { // يتحرك لفوق عند الهوفر
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
   }
 }
-
 @media (prefers-color-scheme: dark) {
-  ::ng-deep .border {
+  ::ng-deep {
+    .border {
   background: var(--darkcontainer) !important; // الخلفية بيضاء
   border-radius: 16px; // حواف ناعمة
   padding: 2rem; // مسافة داخلية
@@ -45,6 +201,28 @@ ease-in-out;
     transform: translateY(-6px); // يتحرك لفوق عند الهوفر
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
   }
+}
+.tabs .p-button-rounded {
+  background: #ccc !important;
+  &:hover {
+    background: #ccc !important;
+  }
+}
+.tabs .p-button-outlined {
+    background: #212121 !important;
+    color: #fff !important;
+    &:hover {
+    background: #212121 !important;
+    }
+}
+.carousel .p-button-text.p-button-secondary {
+    background: #212121;
+    color: #fff !important;
+    margin: 10px;
+    &:hover {
+      background: #212121 !important;
+    }
+}
 }
 }
 // تعديلات للموبايل فقط
