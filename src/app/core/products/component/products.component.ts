@@ -6,6 +6,7 @@ import {
   QueryList,
   ViewChildren,
   AfterViewInit,
+  AfterViewChecked,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
@@ -53,32 +54,32 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     { breakpoint: '1024px', numVisible: 2, numScroll: 1 },
   ];
 
-  data = [
-    {
-      number: 850,
-      name: 'Customers',
-      opinion: 'You can Watch Our Customers Opinion From Here.',
-      animation: 'fade-right',
-      displayedNumber: 0,
-      value: 1
-    },
-    {
-      number: 1200,
-      name: 'Students',
-      opinion: 'Trusted by learners around the world.',
-      animation: 'fade-up',
-      displayedNumber: 0,
-      value: 2
-    },
-    {
-      number: 320,
-      name: 'Courses',
-      opinion: 'Learn from a wide range of quality content.',
-      animation: 'fade-right',
-      displayedNumber: 0,
-      value: 3
-    },
-  ];
+data = [
+  {
+    number: 850,
+    name: 'Customers',
+    opinion: 'You can Watch Our Customers Opinion From Here.',
+    animation: 'fade-right',
+    displayedNumber: 0,
+    value: 1
+  },
+  {
+    number: 1200,
+    name: 'Students',
+    opinion: 'Trusted by learners around the world.',
+    animation: 'fade-up',
+    displayedNumber: 0,
+    value: 2
+  },
+  {
+    number: 320,
+    name: 'Courses',
+    opinion: 'Learn from a wide range of quality content.',
+    animation: 'fade-right',
+    displayedNumber: 0,
+    value: 3
+  },
+];
 
   ngOnInit() {
     this.courseService
@@ -99,7 +100,18 @@ export class ProductsComponent implements OnInit, AfterViewInit {
           }
         }
       });
+      this.setAnimationsForDevice()
   }
+  setAnimationsForDevice() {
+  const isMobileOrTablet = window.innerWidth <= 992; // أقل من 992px يعني موبايل أو تابلت
+
+  if (isMobileOrTablet) {
+    this.data = this.data.map(item => ({
+      ...item,
+      animation: 'fade-up' // الكل يطلع من تحت
+    }));
+  }
+}
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -113,12 +125,14 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       }
     }, 300);
 
-    // ✅ تهيئة AOS
+  setTimeout(() => {
     AOS.init({
       duration: 800,
       once: false,
       offset: 100,
     });
+    AOS.refresh(); // بعد init بشوية
+  }, 500);
 
     // ✅ مراقبة العناصر لتشغيل العدّاد
     const observer = new IntersectionObserver(
@@ -139,6 +153,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
     // ✅ تحديث AOS عند تغيّر عناصر الـ box
     this.boxElements.changes.subscribe(() => AOS.refresh());
+      this.setAnimationsForDevice()
   }
 
   /** ✅ حركة العد التزايدي */

@@ -441,6 +441,9 @@
         font-size: 1.1rem !important;
       }
     }
+    .course-dialog .course-card h3 {
+      font-size: 14px;
+    }
   }
 }
 ::ng-deep {
@@ -490,3 +493,9 @@
       background-position: 0% center;
     }
   }
+.bannerContainer {
+  min-height: 100vh;
+}
+.box {
+  margin-bottom: 40px;
+}
