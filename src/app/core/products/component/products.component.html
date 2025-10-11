@@ -22,12 +22,12 @@
 
       <div class="flex flex-column p-3 align-items-center">
         <h4 class="font-semibold mb-2">{{ category.key }}</h4>
-        <p-button
-          label="View Course"
-          icon="pi pi-arrow-right"
-          severity="info"
-          (click)="showDialog()"
-        ></p-button>
+          <p-button
+            label="View Course"
+            icon="pi pi-arrow-right"
+            severity="info"
+            (click)="showDialog(category.key)"
+          ></p-button>
       </div>
     </div>
   </ng-template>
@@ -38,31 +38,27 @@
   </div>
 
   <!-- Tabs -->
-  <div class="card tabs" *ngIf="categories.length > 0">
-    <div class="flex mb-3 gap-2 justify-content-between flex-wrap">
-      <h1>What Courses Provide To You?</h1>
-      <div class="flex gap-2 justify-content-end">
-        <p-button
-        *ngFor="let category of categories; let i = index"
-        (click)="selectCategory(category.key, i)"
-        rounded="true"
-        [outlined]="selectedCategory !== category.key"
-        [ngClass]="{ 'active-btn': selectedCategory === category.key }"
-        label="{{ i + 1 }}"
-      >
-      </p-button>
-      </div>
+<div class="card tabs" *ngIf="categories.length > 0">
+  <div class="flex mb-3 gap-2 justify-content-between flex-wrap">
+    <h1>What Courses Provide To You?</h1>
+    <div class="flex-1">
+      <p-paginator
+        [rows]="1"
+        [totalRecords]="categories.length"
+        (onPageChange)="onPageChange1($event)"
+        [first]="activeIndex">
+      </p-paginator>
     </div>
+  </div>
 
 <p-tabs [(value)]="activeIndex" scrollable class="custom-tabs">
   <p-tablist>
     <p-tab
       *ngFor="let category of categories; let i = index"
       [value]="i"
-      #tabRef
       (click)="selectCategory(category.key, i)"
       class="custom-tab"
-    >
+      [ngClass]="{ 'active-tab': activeIndex === i }">
       <div class="tab-content">
         <i class="pi pi-folder-open"></i>
         <span>{{ category.key }}</span>
@@ -71,30 +67,122 @@
   </p-tablist>
 
   <p-tabpanels>
-    <p-tabpanel
-      *ngFor="let category of categories; let i = index"
-      [value]="i"
-    >
+    <p-tabpanel *ngFor="let category of categories; let i = index" [value]="i">
       <div class="flex flex-wrap gap-3 justify-content-start mt-3">
-        <div
-          *ngFor="let course of category.value.value"
-          class="course-card"
-        >
+        <div *ngFor="let course of category.value.value" class="course-card">
           <h4>{{ course.name }}</h4>
-          <p>{{ course.description || 'No description available.' }}</p>
+          <p>{{ course.description || 'Not added description yet.' }}</p>
         </div>
       </div>
     </p-tabpanel>
   </p-tabpanels>
 </p-tabs>
-
-  </div>
+</div>
 </div>
 
 
 
-    <p-dialog header="Header" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [maximizable]="true">
-        <p         *ngFor="let category of categories; let i = index">
-          {{ category.key }}
-        </p>
-    </p-dialog>
+<p-dialog
+  header="Course Details"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '50rem' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [maximizable]="true"
+  [draggable]="false"
+  [dismissableMask]="true"
+  styleClass="course-dialog"
+>
+  <ng-container *ngIf="selectedCategory">
+    <div class="dialog-header w-full justify-content-between align-items-center gap-3 flex-wrap">
+      <div class="flex align-items-center gap-2">
+        <i class="pi pi-book" style="font-size: 1.5rem; color: var(--primary-color)"></i>
+        <h2 class="category-title">{{ selectedCategory }}</h2>
+      </div>
+        <h2 class="category-price">€ 2,900.00</h2>
+    </div>
+
+    <div *ngIf="categories.length">
+      <div
+        class="courses-grid"
+        *ngFor="let category of categories"
+      >
+        <ng-container *ngIf="category.key === selectedCategory">
+          <div class="img">
+            <img
+              [src]="category.image"
+              alt="{{ category.key }}"
+              class="w-full h-full rounded"
+              height="200"
+            />
+          </div>
+          <div class="content">
+            <!-- <div
+              *ngFor="let course of category.value.value"
+              class="course-card p-3 border-round-lg shadow-2 mb-3"
+            >
+              <div class="flex align-items-center justify-content-between mb-2">
+                <h3 class="m-0 text-primary">
+                  <i class="pi pi-graduation-cap mr-2"></i>{{ course.name }}
+                </h3>
+                <span class="text-sm text-color-secondary">
+                  {{ course.createdAt | date: 'mediumDate' }}
+                </span>
+              </div>
+              <p class="m-0 text-color-secondary">{{ course.description }}</p>
+            </div> -->
+
+
+
+                <div class="course-card">
+                  <p-accordion>
+                    @for (course of category.value.value; track course.name; let i = $index) {
+                      <p-accordion-panel [value]="i">
+                        <p-accordion-header>
+                          <div class="flex align-items-center justify-content-between gap-2">
+                            <h3 class="m-0">
+                              <i class="pi pi-graduation-cap mr-2"></i>{{ course.name }}
+                            </h3>
+                            <span class="text-sm">
+                              ( {{ course.createdAt | date: 'mediumDate' }} )
+                            </span>
+                          </div>
+                        </p-accordion-header>
+                        <p-accordion-content>
+                          <p class="m-0 text-color-secondary">{{ course.description }}</p>
+                        </p-accordion-content>
+                      </p-accordion-panel>
+                    }
+                  </p-accordion>
+                </div>
+
+
+            <div class="bannerContainer">
+              <div
+                #boxRef
+                class="box"
+                *ngFor="let item of data; let i = index"
+                [attr.data-aos]="item.animation"
+              >
+                <div class="number-customer">
+                  <h2 class="counter">{{ item.displayedNumber }}</h2>
+                </div>
+                <h3>{{ item.name }}</h3>
+                <p>{{ item.opinion }}</p>
+              </div>
+            </div>
+            <div class="flex w-full justify-content-end">
+              <p-button
+              label="ADD TO CART"
+              severity="success"
+              icon="fa-solid fa-cart-arrow-down"
+              class="mt-4"
+              ></p-button>
+            </div>
+
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+</p-dialog>

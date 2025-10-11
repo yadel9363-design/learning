@@ -1,5 +1,5 @@
 <p-menubar [model]="items">
-  <ng-template #start>
+  <ng-template *ngIf="username">
     <div class="isMobile" >
       <div class="flex gap-3">
         <p-button

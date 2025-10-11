@@ -135,13 +135,50 @@
 }
 
 .p-tabpanel .course-card h4 {
-  color: #333;
+  position: relative;
+  display: inline-block;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: capitalize;
   margin-bottom: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  z-index: 1;
+  text-align: center;
+  color: #ffffff; /* ✅ لون ثابت للنص */
+  overflow: hidden; /* علشان الـ ::before ما يطلعش بره الحواف */
+  width: 100%;
+  /* ✅ العنصر قبل (الخلفية المتحركة) */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: -1;
+    background: linear-gradient(90deg, #007ad9, #00c8ffb6, #007ad9);
+    background-size: 200% 100%;
+    background-position: 0% 50%;
+    animation: gradientFlow 4s linear infinite;
+    opacity: 0.9; /* خفيف علشان النص واضح */
+  }
+
+  /* ✅ طبقة overlay سوداء خفيفة فوق التدرج */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: inherit;
+    z-index: -1;
+  }
 }
+
+
 
 .p-tabpanel .course-card p {
   color: #666;
   font-size: 0.9rem;
+  padding: 10px;
 }
 .custom-tabs .p-tab:last-child {
   margin-right: 1rem !important;
@@ -151,6 +188,9 @@
   color: #333 !important;
 }
 .p-tablist-next-button {
+    box-shadow: none !important;
+}
+.p-tablist-prev-button {
     box-shadow: none !important;
 }
 .p-tablist-content {
@@ -166,13 +206,124 @@
     color: #0369a1 !important;
   }
 }
+.p-paginator {
+  background: transparent !important;
+  justify-content: flex-end !important;
+  gap: 15px;
+  .p-paginator-page {
+    background: #000;
+    color: #fff;
+  }
+  .p-paginator-page.p-paginator-page-selected {
+    background: #fff !important;
+    border: 3px solid #000 !important;
+    color: #000 !important;
+}
+}
+
+.course-dialog {
+  .dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.5rem;
+  }
+
+  .category-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  .courses-grid {
+    gap: 1rem;
+    .img{
+      display: none;
+    }
+  }
+
+  .course-card {
+    background: var(--surface-card);
+    transition: all 0.2s ease-in-out;
+    border-radius: 10px !important;
+
+    h3 {
+      font-size: 1.2rem;
+    }
+
+    p {
+      line-height: 1.6;
+    }
+    .p-accordioncontent-content {
+      border-radius: 10px;
+      padding: 10px;
+      border: 1px solid #eee;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+    .p-accordionpanel {
+      border-radius: 10px;
+    }
+    .p-accordionpanel-active .p-accordionheader {
+      border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
+    .p-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-radius: 10px !important;
+      .p-accordionheader {
+          border-radius: 10px;
+          background: var(--info-color) !important;
+          color: #fff !important;
+        }
+    }
+  }
+
+ .p-dialog-content {
+    padding: 2rem;
+    background-color: #fdfdfd;
+  }
+
+ .p-dialog-header {
+    background-color: #f8fafc;
+    font-weight: 600;
+    border-radius: 10px;
+  }
+}
+.p-dialog-maximized   .courses-grid {
+  display: flex;
+  justify-content: space-between;
+    .img{
+      display: flex;
+      width: 50%;
+      max-height: 500px;
+      overflow: hidden;
+      justify-content: center;
+      img {
+        object-fit: inherit;
+        max-height: 500px;
+        max-width: 100%;
+      }
+    }
+    .content {
+      width: 50%;
+    }
+  }
+  .p-button-success {
+    background: #fd5d93 !important;
+    border: none !important;
+    color: #fff;
+}
 }
 .border {
     background: #fff;
-    padding: 0 !IMPORTANT;
+    padding: 0 !important;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s
-ease-in-out;
+    transition: all 0.3s ease-in-out;
     border-radius: 15px !important;
     img {
       border-top-left-radius: 15px;
@@ -228,7 +379,23 @@ ease-in-out;
 // تعديلات للموبايل فقط
 @media (max-width: 768px) {
   ::ng-deep {
-
+.p-dialog-maximized   .courses-grid {
+  display: flex;
+  flex-direction: column;
+    .img{
+      display: block;
+      width: 100% !important;
+      max-height: 400px;
+      overflow: hidden;
+      img {
+        max-height: 400px;
+        object-fit: cover;
+      }
+    }
+    .content {
+      width: 100% !important;
+    }
+  }
     .border {
       padding: 1rem !important;
       text-align: center;
@@ -276,3 +443,50 @@ ease-in-out;
     }
   }
 }
+::ng-deep {
+.bannerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  padding: 20px;
+  background: #eee;
+  border-radius: 10px;
+}
+
+.box {
+  flex: 1 1 250px;
+  max-width: 320px;
+  text-align: center;
+  background: #fff;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  will-change: transform, opacity;
+}
+
+.box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.counter {
+  font-size: 2.5rem;
+  color: #0d6efd;
+  margin: 0;
+}
+}
+  @keyframes gradientFlow {
+    0% {
+      background-position: 0% center;
+    }
+    50% {
+      background-position: 100% center;
+    }
+    100% {
+      background-position: 0% center;
+    }
+  }

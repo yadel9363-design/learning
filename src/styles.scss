@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-
+@import 'aos/dist/aos.css';
 @import 'primeflex/primeflex.css';
 @import "primeicons/primeicons.css";
 @import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -25,6 +25,7 @@
   --main-bg-content: #eee;
   --main-text-content: #212529;
   --darkcontainer: #212121;
+  --second-color: #0369a1;
 }
 body {
   font-family: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
