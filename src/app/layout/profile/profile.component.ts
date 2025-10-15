@@ -44,6 +44,7 @@ throw new Error('Method not implemented.');
   genderEditInput: string = '';
   PhoneEditInput: string = '';
   EmailEditInput: string = '';
+  hideLinkTimeout: any;
 
   showCropper = false;
   loading = false;
@@ -51,6 +52,7 @@ throw new Error('Method not implemented.');
   isEditingPhoneNumber = false;
   isEditingEmail = false;
   isEditingUsername = false;
+  showSetNewImageMsg = false;
 
   private db = inject(Database);
   private auth = inject(Auth);
@@ -59,6 +61,8 @@ throw new Error('Method not implemented.');
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private messageService = inject(MessageService);
+
+
 
   async ngOnInit(): Promise<void> {
     // ✅ راقب المستخدم الحالي مباشرة من AuthService
@@ -329,6 +333,15 @@ throw new Error('Method not implemented.');
     this.loading = false;
   }
   }
+onImageError(event: Event) {
+  const img = event.target as HTMLImageElement;
+  img.src = img.alt;
+  this.showSetNewImageMsg = false
 
-
+  clearTimeout(this.hideLinkTimeout);
+  this.hideLinkTimeout = setTimeout(() => {
+    img.style.display = 'none';
+    this.showSetNewImageMsg = true;
+  }, 5000);
+}
 }

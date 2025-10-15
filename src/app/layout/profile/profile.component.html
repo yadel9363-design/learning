@@ -3,12 +3,18 @@
     <div class="cover-photo"></div>
   </div>
     <div class="avatar-container">
-      <img
-        [src]="photoURL || 'assets/images/img4.png'"
-        alt="Profile"
-        class="avatar"
-        (click)="fileInput.click()"
+    <img
+      [src]="photoURL || 'assets/images/img4.png'"
+      alt="https://cdn.dribbble.com/users/347174/screenshots/2958807/charlie-loader.gif"
+      class="avatar"
+      (click)="fileInput.click()"
+      (error)="onImageError($event)"
       />
+
+  <p  (click)="fileInput.click()" *ngIf="showSetNewImageMsg" class="text-warning">
+    <i class="fa-regular fa-circle-user fa-2xl"></i>
+    Set new image
+  </p>
       <input
         #fileInput
         type="file"

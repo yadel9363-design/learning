@@ -108,8 +108,10 @@
     bottom: 60px;
 
     .avatar {
-      width: 120px;
-      height: 120px;
+      min-width: 120px;
+      min-height: 120px;
+      max-height: 120px;
+      max-width: 120px;
       border-radius: 50%;
       border: 5px solid #fff;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -118,6 +120,7 @@
       transition: 0.3s ease;
       z-index: 5;
       position: relative;
+      text-align: center;
       &:hover {
         transform: scale(1.05);
       }
@@ -251,6 +254,23 @@ input:focus {
 .p-radiobutton-checked .p-radiobutton-box .p-radiobutton-icon {
     background: #eee !important;
 }
+}
+.text-warning {
+  color: #d85356;
+  min-height: 120px;
+  width: 100%;
+  background: #eee;
+  z-index: 2;
+  position: relative;
+  border-radius: 15px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 600;
+  flex-direction: column;
+  gap: 20px;
 }
 @media (prefers-color-scheme: dark) {
 ::ng-deep {

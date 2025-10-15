@@ -307,6 +307,7 @@
         object-fit: inherit;
         max-height: 500px;
         max-width: 100%;
+        border-radius: 20px;
       }
     }
     .content {
@@ -445,6 +446,9 @@
       font-size: 14px;
     }
   }
+  .bannerContainer {
+  min-height: 100vh;
+}
 }
 ::ng-deep {
 .bannerContainer {
@@ -494,7 +498,7 @@
     }
   }
 .bannerContainer {
-  min-height: 100vh;
+  min-height: 50vh;
 }
 .box {
   margin-bottom: 40px;
