@@ -1,7 +1,25 @@
-import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
-import { Firestore, doc, docData, updateDoc, arrayUnion, deleteDoc, setDoc } from '@angular/fire/firestore';
+import {
+  Injectable,
+  inject,
+  EnvironmentInjector,
+  runInInjectionContext
+} from '@angular/core';
+import {
+  Firestore,
+  doc,
+  docData,
+  updateDoc,
+  arrayUnion,
+  deleteField,
+  setDoc
+} from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { deleteField } from '@angular/fire/firestore';
+
+export interface CourseItem {
+  name: string;
+  description: string;
+  createdAt?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class CourseService {
@@ -20,45 +38,62 @@ export class CourseService {
     return this.runInCtx(() => docData(this.getDocRef()));
   }
 
-  async createCourse(category: string, course: string) {
+  // 🔹 إضافة كورس جديد إلى تصنيف موجود
+  async createCourse(category: string, courseName: string) {
     return this.runInCtx(async () => {
       await updateDoc(this.getDocRef(), {
-        [category + '.value']: arrayUnion({ name: course, createdAt: new Date().toISOString() })
+        [`${category}.value`]: arrayUnion({
+          name: courseName,
+          description: '',
+          createdAt: new Date().toISOString()
+        })
       });
     });
   }
 
-  async updateCategory(oldKey: string, updatedCategory: { key: string; value: string[] }) {
+  // 🔹 تحديث أو إنشاء تصنيف بكورسات جديدة
+  async updateCategory(
+    oldKey: string,
+    updatedCategory: { key: string; value: CourseItem[] }
+  ) {
+    const { key, value } = updatedCategory;
+
     return this.runInCtx(async () => {
       const docRef = this.getDocRef();
       const updatePayload: any = {};
 
-      updatePayload[updatedCategory.key] = {
-        value: updatedCategory.value.map(v => ({
-          name: v,
-          createdAt: new Date().toISOString()
+      // 🔹 هنا بنحافظ على الـ name و description كما هما
+      updatePayload[key] = {
+        value: value.map(v => ({
+          name: v.name.trim(),
+          description: v.description.trim(),
+          createdAt: v.createdAt || new Date().toISOString()
         })),
         createdAt: new Date().toISOString()
       };
 
-      if (oldKey && oldKey !== updatedCategory.key) {
+      // 🔹 لو اسم التصنيف اتغيّر نحذف القديم
+      if (oldKey && oldKey !== key) {
         updatePayload[oldKey] = deleteField();
       }
 
       await setDoc(docRef, updatePayload, { merge: true });
-      console.log('✅ Category updated successfully');
+      console.log('✅ Category updated successfully:', key);
     });
   }
 
+  // 🔹 حذف تصنيف بالكامل
   async deleteCategory(categoryKey: string) {
     return this.runInCtx(async () => {
       const docRef = this.getDocRef();
       await updateDoc(docRef, {
         [categoryKey]: deleteField()
       });
+      console.log(`🗑️ Category '${categoryKey}' deleted`);
     });
   }
 
+  // 🔹 إنشاء تصنيف فارغ
   async createCategory(title: string): Promise<void> {
     return this.runInCtx(async () => {
       const docRef = this.getDocRef();
@@ -72,6 +107,7 @@ export class CourseService {
     });
   }
 
+  // 🔹 ترحيل بيانات قديمة إلى البنية الجديدة
   async migrateCategories(oldData: any) {
     return this.runInCtx(async () => {
       const docRef = this.getDocRef();
@@ -82,7 +118,9 @@ export class CourseService {
         if (Array.isArray(value)) {
           updatePayload[catKey] = {
             value: value.map(v => ({
-              name: v,
+              name: typeof v === 'string' ? v : v.name || '',
+              description:
+                typeof v === 'string' ? '' : v.description || '',
               createdAt: new Date().toISOString()
             })),
             createdAt: new Date().toISOString()
@@ -91,6 +129,7 @@ export class CourseService {
       });
 
       await setDoc(docRef, updatePayload, { merge: true });
+      console.log('✅ Categories migrated successfully');
     });
   }
 }

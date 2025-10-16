@@ -75,7 +75,7 @@ data = [
     number: 320,
     name: 'Courses',
     opinion: 'Learn from a wide range of quality content.',
-    animation: 'fade-right',
+    animation: 'fade-left',
     displayedNumber: 0,
     value: 3
   },
@@ -108,7 +108,7 @@ data = [
   if (isMobileOrTablet) {
     this.data = this.data.map(item => ({
       ...item,
-      animation: 'fade-up' // الكل يطلع من تحت
+      animation: 'fade-right',
     }));
   }
 }
@@ -177,7 +177,6 @@ data = [
     }, duration / steps);
   }
 
-  /** ✅ عند الضغط على تاب */
   selectCategory(key: string, index: number) {
     this.selectedCategory = key;
     this.activeIndex = index;
@@ -209,22 +208,22 @@ data = [
     }, 100);
   }
 
-  /** ✅ عند فتح الـ Dialog */
 showDialog(key: string) {
   this.selectedCategory = key;
   this.visible = true;
 
-  // ⏱️ بعد ما يظهر الـ Dialog فعليًا
   setTimeout(() => {
-    // ✅ نعيد تصفير العدادات قبل البدء
-    this.data.forEach((item) => (item.displayedNumber = 0));
+  AOS.init({ duration: 800, once: false, offset: 50 });
+  AOS.refresh();
+  this.data.forEach((item) => (item.displayedNumber = 0));
 
-    // ✅ نعيد تهيئة الـ AOS علشان الـ animation يشتغل تاني
-    AOS.refreshHard(); // يضمن إعادة تفعيل كل التأثيرات من البداية
+  // force animate all boxes
+  this.boxElements.forEach(el => {
+    el.nativeElement.classList.add('aos-animate');
+  });
 
-    // ✅ نبدأ العدّ التزايدي من جديد
-    this.data.forEach((_, i) => this.animateCounter(i));
-  }, 400);
+  this.data.forEach((_, i) => this.animateCounter(i));
+}, 400);
 }
 
 
@@ -239,6 +238,7 @@ showDialog(key: string) {
       'Cyber Security': 'assets/images/CS.png',
       'Mobile Development': 'assets/images/MD.png',
       'Web Development': 'assets/images/WD.jpg',
+      'Project Management': 'assets/images/PM.png',
     };
 
     return (

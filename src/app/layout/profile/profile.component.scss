@@ -170,21 +170,29 @@
     }
 
     .value {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       color: #f9f9f9;
+      letter-spacing: 0.8px;
     }
   }
 }
-input {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid #eee;
-  padding: 8px 10px;
+input, ::ng-deep .p-inputtext .p-inputmask  {
+  background: rgba(255, 255, 255, 0.5) !important;
+  border: 1px solid #eee !important;
+  padding: 8px 10px !important;
   border-radius: 8px;
   outline: none;
   width: 100%;
   color: #212121;
   font-size: 16px;
-  letter-spacing: .6px;
+  letter-spacing: 0.6px;
+}
+::ng-deep .p-inputtext {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  width: 100%;
 }
 
 input:focus {
@@ -208,8 +216,8 @@ input:focus {
 }
 ::ng-deep .save .p-button {
   width: 200px;
-  background: #d85356;
-  border: 1px solid #d85356;
+  background: #d85356 !important;
+  border: 1px solid #d85356 !important;
   color: #fff !important;
 }
 .User {
@@ -298,6 +306,10 @@ input:focus {
   }
   .gender-options > div {
     gap: 20px !important;
+  }
+  .phone .content {
+    flex-wrap: wrap;
+    justify-content: end !important;
   }
 }
 @keyframes waveMove {

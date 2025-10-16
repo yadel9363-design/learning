@@ -1,57 +1,88 @@
 <div class="mb-4">
-  <p-button label="Add New Category"
-            icon="pi pi-plus"
-            (click)="showAddCategoryDialog()"
-            severity="info"></p-button>
+  <p-button
+    label="Add New Category"
+    icon="pi pi-plus"
+    (click)="showAddCategoryDialog()"
+    severity="info">
+  </p-button>
 </div>
 
-<!-- نمرر الداتا للـ child component -->
+<!-- عرض البيانات -->
 <app-my-orders [coursesAdmin]="courses"></app-my-orders>
 
-<p-dialog header="Add New Category"
-          [(visible)]="isAddCategoryDialogVisible"
-          [modal]="true"
-          [closable]="true"
-          [dismissableMask]="true"
-          [style]="{ width: '400px' }">
+<!-- نافذة إضافة الفئة -->
+<p-dialog
+  header="Add New Category"
+  [(visible)]="isAddCategoryDialogVisible"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '700px' }">
 
   <div>
     <label class="block mb-2 font-bold">Category Title</label>
-    <input type="text"
-           pInputText
-           [(ngModel)]="newCategoryTitle"
-           placeholder="Enter category title"
-           class="w-full mb-3" />
+    <input
+      type="text"
+      pInputText
+      [(ngModel)]="newCategoryTitle"
+      placeholder="Enter category title"
+      class="w-full mb-3" />
 
-    <label class="block mb-2 font-bold">Courses</label>
+    <h3 class="block mb-2 font-bold">Courses</h3>
 
-    <div *ngFor="let course of newCourses; let i = index; trackBy: trackByIndex" class="flex gap-2 mb-2">
-      <input pInputText
-             [(ngModel)]="newCourses[i]"
-             placeholder="Enter course name"
-             class="w-full" />
-      <p-button icon="pi pi-trash"
-                (click)="deleteNewCourse(i)"
-                severity="primary"
-                size="small"></p-button>
+    <div class="flex gap-2 flex-column mt-4">
+          <div
+      *ngFor="let course of newCourses; let i = index; trackBy: trackByIndex"
+      class="grid grid-cols-1 gap-2 mb-3 box">
+
+      <input
+        pInputText
+        [(ngModel)]="course.name"
+        placeholder="Course name"
+        class="w-full" />
+
+      <textarea
+        pInputText
+        [(ngModel)]="course.description"
+        (resize)="false"
+        placeholder="Course description"
+        class="w-full resize-none"></textarea>
+
+      <div class="flex justify-end">
+        <p-button
+          icon="pi pi-trash"
+          (click)="deleteNewCourse(i)"
+          severity="danger"
+          size="small"
+          label="Delete">
+        </p-button>
+      </div>
+    </div>
     </div>
 
-    <p-button label="Add Course"
-              icon="pi pi-plus"
-              (click)="addNewCourse()"
-              severity="info"
-              class="mb-3"></p-button>
+    <p-button
+      label="Add Course"
+      icon="pi pi-plus"
+      (click)="addNewCourse()"
+      severity="info"
+      class="mb-3">
+    </p-button>
   </div>
 
   <ng-template pTemplate="footer">
-    <p-button label="Cancel"
-              icon="pi pi-times"
-              (click)="cancelAddCategory()"
-              severity="secondary"></p-button>
-    <p-button label="Save"
-              icon="pi pi-check"
-              (click)="saveNewCategory()"
-              [disabled]="isSaveDisabled()"
-              severity="success"></p-button>
+    <p-button
+      label="Cancel"
+      icon="pi pi-times"
+      (click)="cancelAddCategory()"
+      severity="secondary">
+    </p-button>
+
+    <p-button
+      label="Save"
+      icon="pi pi-check"
+      (click)="saveNewCategory()"
+      [disabled]="isSaveDisabled()"
+      severity="success">
+    </p-button>
   </ng-template>
 </p-dialog>

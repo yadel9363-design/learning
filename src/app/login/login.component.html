@@ -60,10 +60,10 @@
         <p-checkbox id="accept" name="accept" value="Accept" />
         <label for="accept">I agree to the terms and conditions.</label>
       </div>
-      <div class="flex flex-column align-items-center gap-1 mt-2">
-        <div class="flex gap-3 align-items-center">
-          <p-button severity="info" [disabled]="loginForm.invalid" type="submit" label="Login" class="mt-2" />
-          <a (click)="signInWithGoogle()" class="mt-2 cursor-pointer"> Sign in With Google?</a>
+      <div class="login flex flex-column align-items-center gap-1 mt-2">
+        <div class="flex flex-column mt-3 gap-3 align-items-center">
+          <p-button severity="info" [disabled]="loginForm.invalid" type="submit" label="Login" class="mt-2 col-12 p-0" />
+          <a (click)="signInWithGoogle()" class="cursor-pointer"> Sign in With Google?</a>
         </div>
       <a (click)="RedirectToRegister()" class="mt-5 register cursor-pointer"> Are you Not Have an Account?</a>
       </div>

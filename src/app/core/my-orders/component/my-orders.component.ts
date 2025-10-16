@@ -74,6 +74,7 @@ export class MyOrdersComponent implements OnInit {
   loadCourses() {
     this.courseService.getCourses().pipe(take(1)).subscribe(data => {
       this.courses = data;
+    console.log('data', Object.entries(this.courses))
     });
   }
 

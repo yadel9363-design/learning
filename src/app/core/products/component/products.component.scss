@@ -89,10 +89,14 @@
     display: none !important;
 }
 .p-tab-active{
-  background: #eee !important;
-  color: #000 !important;
+  background: #1b7bbe !important;
+  color: #fff !important;
   font-weight: bold !important;
   border: 1px solid #eee !important;
+  &:hover {
+    background: #1b7bbe !important;
+    color: #fff !important;
+  }
 }
 .p-tablist-tab-list {
   border: none !important;
@@ -497,9 +501,3 @@
       background-position: 0% center;
     }
   }
-.bannerContainer {
-  min-height: 50vh;
-}
-.box {
-  margin-bottom: 40px;
-}

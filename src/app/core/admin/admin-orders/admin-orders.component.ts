@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MyOrdersComponent } from '../../my-orders/component/my-orders.component';
 import { CourseService } from '../../my-orders/service/course.service';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +7,13 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
 import { take } from 'rxjs/operators';
+
+// 👇 تعريف نوع واحد للكورس
+export interface CourseItem {
+  name: string;
+  description: string;
+  createdAt?: string;
+}
 
 @Component({
   selector: 'app-admin-orders',
@@ -24,9 +31,9 @@ import { take } from 'rxjs/operators';
 })
 export class AdminOrdersComponent implements OnInit {
   courses: any = {};
-  newCategoryTitle: string = '';
-  newCourses: string[] = [];
-  isAddCategoryDialogVisible: boolean = false;
+  newCategoryTitle = '';
+  newCourses: CourseItem[] = [];
+  isAddCategoryDialogVisible = false;
 
   private courseService = inject(CourseService);
 
@@ -43,11 +50,11 @@ export class AdminOrdersComponent implements OnInit {
   showAddCategoryDialog() {
     this.isAddCategoryDialogVisible = true;
     this.newCategoryTitle = '';
-    this.newCourses = [''];
+    this.newCourses = [{ name: '', description: '' }];
   }
 
   addNewCourse() {
-    this.newCourses.push('');
+    this.newCourses.push({ name: '', description: '' });
   }
 
   deleteNewCourse(index: number) {
@@ -55,41 +62,47 @@ export class AdminOrdersComponent implements OnInit {
   }
 
   isSaveDisabled(): boolean {
-    if (!this.newCategoryTitle.trim()) {
-      return true;
-    }
-    return this.newCourses.some(course => !course.trim());
+    if (!this.newCategoryTitle.trim()) return true;
+    // لازم كل course يكون ليه name و description
+    return this.newCourses.some(c => !c.name.trim() || !c.description.trim());
   }
 
-async saveNewCategory() {
-  const category = this.newCategoryTitle.trim();
-  if (!category) return;
+  async saveNewCategory() {
+    const category = this.newCategoryTitle.trim();
+    if (!category) return;
 
-  const filteredCourses = this.newCourses
-    .map(c => c.trim())
-    .filter(c => c.length > 0);
-
-  try {
-    await this.courseService.updateCategory('', { key: category, value: filteredCourses });
-
-    this.isAddCategoryDialogVisible = false;
-
-    // ✅ حافظ على نفس شكل Firestore
-    this.courses = {
-      ...this.courses,
-      [category]: {
-        value: filteredCourses.map(c => ({ name: c, createdAt: new Date().toISOString() })),
+    // حذف الكورسات الفاضية
+    const filteredCourses: CourseItem[] = this.newCourses
+      .filter(c => c.name.trim() && c.description.trim())
+      .map(c => ({
+        name: c.name.trim(),
+        description: c.description.trim(),
         createdAt: new Date().toISOString()
-      }
-    };
+      }));
 
-    console.log('Category and courses added successfully!', category);
-  } catch (error) {
-    console.error('Error saving new category:', error);
+    try {
+      // ✅ عدّل CourseService ليستقبل CourseItem[] بدل string[]
+      await this.courseService.updateCategory('', {
+        key: category,
+        value: filteredCourses
+      });
+
+      this.isAddCategoryDialogVisible = false;
+
+      // ✅ نفس شكل Firestore
+      this.courses = {
+        ...this.courses,
+        [category]: {
+          value: filteredCourses,
+          createdAt: new Date().toISOString()
+        }
+      };
+
+      console.log('✅ Category and courses added successfully!', category);
+    } catch (error) {
+      console.error('❌ Error saving new category:', error);
+    }
   }
-}
-
-
 
   cancelAddCategory() {
     this.isAddCategoryDialogVisible = false;

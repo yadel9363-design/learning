@@ -11,7 +11,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { MessageService } from 'primeng/api';
-
+import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +21,8 @@ import { MessageService } from 'primeng/api';
     DialogModule,
     ImageCropperComponent,
     FormsModule,
-    RadioButtonModule
+    RadioButtonModule,
+    InputMaskModule
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
@@ -46,6 +47,7 @@ throw new Error('Method not implemented.');
   EmailEditInput: string = '';
   hideLinkTimeout: any;
 
+
   showCropper = false;
   loading = false;
   isEditingGender = false;
@@ -53,6 +55,8 @@ throw new Error('Method not implemented.');
   isEditingEmail = false;
   isEditingUsername = false;
   showSetNewImageMsg = false;
+  isPhoneValid = false;
+  isEmailValid = false;
 
   private db = inject(Database);
   private auth = inject(Auth);
@@ -66,19 +70,23 @@ throw new Error('Method not implemented.');
 
   async ngOnInit(): Promise<void> {
     // ✅ راقب المستخدم الحالي مباشرة من AuthService
-    this.authService.user$.subscribe(async (user) => {
-      if (user) {
-        this.username = user;
-        this.photoURL = user.photoURL ?? undefined;
+this.authService.user$.subscribe(async (user) => {
+  if (user) {
+    this.username = user;
+    this.photoURL = user.photoURL ?? undefined;
 
-        // ✅ اجلب بياناته من DB لتحديث الهاتف وغيره
-        const dbUser = await this.userService.getUserById(user.uid);
-        if (dbUser?.phoneNumber) this.phoneNumber = dbUser.phoneNumber;
-      } else {
-        this.username = null;
-        this.photoURL = undefined;
-      }
-    });
+    // ✅ اجلب بياناته من DB لتحديث الهاتف وغيره
+    const dbUser = await this.userService.getUserById(user.uid);
+
+    if (dbUser?.phoneNumber) this.phoneNumber = dbUser.phoneNumber;
+    if (dbUser?.gender) this.gender = dbUser.gender;
+    if (dbUser?.email) this.emailText = dbUser.email;
+    if (dbUser?.displayName) this.userName = dbUser.displayName;
+  } else {
+    this.username = null;
+    this.photoURL = undefined;
+  }
+});
 
     // ✅ لو المستخدم admin
     this.userService.getCurrentUserData().subscribe((user) => {
@@ -86,7 +94,14 @@ throw new Error('Method not implemented.');
     });
   }
 
-  // ✅ اختيار صورة جديدة
+  onPhoneComplete() {
+    this.isPhoneValid = true;
+  }
+
+  onPhoneInput() {
+  const value = this.PhoneEditInput || '';
+  this.isPhoneValid = value.replace(/\D/g, '').length === 11;
+}
   onFileChange(event: any): void {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -94,8 +109,6 @@ throw new Error('Method not implemented.');
     this.imageChangedEvent = event;
     this.showCropper = true;
   }
-
-  // ✅ عند القص
   imageCropped(event: ImageCroppedEvent) {
     if (event.base64) {
       this.croppedImage = event.base64;
@@ -115,8 +128,6 @@ throw new Error('Method not implemented.');
     this.imageChangedEvent = '';
     this.croppedImage = null;
   }
-
-  // ✅ رفع الصورة الجديدة إلى Storage
   async saveCroppedImage() {
     const user = this.auth.currentUser;
     if (!user) return console.warn('⚠️ No user logged in');
@@ -165,7 +176,6 @@ throw new Error('Method not implemented.');
 
       await this.userService.updateUser(uid, dataToUpdate);
 
-      // ✅ تحديث محلي مباشر
       this.gender = this.genderInput;
       this.phoneNumber = this.phoneInput;
 
@@ -222,17 +232,19 @@ throw new Error('Method not implemented.');
   this.isEditingPhoneNumber = false;
   this.PhoneEditInput = '';
   }
-  async savePhoneEdit() {
-  if (!this.username || !this.PhoneEditInput) return;
+async savePhoneEdit() {
+  if (!this.username || !this.PhoneEditInput || !this.isPhoneValid) return;
   this.loading = true;
 
   try {
+    const cleanPhone = this.PhoneEditInput.replace(/\D/g, '');
+
     await this.userService.updateUser(this.username.uid, {
-      phoneNumber: this.PhoneEditInput,
+      phoneNumber: cleanPhone,
     });
 
-    this.phoneNumber = this.PhoneEditInput;
-    if (this.username) (this.username as any).phoneNumber = this.PhoneEditInput;
+    this.phoneNumber = cleanPhone;
+    if (this.username) (this.username as any).phoneNumber = cleanPhone;
 
     await this.authService.refreshUserData();
 
@@ -252,7 +264,8 @@ throw new Error('Method not implemented.');
   } finally {
     this.loading = false;
   }
-  }
+}
+
 
   startEditEmail() {
   this.isEditingEmail = true;
@@ -262,36 +275,42 @@ throw new Error('Method not implemented.');
   this.isEditingEmail = false;
   this.EmailEditInput = '';
   }
-  async saveEmailEdit() {
-  if (!this.username || !this.EmailEditInput) return;
-  this.loading = true;
 
-  try {
-    await this.userService.updateUser(this.username.uid, {
-      email: this.EmailEditInput,
-    });
-
-    this.emailText = this.EmailEditInput;
-    if (this.username) (this.username as any).emailText = this.EmailEditInput;
-
-    await this.authService.refreshUserData();
-
-    this.isEditingEmail = false;
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: '📧 Email updated successfully',
-    });
-  } catch (err) {
-    console.error('❌ Error updating Email:', err);
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Error updating Email, please try again.',
-    });
-  } finally {
-    this.loading = false;
+  validateEmail() {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    this.isEmailValid = emailPattern.test(this.EmailEditInput || '');
   }
+
+  async saveEmailEdit() {
+    if (!this.username || !this.EmailEditInput || !this.isEmailValid) return;
+    this.loading = true;
+
+    try {
+      await this.userService.updateUser(this.username.uid, {
+        email: this.EmailEditInput,
+      });
+
+      this.emailText = this.EmailEditInput;
+      if (this.username) (this.username as any).emailText = this.EmailEditInput;
+
+      await this.authService.refreshUserData();
+
+      this.isEditingEmail = false;
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: '📧 Email updated successfully',
+      });
+    } catch (err) {
+      console.error('❌ Error updating Email:', err);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error updating Email, please try again.',
+      });
+    } finally {
+      this.loading = false;
+    }
   }
 
   startEditUsername() {

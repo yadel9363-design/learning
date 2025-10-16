@@ -72,7 +72,7 @@ initCharts() {
               const dayKey = labels[dayIndex]; // YYYY-MM-DD
               const dayCategories = grouped[dayKey]?.categories || [];
               const names = dayCategories.join(', ');
-              return `${dayCategories.length} Categories [${names}]`;
+              return `${dayCategories.length} Categories [ ${names} ]`;
             }
           }
         }

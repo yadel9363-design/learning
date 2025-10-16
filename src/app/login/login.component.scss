@@ -55,3 +55,8 @@ input.ng-invalid.ng-touched {
     }
   }
 }
+::ng-deep {
+  .login .p-button {
+    width: 100%;
+  }
+}
