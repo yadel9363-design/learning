@@ -12,12 +12,12 @@
 }
 
 :root {
-  --primary-color: linear-gradient(to bottom left,#fd5d93,#ec250d,#fd5d93);
+  --primary-color: linear-gradient(to bottom left, #5ac5f0, #0369a1, #5ac5f0);
   --info-color: #0369a1;
   --success-color: #fd5d93;
-  --hoverprimary-color: rgb(244 67 54 / 50%);
+  --hoverprimary-color: #5ac5f0;
   --secondary-color: #6c757d;
-  --boxShadow-color: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(244, 67, 54, .4);
+  --boxShadow-color: 0 4px 20px 0 #1e3b8a40;
   --danger-color: #dc3545;
   --radius: 10px;
   --main-gradient-navbar:  linear-gradient(90deg, #343a40, #0dcaf0);

@@ -1,22 +1,25 @@
-import { Component, OnInit, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
+import { Component, OnInit, inject, EnvironmentInjector, runInInjectionContext, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ImageCropperComponent, ImageCroppedEvent } from 'ngx-image-cropper';
 import { Auth, updateProfile, User } from '@angular/fire/auth';
-import { Storage, ref as storageRef, uploadString, getDownloadURL } from '@angular/fire/storage';
-import { Database, ref as dbRef, update } from '@angular/fire/database';
+import { Storage, ref as storageRef, uploadString, getDownloadURL, connectStorageEmulator } from '@angular/fire/storage';
+import { Database } from '@angular/fire/database';
 import { UserService } from '../../shared/services/user.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { MessageService } from 'primeng/api';
 import { InputMaskModule } from 'primeng/inputmask';
+import { HttpClient } from '@angular/common/http';
+import { AppUser } from '../../shared/DTO/user.model';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     ButtonModule,
     DialogModule,
     ImageCropperComponent,
@@ -28,25 +31,24 @@ import { InputMaskModule } from 'primeng/inputmask';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-Logout() {
-throw new Error('Method not implemented.');
-}
   photoURL?: string;
-  username: User | null = null;
+  user: User | null = null;
+  username: AppUser | null = null;
   imageChangedEvent: any = '';
   croppedImage: string | null = null;
-  phoneNumber: string = '';
-  userName: string = '';
-  emailText: string = '';
-  genderInput: string = '';
-  phoneInput: string = '';
-  gender: string = '';
-  usernameInput: string = '';
-  genderEditInput: string = '';
-  PhoneEditInput: string = '';
-  EmailEditInput: string = '';
+  phoneNumber = '';
+  userName = '';
+  emailText = '';
+  gender = '';
+  usernameInput = '';
+  genderEditInput = '';
+  PhoneEditInput = '';
+  EmailEditInput = '';
+  genderInput = '';
+  phoneInput = '';
   hideLinkTimeout: any;
-
+  currentImage = 'https://cdn.dribbble.com/users/347174/screenshots/2958807/charlie-loader.gif';
+  selectedFile: File | null = null;
 
   showCropper = false;
   loading = false;
@@ -57,6 +59,10 @@ throw new Error('Method not implemented.');
   showSetNewImageMsg = false;
   isPhoneValid = false;
   isEmailValid = false;
+  showCropperDialog = false;
+  isCropping = false;
+  loadingImage = false;
+  private isUploading = false;
 
   private db = inject(Database);
   private auth = inject(Auth);
@@ -65,133 +71,245 @@ throw new Error('Method not implemented.');
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private messageService = inject(MessageService);
-
-
+  private zone = inject(NgZone);
+  private cdr = inject(ChangeDetectorRef);
 
   async ngOnInit(): Promise<void> {
-    // ✅ راقب المستخدم الحالي مباشرة من AuthService
-this.authService.user$.subscribe(async (user) => {
-  if (user) {
-    this.username = user;
-    this.photoURL = user.photoURL ?? undefined;
+    if (window.location.hostname === 'localhost') {
+      runInInjectionContext(this.injector, () => {
+        connectStorageEmulator(this.storage, 'localhost', 9199);
+      });
+    }
 
-    // ✅ اجلب بياناته من DB لتحديث الهاتف وغيره
-    const dbUser = await this.userService.getUserById(user.uid);
+    this.authService.user$.subscribe(async (user) => {
+      this.user = user || null;
+      if (user) {
+        const dbUser = await this.userService.getUserById(user.uid);
+        this.username = dbUser ? { ...user, ...dbUser } : user;
+        setTimeout(() => this.showLoadingThenFallback(), 5000);
+      } else {
+        this.username = null;
+      }
+      this.cdr.detectChanges();
+    });
 
-    if (dbUser?.phoneNumber) this.phoneNumber = dbUser.phoneNumber;
-    if (dbUser?.gender) this.gender = dbUser.gender;
-    if (dbUser?.email) this.emailText = dbUser.email;
-    if (dbUser?.displayName) this.userName = dbUser.displayName;
-  } else {
-    this.username = null;
-    this.photoURL = undefined;
-  }
-});
-
-    // ✅ لو المستخدم admin
     this.userService.getCurrentUserData().subscribe((user) => {
       if (user?.isAdmin) this.userService.updateOldUsers();
     });
   }
 
-  onPhoneComplete() {
-    this.isPhoneValid = true;
-  }
+  onPhoneComplete() { this.isPhoneValid = true; }
+  onPhoneInput() { this.isPhoneValid = (this.PhoneEditInput || '').replace(/\D/g, '').length === 11; }
 
-  onPhoneInput() {
-  const value = this.PhoneEditInput || '';
-  this.isPhoneValid = value.replace(/\D/g, '').length === 11;
-}
-  onFileChange(event: any): void {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || !input.files[0]) return;
 
+    this.selectedFile = input.files[0];
+    this.croppedImage = null;
+    this.isCropping = false;
+    this.showCropperDialog = true;
     this.imageChangedEvent = event;
-    this.showCropper = true;
-  }
-  imageCropped(event: ImageCroppedEvent) {
-    if (event.base64) {
-      this.croppedImage = event.base64;
-    } else if (event.blob) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.croppedImage = reader.result as string;
-      };
-      reader.readAsDataURL(event.blob);
-    } else {
-      console.warn('⚠️ No image data returned from cropper', event);
-    }
   }
 
   cancelCrop() {
-    this.showCropper = false;
-    this.imageChangedEvent = '';
+    this.showCropperDialog = false;
+    this.isCropping = false;
+    this.imageChangedEvent = null;
+    this.croppedImage = null;
+    this.selectedFile = null;
+    const inputElement = document.querySelector<HTMLInputElement>('input[type="file"]');
+    if (inputElement) inputElement.value = '';
+  }
+
+  startCrop() { this.isCropping = true; }
+
+imageCropped(event: ImageCroppedEvent) {
+  console.log('imageCropped event:', event);
+
+  if (event.blob) {
+    const reader = new FileReader();
+    reader.readAsDataURL(event.blob);
+    reader.onload = () => {
+      this.zone.run(() => {
+        this.croppedImage = reader.result as string;
+        console.log('croppedImage set:', this.croppedImage?.substring(0,30));
+      });
+    };
+    reader.onerror = (error) => {
+      console.error('FileReader error:', error);
+      this.croppedImage = null;
+    };
+  } else {
     this.croppedImage = null;
   }
-  async saveCroppedImage() {
-    const user = this.auth.currentUser;
-    if (!user) return console.warn('⚠️ No user logged in');
-    if (!this.croppedImage) return console.warn('⚠️ No cropped image to upload!');
+}
 
-    const imageRef = storageRef(this.storage, `profilePhotos/${user.uid}.png`);
-    this.loading = true;
-    console.log('🟡 Starting upload for user:', user.uid);
 
-    await runInInjectionContext(this.injector, async () => {
-      try {
-        await uploadString(imageRef, this.croppedImage!, 'data_url');
-        const url = await getDownloadURL(imageRef);
-        console.log('✅ Uploaded! URL:', url);
+// عند فشل تحميل الصورة
+async showLoadingThenFallback() {
+  // أولًا: اعرض اللودر
+  this.currentImage = 'https://cdn.dribbble.com/users/347174/screenshots/2958807/charlie-loader.gif';
 
-        // ✅ حدّث الصورة في Auth
-        await updateProfile(user, { photoURL: url });
+  // انتظر 5 ثواني قبل أي تبديل
+  await new Promise(resolve => setTimeout(resolve, 5000));
 
-        // ✅ حدّث الصورة في قاعدة البيانات
-        await this.userService.updateUser(user.uid, { photoURL: url });
+  // لو مازالت مفيش صورة من Firebase، اعرض الصورة الافتراضية
+  if (!this.photoURL) {
+    this.currentImage = 'assets/images/img4.png';
+  } else {
+    this.currentImage = this.photoURL;
+  }
+}
 
-        // ✅ حدّث البيانات في AuthService ليظهر فورًا في Navbar
-        await this.authService.refreshUserData();
 
-        this.photoURL = url;
-        this.showCropper = false;
-      } catch (err) {
-        console.error('❌ Upload failed:', err);
-      } finally {
-        this.loading = false;
-      }
+// ✅ لو الصورة فشلت في التحميل لأي سبب
+onImageError(event: Event) {
+  const img = event.target as HTMLImageElement;
+  img.src = 'assets/images/img4.png';
+  img.onerror = null; // منع الدخول في حلقة لانهائية
+}
+// عند رفع الصورة
+async saveCroppedImage() {
+  if (!this.username || !this.croppedImage) return;
+  if (this.isUploading) return; // ✅ منع التكرار
+  this.isUploading = true;
+  this.loading = true;
+  this.loadingImage = true;
+
+  try {
+    const imageRef = storageRef(this.storage, `profilePhotos/${this.username.uid}_${Date.now()}.png`);
+    await uploadString(imageRef, this.croppedImage!, 'data_url');
+    const url = await getDownloadURL(imageRef);
+
+    await updateProfile(this.user!, { photoURL: url });
+    await this.userService.updateUser(this.username!.uid, { photoURL: url });
+    await this.authService.refreshUserData();
+
+    this.zone.run(() => {
+      this.photoURL = `${url}&t=${Date.now()}`;
+      this.showCropperDialog = false;
+      this.selectedFile = null;
+      this.croppedImage = null;
+      this.loadingImage = false;
     });
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Uploaded',
+      detail: 'Profile photo updated successfully!'
+    });
+  } catch (err) {
+    console.error('Upload error:', err);
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to upload image.'
+    });
+  } finally {
+    this.isUploading = false; // ✅ إعادة الضبط
+    this.loading = false;
   }
+}
 
 
-    async saveExtraInfo() {
-    if (!this.username || (!this.genderInput && !this.phoneInput)) return;
 
-    this.loading = true;
-    const uid = this.username.uid;
+async saveImageDirectly(file: File | null) {
+  if (!file || !this.username) return;
+  this.loading = true;
 
-    try {
-      const dataToUpdate: any = {};
-      if (this.genderInput) dataToUpdate.gender = this.genderInput;
-      if (this.phoneInput) dataToUpdate.phoneNumber = this.phoneInput;
+  try {
+    // تحويل الصورة إلى Base64
+    const base64 = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = err => reject(err);
+      reader.readAsDataURL(file);
+    });
 
-      await this.userService.updateUser(uid, dataToUpdate);
+    const imageRef = storageRef(this.storage, `profilePhotos/${this.username.uid}_${Date.now()}.png`);
 
-      this.gender = this.genderInput;
-      this.phoneNumber = this.phoneInput;
+    // رفع الصورة
+    await runInInjectionContext(this.injector, () =>
+      uploadString(imageRef, base64, 'data_url')
+    );
 
-      // ✅ إعادة تحميل بيانات المستخدم من AuthService
+    // جلب رابط الصورة
+    const url = await runInInjectionContext(this.injector, () =>
+      getDownloadURL(imageRef)
+    );
+
+    // تحديث بيانات المستخدم في Firebase Auth و Database
+    await runInInjectionContext(this.injector, async () => {
+      await updateProfile(this.user!, { photoURL: url });
+      await this.userService.updateUser(this.username!.uid, { photoURL: url });
       await this.authService.refreshUserData();
+    });
 
-      this.genderInput = '';
-      this.phoneInput = '';
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: '✅ Saved successfully' });
-    } catch (err) {
-      console.error('❌ Error saving extra info:', err);
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Error saving info, Please try again.' });
-    } finally {
-      this.loading = false;
+    // عرض الصورة مباشرة
+    this.zone.run(() => {
+      this.photoURL = url; // تعيين الرابط الجديد
+      this.showCropperDialog = false;
+      this.selectedFile = null;
+    });
+
+    // تحديث عنصر الصورة مباشرة في الـ DOM لتجنب الـ cache
+    const imgElement = document.querySelector<HTMLImageElement>('.avatar');
+    if (imgElement) {
+      imgElement.src = ''; // اجبر على إعادة التحميل
+      setTimeout(() => imgElement.src = this.photoURL || 'assets/images/img4.png', 50);
     }
+
+    // إعادة تعيين input type file
+    const inputElement = document.querySelector<HTMLInputElement>('input[type="file"]');
+    if (inputElement) inputElement.value = '';
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Uploaded',
+      detail: 'Profile photo updated successfully!'
+    });
+  } catch (err) {
+    console.error('Upload error:', err);
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to upload image.'
+    });
+  } finally {
+    this.loading = false;
   }
+}
+
+  async saveExtraInfo() {
+  if (!this.username || (!this.genderInput && !this.phoneInput)) return;
+
+  this.loading = true;
+  const uid = this.username.uid;
+
+  try {
+    const dataToUpdate: any = {};
+    if (this.genderInput) dataToUpdate.gender = this.genderInput;
+    if (this.phoneInput) dataToUpdate.phoneNumber = this.phoneInput;
+
+    await this.userService.updateUser(uid, dataToUpdate);
+
+    this.gender = this.genderInput;
+    this.phoneNumber = this.phoneInput;
+
+    // ✅ إعادة تحميل بيانات المستخدم من AuthService
+    await this.authService.refreshUserData();
+
+    this.genderInput = '';
+    this.phoneInput = '';
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: '✅ Saved successfully' });
+  } catch (err) {
+    console.error('❌ Error saving extra info:', err);
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Error saving info, Please try again.' });
+  } finally {
+    this.loading = false;
+  }
+}
 
   startEditGender() {
   this.isEditingGender = true;
@@ -352,15 +470,7 @@ async savePhoneEdit() {
     this.loading = false;
   }
   }
-onImageError(event: Event) {
-  const img = event.target as HTMLImageElement;
-  img.src = img.alt;
-  this.showSetNewImageMsg = false
-
-  clearTimeout(this.hideLinkTimeout);
-  this.hideLinkTimeout = setTimeout(() => {
-    img.style.display = 'none';
-    this.showSetNewImageMsg = true;
-  }, 5000);
+onSelectedFile(event:any){
+  console.log('event on click',event)
 }
 }

@@ -1,6 +1,11 @@
 <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase.js"></script>
-  <div class="flex align-items-center container w-full" [ngClass]="{ 'overflow-hidden': !(user$ | async) }">
-    <div *ngIf="user$ | async as user" class="sidebar-container flex align-items-center justify-content-center">
+
+<div
+  class="flex align-items-center container w-full"
+  [ngClass]="{ 'overflow-hidden': !(user$ | async) }"
+>
+  <!-- ✅ sidebar يظهر فقط عند تسجيل الدخول -->
+  <div *ngIf="user$ | async as user" class="sidebar-container flex align-items-center justify-content-center">
     <app-sidebar />
   </div>
 
@@ -8,19 +13,18 @@
     <div class="navbar">
       <app-navbar />
     </div>
-<div class="w-full" [ngClass]="{ 'contentrouter-isLoggedIn': (user$ | async), 'content-router': !(user$ | async) }">
 
-<!-- <div class="custom-date p-3 mx-3" *ngIf="lastSignInDate && user$ | async as user">
-<p>
-  Last Sign In: <span>{{ user?.metadata?.lastSignInTime | date:'medium' }}</span>
-</p>
-</div> -->
-
-  <div class="m-3">
-    <p-toast></p-toast>
-    <router-outlet />
+    <div
+      class="w-full"
+      [ngClass]="{
+        'contentrouter-isLoggedIn': (user$ | async),
+        'content-router': !(user$ | async)
+      }"
+    >
+      <div class="m-3">
+        <p-toast></p-toast>
+        <router-outlet />
+      </div>
+    </div>
   </div>
-</div>
-</div>
-
 </div>

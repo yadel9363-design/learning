@@ -38,29 +38,12 @@
     }
   }
 
-  ::ng-deep .p-button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background: var(--info-color);
-    color: #fff;
-    border-radius: 6px;
-    cursor: pointer;
-      &:disabled {
-    background: var(--info-color) !important;
-    color: #ffffff76 !important;
-    cursor: not-allowed;
-    opacity: 0.9;
-    pointer-events: none;
-  }
-  }
-
   p {
     text-align: center;
     margin-top: 15px;
   }
   a {
-    color: #fd5d93;
+    color: var(--info-color);
     cursor: pointer;
   }
 }
@@ -83,4 +66,151 @@
 }
 ::ng-deep .p-autocomplete {
     width: 100%;
+}
+.title {
+  text-decoration: underline;
+  color: #212121;
+}
+ul {
+  list-style: none; /* إلغاء الرموز الافتراضية */
+  padding: 0;
+}
+
+ul li {
+  position: relative;
+  padding-left: 20px; /* مساحة للدائرة */
+}
+
+ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px; /* لضبط تمركز الدائرة عموديًا */
+  width: 8px;
+  height: 8px;
+  background-color: #212121; /* لون الدائرة */
+  border-radius: 50%; /* يجعلها دائرية */
+}
+
+::ng-deep {
+p-stepper {
+  width: 100%;
+  .p-button-info {
+  background: var(--info-color) !important;
+  border: 1px solid var(--info-color) !important;
+  &:hover {
+    background: var(--info-color) !important;
+    border: 1px solid var(--info-color) !important;
+  }
+}
+.p-button-info {
+    width: 100%;
+    padding: 10px;
+    border: none !important;
+    background: var(--info-color) !important;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    &:hover {
+      border: none !important;
+    }
+      &:disabled {
+    background: var(--info-color) !important;
+    color: #ffffff76 !important;
+    cursor: not-allowed;
+    opacity: 0.9;
+    pointer-events: none;
+  }
+}
+.bg-primary {
+    color: #212121 !important;
+    background-color: #fff !important;
+    padding: 10px !important;
+}
+.border-primary {
+    border-color: #fff !important;
+    border-radius: 50% !important;
+}
+.border-2 {
+    border: none;
+}
+.p-step:has(~ .p-step-active) .p-stepper-separator {
+    background: var(--info-color);
+}
+.p-button-secondary {
+  width: 100%;
+}
+}
+.p-password, .p-password .p-inputtext {
+  width: 100%;
+}
+.p-togglebutton {
+  background: var(--info-color) !important;
+  border: 1px solid var(--info-color) !important;
+  color: #fff !important;
+  border-radius: 50px;
+  padding: 0.6rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.25s ease-in-out;
+  color: #334155;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.p-togglebutton-checked .p-togglebutton-content {
+  span.p-togglebutton-label {
+    color: var(--info-color) !important;
+  }
+}
+}
+
+@media (max-width: 991px) {
+ p-step-panel p-button {
+  width: 50% !important;
+}
+}
+@media (min-width: 991px) {
+  p-stepper {
+    img {
+      width: 300px;
+      height: 300px;
+    }
+  }
+}
+.interests-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  min-height: 20rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+.step-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  z-index: 9;
+}
+
+.step-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  max-width: 420px;
+  line-height: 1.5;
+  z-index: 9;
+}
+
+.interests-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  max-width: 700px;
+}
+.content-error {
+  background-color: var(--info-color) !important;
+  z-index: 9;
+  color: #fff;
+  border-radius: 15px;
 }

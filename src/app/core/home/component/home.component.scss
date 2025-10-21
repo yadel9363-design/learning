@@ -4,6 +4,29 @@
   min-height: 100%;
 }
 }
+.box {
+  height: 150px;
+  width: 300px;
+  background: #fff;
+  border-radius: 10px;
+  transition: 0.3s ease;
+  &:hover {
+    box-shadow: 0 2px 8px 3px rgba(0, 0, 0, 0.1);
+  }
+  span{
+    font-size: 1.4rem;
+  }
+}
+.Categories {
+  h2, i {
+    color: var(--info-color);
+  }
+}
+.Courses {
+  h2, i {
+    color: var(--danger-color);
+  }
+}
 .card-smallChart {
   background: #fff;
   padding: 20px;

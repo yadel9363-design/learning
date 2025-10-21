@@ -24,11 +24,6 @@ bootstrapApplication(AppComponent, {
     // 🔥 تشغيل داخل الـ context
     runInInjectionContext(injector, () => {
       const messageService = injector.get(MessageService);
-      messageService.add({
-        severity: 'success',
-        summary: 'website Started',
-        detail: 'Your website working good 🎉'
-      });
     });
   })
   .catch(err => console.error('❌ Bootstrap error:', err));

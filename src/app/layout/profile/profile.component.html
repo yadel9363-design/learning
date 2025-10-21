@@ -2,27 +2,30 @@
   <div class="profile-header">
     <div class="cover-photo"></div>
   </div>
-    <div class="avatar-container">
-    <img
-      [src]="photoURL || 'assets/images/img4.png'"
-      alt="https://cdn.dribbble.com/users/347174/screenshots/2958807/charlie-loader.gif"
-      class="avatar"
-      (click)="fileInput.click()"
-      (error)="onImageError($event)"
-      />
+<div class="avatar-container">
+<img
+  [src]="photoURL || currentImage"
+  alt="Profile Image"
+  class="avatar"
+  (click)="fileInput.click()"
+  (error)="onImageError($event)"
+/>
 
-  <p  (click)="fileInput.click()" *ngIf="showSetNewImageMsg" class="text-warning">
-    <i class="fa-regular fa-circle-user fa-2xl"></i>
-    Set new image
-  </p>
-      <input
-        #fileInput
-        type="file"
-        accept="image/*"
-        hidden
-        (change)="onFileChange($event)"
-      />
-    </div>
+  <!-- <img
+    alt=""
+    *ngIf="loadingImage && !showSetNewImageMsg"
+    src="https://cdn.dribbble.com/users/347174/screenshots/2958807/charlie-loader.gif"
+    class="avatar"
+  />
+
+  <p *ngIf="showSetNewImageMsg && loadingImage" (click)="fileInput.click()" class="text-warning">
+    <i class="fa-regular fa-circle-user fa-2xl"></i> Set new image
+  </p> -->
+  <input #fileInput type="file" accept="image/*" hidden (change)="onFileChange($event)" />
+</div>
+
+
+
     <div class="User  flex gap-4 align-items-center">
       <ng-container class="username-content" *ngIf="username?.displayName || userName; else RegisterUserName">
         <h2
@@ -152,12 +155,35 @@
 
         <!-- الحالة عند الضغط على edit -->
         <div *ngIf="isEditingGender" class="flex justify-content-between align-items-center gap-2 w-full">
-          <input
-            type="text"
-            [(ngModel)]="genderEditInput"
-            placeholder="Enter gender"
-          />
+          <div
+            class="flex align-items-center justify-content-start flex-wrap gap-5"
+          >
+            <div class="flex align-items-center gap-2">
+              <label for="male">Male ♂️</label>
+              <p-radioButton
+                name="gender"
+                inputId="male"
+                value="Male"
+                [(ngModel)]="genderEditInput"
+              ></p-radioButton>
+            </div>
+            <div class="flex align-items-center gap-2">
+              <label for="female">Female ♀️</label>
+              <p-radioButton
+                name="gender"
+                inputId="female"
+                value="Female"
+                [(ngModel)]="genderEditInput"
+              ></p-radioButton>
+            </div>
+          </div>
 
+
+
+
+
+
+          <div class="flex gap-2">
           <p-button
             icon="pi pi-save"
             [disabled]="!genderEditInput || loading"
@@ -170,6 +196,7 @@
             (click)="cancelEditGender()"
             severity="secondary"
           ></p-button>
+          </div>
         </div>
       </div>
     </ng-container>
@@ -263,24 +290,48 @@
   </div>
 
   <!-- Account creation -->
-  <div class="lg:col-6 md:col-6 sm:col-12 info-content">
-    <div class="info-item" *ngIf="username?.metadata?.creationTime">
+  <div *ngIf="user?.metadata?.creationTime" class="lg:col-6 md:col-6 sm:col-12 info-content">
+    <div class="info-item">
       <span class="label">🗓️ Account Created</span>
       <span class="value flex mt-3">
-        {{ username?.metadata?.creationTime | date: 'MMM d, y' }}
+        {{ user?.metadata?.creationTime | date: 'MMM d, y' }}
       </span>
     </div>
   </div>
 
   <!-- Last login -->
-  <div class="lg:col-6 md:col-6 sm:col-12 info-content">
-    <div class="info-item" *ngIf="username?.metadata?.lastSignInTime">
+  <div  *ngIf="user?.metadata?.lastSignInTime" class="lg:col-6 md:col-6 sm:col-12 info-content">
+    <div class="info-item">
       <span class="label">⏰ Last Login</span>
       <span class="value flex mt-3">
-        {{ username?.metadata?.lastSignInTime | date: 'MMM d, y, h:mm a' }}
+        {{ user?.metadata?.lastSignInTime | date: 'MMM d, y, h:mm a' }}
       </span>
     </div>
   </div>
+
+<div class="col-12 info-content" *ngIf="username?.interests?.length">
+  <div class="info-item">
+<div class="interests-section">
+  <h3 class="interests-title">🎯 Interests</h3>
+
+  <div class="interests-tags">
+    <ng-container *ngIf="username?.interests?.length; else noInterests">
+      <div *ngFor="let interest of username?.interests" class="interest-pill">
+        {{ interest }}
+      </div>
+    </ng-container>
+
+    <ng-template #noInterests>
+      <span class="no-interests">No interests added yet</span>
+    </ng-template>
+  </div>
+</div>
+
+
+
+  </div>
+</div>
+
 </div>
 
 <!-- Save Button -->
@@ -297,3 +348,66 @@
 
   </div>
 </div>
+
+
+
+  <!-- Cropper dialog -->
+<p-dialog
+  header="Upload Image"
+  [(visible)]="showCropperDialog"
+  [modal]="true"
+  [closable]="false"
+  [style]="{ width: '700px' }"
+  [ngClass]="{'notCropping': !isCropping, 'isCropping': isCropping}"
+  [contentStyle]="{ overflow: 'auto' }"
+>
+  <ng-container *ngIf="!isCropping">
+
+    <div class="flex justify-content-between w-full box-container align-items-start h-full gap-3 mt-4">
+      <div class="flex flex-column box text-center gap-2">
+        <p>Do you want to crop the image?</p>
+        <p-button label="Crop" (click)="startCrop()" severity="success"></p-button>
+      </div>
+
+      <div class="flex flex-column box text-center gap-2">
+        <p><span>OR</span></p>
+        <p-button label="Cancel" (click)="cancelCrop()" severity="danger"></p-button>
+      </div>
+
+      <div class="flex flex-column box text-center gap-2">
+        <p>Set the Original image?</p>
+        <p-button
+          label="Use Original"
+          (click)="selectedFile && saveImageDirectly(selectedFile)"
+          [disabled]="!selectedFile"
+          severity="info">
+        </p-button>
+      </div>
+
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isCropping">
+<image-cropper
+  *ngIf="isCropping && imageChangedEvent"
+  [imageChangedEvent]="imageChangedEvent"
+  [maintainAspectRatio]="true"
+  [aspectRatio]="1"
+  format="png"
+  outputType="base64"
+  (imageCropped)="imageCropped($event)">
+</image-cropper>
+
+<div class="flex justify-content-end gap-2 mt-2">
+<p-button
+  label="Save Cropped"
+  [disabled]="!croppedImage"
+  (click)="saveCroppedImage()"
+  severity="success">
+</p-button>
+    <p-button label="Cancel" (click)="cancelCrop()" severity="danger"></p-button>
+    </div>
+  </ng-container>
+</p-dialog>
+
+

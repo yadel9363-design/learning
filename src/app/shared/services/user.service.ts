@@ -1,4 +1,10 @@
-import { EnvironmentInjector, inject, Injectable, runInInjectionContext, isDevMode } from '@angular/core';
+import {
+  EnvironmentInjector,
+  inject,
+  Injectable,
+  runInInjectionContext,
+  isDevMode,
+} from '@angular/core';
 import { Database, ref, set, update, objectVal, get } from '@angular/fire/database';
 import { User } from 'firebase/auth';
 import { Auth, user } from '@angular/fire/auth';
@@ -12,53 +18,47 @@ export class UserService {
   private envInjector = inject(EnvironmentInjector);
   private auth: Auth = inject(Auth);
 
-  constructor() {
-    this.log('✅ UserService initialized');
-  }
-
   private runInCtx<T>(fn: () => T): T {
     return runInInjectionContext(this.envInjector, fn);
   }
 
   private log(...args: any[]) {
-    if (isDevMode()) {
-    }
+    if (isDevMode()) console.log(...args);
   }
 
-async save(user: any) {
-  const userData = {
-    uid: user.uid,
-    email: user.email,
-    displayName: user.displayName || '',
-    photoURL: user.photoURL || '',
-    providerId: user.providerData?.[0]?.providerId || user.providerId || 'unknown',
-    isAdmin: user.isAdmin ?? false,
-    phoneNumber: user.phoneNumber || '',
-    gender: user.gender || ''
-  };
+  /** ✅ إنشاء أو تحديث المستخدم */
+  async save(user: any) {
+    const userData = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName || '',
+      photoURL: user.photoURL || '',
+      providerId: user.providerData?.[0]?.providerId || user.providerId || 'unknown',
+      isAdmin: user.isAdmin ?? false,
+      phoneNumber: user.phoneNumber || '',
+      gender: user.gender || '',
+      interests: user.interests || [], // ✅ حفظ الاهتمامات
+    };
 
-  // ✅ ضع كل شيء داخل runInCtx
-  return this.runInCtx(async () => {
-    const userRef = ref(this.db, `users/${user.uid}`);
-    const snapshot = await get(userRef); // ⚡ لن يسبب التحذير الآن
+    return this.runInCtx(async () => {
+      const userRef = ref(this.db, `users/${user.uid}`);
+      const snapshot = await get(userRef);
 
-    if (snapshot.exists()) {
-      const existingData = snapshot.val();
-      await set(userRef, {
-        ...existingData,
-        ...userData,
-        isAdmin: existingData.isAdmin ?? false
-      });
-      this.log(`🔄 Updated existing user: ${user.uid}`);
-    } else {
-      await set(userRef, userData);
-      this.log(`🆕 Created new user: ${user.uid}`);
-    }
-  });
-}
+      if (snapshot.exists()) {
+        const existingData = snapshot.val();
+        await set(userRef, {
+          ...existingData,
+          ...userData,
+          isAdmin: existingData.isAdmin ?? false,
+        });
+        this.log(`🔄 Updated existing user: ${user.uid}`);
+      } else {
+        await set(userRef, userData);
+        this.log(`🆕 Created new user: ${user.uid}`);
+      }
+    });
+  }
 
-
-  /** ✅ تحديث بيانات المستخدم */
   async updateUser(uid: string, data: Partial<AppUser>): Promise<void> {
     return this.runInCtx(async () => {
       const userRef = ref(this.db, `users/${uid}`);
@@ -67,18 +67,17 @@ async save(user: any) {
     });
   }
 
-  /** ✅ بيانات المستخدم الحالي */
   getCurrentUserData(): Observable<AppUser | null> {
     return this.userInContext().pipe(
       switchMap((u) => {
         if (!u) return of(null);
         return this.objectValInContext<AppUser>(`users/${u.uid}`).pipe(
-          map(userProfile => {
+          map((userProfile) => {
             if (!userProfile) return null;
             return {
               ...userProfile,
               isAdmin: userProfile.isAdmin ?? false,
-              phoneNumber: userProfile.phoneNumber ?? ''
+              phoneNumber: userProfile.phoneNumber ?? '',
             } as AppUser;
           })
         );
@@ -86,14 +85,12 @@ async save(user: any) {
     );
   }
 
-  /** ✅ مراقبة المستخدم داخل Context */
   private userInContext(): Observable<User | null> {
     return new Observable<User | null>((subscriber) => {
       return this.runInCtx(() => user(this.auth).subscribe(subscriber));
     });
   }
 
-  /** ✅ قراءة Object داخل Context */
   private objectValInContext<T>(path: string): Observable<T | null> {
     return new Observable<T | null>((subscriber) => {
       return this.runInCtx(() => {
@@ -103,8 +100,14 @@ async save(user: any) {
     });
   }
 
-  /** ✅ تحديث المستخدمين القدامى (للمشرف فقط) */
-async updateOldUsers() {
+  async getUserById(uid: string): Promise<AppUser | null> {
+    return this.runInCtx(async () => {
+      const userRef = ref(this.db, `users/${uid}`);
+      const snapshot = await get(userRef);
+      return snapshot.exists() ? (snapshot.val() as AppUser) : null;
+    });
+  }
+  async updateOldUsers() {
   // ✅ لفّ كل الكود بـ runInCtx
   return this.runInCtx(async () => {
     const currentUser = this.auth.currentUser;
@@ -141,15 +144,27 @@ async updateOldUsers() {
   });
 }
 
-
-  /** ✅ جلب مستخدم بالـ uid */
-async getUserById(uid: string): Promise<AppUser | null> {
-  // ✅ هنا كمان نلفّ كل الـ async بـ runInCtx
+async getUserByEmail(email: string): Promise<AppUser | null> {
   return this.runInCtx(async () => {
-    const userRef = ref(this.db, `users/${uid}`);
-    const snapshot = await get(userRef);
-    return snapshot.exists() ? (snapshot.val() as AppUser) : null;
+    const usersRef = ref(this.db, 'users');
+    const snapshot = await get(usersRef);
+
+    if (!snapshot.exists()) {
+      // ✅ قاعدة البيانات فاضية
+      return null;
+    }
+
+    const users = snapshot.val();
+
+    // ✅ التأكد إن كل user عنده email قبل المقارنة
+    const user = Object.values(users).find(
+      (u: any) => u.email && u.email.toLowerCase() === email.toLowerCase()
+    ) as AppUser | undefined;
+
+    // ✅ لو مفيش مستخدم فعلاً
+    return user ?? null;
   });
 }
+
 
 }

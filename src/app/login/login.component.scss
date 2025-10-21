@@ -17,12 +17,10 @@ input.ng-invalid.ng-touched {
   color: rgba(0, 0, 255, 0.40); text-decoration: underline;
 }
 .register{
-  color: #fff;
+  color: var(--info-color);
   text-decoration: none;
   padding: 10px;
   border-radius: 10px;
-  background: #fd5d93 !important;
-  border: 1px solid #fd5d93 !important;
 }
 ::ng-deep .p-button-info {
   background: var(--info-color) !important;
@@ -35,7 +33,7 @@ input.ng-invalid.ng-touched {
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 12px;
-  background: #fff;
+  background: #eee;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 100;
   position: relative;
@@ -58,5 +56,116 @@ input.ng-invalid.ng-touched {
 ::ng-deep {
   .login .p-button {
     width: 100%;
+  }
+}
+.interests-container {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 30px;
+  background: linear-gradient(145deg, #1e1e2f, #2c2c3f);
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  text-align: center;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.step-title {
+  font-size: 28px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #ffd700; /* ذهبي */
+}
+
+.step-subtitle {
+  font-size: 16px;
+  margin-bottom: 25px;
+  color: #cccccc;
+}
+
+.interests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.interest-btn {
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: #3b3b5a !important;
+  color: #fff;
+  transition: all 0.3s ease;
+  &:hover {
+    color: #fff !important;
+  }
+}
+
+::ng-deep {
+  .continue-btn .p-button {
+  background-color: #ffd700;
+  color: #1e1e2f;
+  font-weight: bold;
+  width: 150px;
+  height: 45px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.continue-btn .p-button:disabled {
+  background-color: #888;
+  cursor: not-allowed;
+}
+
+.continue-btn .p-button:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+}
+.p-togglebutton-checked .p-togglebutton-content {
+  background-color: #ffd700 !important; /* ذهبي عند التحديد */
+  color: #1e1e2f !important;
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+}
+.interest-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+}
+}
+.signGoole {
+  background-color: #fff;
+  border: 1px solid #d1d1d1 !important;
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+  text-decoration: none;
+  color: #212121;
+}
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 1rem 0;
+  width: 100%;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background-color: #2a2a3c; // لون الخط
+    transform: translateY(-50%);
+  }
+
+  span {
+    position: relative;
+    background-color: #eee;
+    padding: 0 1rem;
+    font-size: 1.4rem;
+    z-index: 1;
+    bottom: 4px;
+    color: #666;
   }
 }

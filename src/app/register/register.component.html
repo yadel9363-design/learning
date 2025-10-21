@@ -1,114 +1,211 @@
-<div class="register-container">
-  <h2>Register Account</h2>
-
-  <form [formGroup]="registerForm" (ngSubmit)="register()">
-    <!-- الاسم -->
-    <div class="form-group">
-      <label for="displayName">Name</label>
-      <input
-        pInputText
-        id="displayName"
-        type="text"
-        formControlName="displayName"
-        placeholder="Your name"
-      />
-      <div
-        class="error"
-        *ngIf="registerForm.get('displayName')?.touched && registerForm.get('displayName')?.invalid"
+<div class="card stepper flex justify-center mt-5">
+  <p-stepper [(value)]="activeStep" class="basis-[40rem]">
+    <p-step-list>
+<p-step [value]="1">
+  <ng-template #content let-activateCallback="activateCallback" let-value="value">
+    <p-button
+      severity="success"
+      class="bg-transparent border-0 inline-flex flex-col gap-2"
+      (click)="activateCallback()"
+    >
+      <span
+        class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
+        [ngClass]="{
+          'bg-primary text-primary-contrast border-primary': value <= activeStep,
+          'border-surface': value > activeStep
+        }"
       >
-        Name should be more than 3 characters
-      </div>
-    </div>
+        <i class="pi pi-user"></i>
+      </span>
+    </p-button>
+  </ng-template>
+</p-step>
 
-    <!-- الإيميل -->
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input
-        pInputText
-        id="email"
-        type="email"
-        formControlName="email"
-        placeholder="example@email.com"
-      />
-      <div
-        class="error"
-        *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
+<p-step [value]="2">
+  <ng-template #content let-activateCallback="activateCallback" let-value="value">
+    <p-button
+      severity="success"
+      class="bg-transparent border-0 inline-flex flex-col gap-2"
+      [disabled]="activeStep < 2"
+      (click)="activeStep >= 2 && activateCallback()"
+    >
+      <span
+        class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
+        [ngClass]="{
+          'bg-primary text-primary-contrast border-primary': value <= activeStep,
+          'border-surface': value > activeStep
+        }"
       >
-        Email not valid
-      </div>
-    </div>
+        <i class="pi pi-star"></i>
+      </span>
+    </p-button>
+  </ng-template>
+</p-step>
 
-    <!-- رقم الهاتف -->
-    <div class="form-group">
-      <label for="phoneNumber">Phone Number</label>
-      <input
-        pInputText
-        id="phoneNumber"
-        type="text"
-        formControlName="phoneNumber"
-        placeholder="Enter phone number"
-      />
-      <div
-        class="error"
-        *ngIf="registerForm.get('phoneNumber')?.touched && registerForm.get('phoneNumber')?.invalid"
+<p-step [value]="3">
+  <ng-template #content let-activateCallback="activateCallback" let-value="value">
+    <p-button
+      severity="success"
+      class="bg-transparent border-0 inline-flex flex-col gap-2"
+      [disabled]="activeStep < 3"
+      (click)="activeStep >= 3 && activateCallback()"
+    >
+      <span
+        class="rounded-full border-2 w-12 h-12 inline-flex items-center justify-center"
+        [ngClass]="{
+          'bg-primary text-primary-contrast border-primary': value <= activeStep,
+          'border-surface': value > activeStep
+        }"
       >
-        Phone number must be between 10 and 15 digits
-      </div>
-    </div>
+        <i class="pi pi-check-circle"></i>
+      </span>
+    </p-button>
+  </ng-template>
+</p-step>
 
-    <!-- الجنس -->
-    <div class="form-group">
-      <label for="gender">Gender</label>
-      <p-autoComplete
-        id="gender"
-        formControlName="gender"
-        [suggestions]="filteredGenders"
-        (completeMethod)="filterGender($event)"
-        [dropdown]="true"
-        placeholder="Select or type gender"
-      ></p-autoComplete>
-      <div
-        class="error"
-        *ngIf="registerForm.get('gender')?.touched && registerForm.get('gender')?.invalid"
-      >
-        Gender is required
-      </div>
-    </div>
+    </p-step-list>
 
-    <!-- الباسورد -->
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input
-        pInputText
-        id="password"
-        type="password"
-        formControlName="password"
-      />
-      <div
-        class="error"
-        *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid"
-      >
-        Password should be more than 6 characters
-      </div>
-    </div>
+    <p-step-panels>
+      <!-- STEP 1 -->
+      <p-step-panel [value]="1">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="register-container">
+            <h2>Register Account</h2>
 
-    <!-- رسالة الخطأ -->
+            <form [formGroup]="registerForm" (ngSubmit)="register($event)">
+              <div class="form-group">
+                <label for="displayName">Name</label>
+                <input pInputText id="displayName" formControlName="displayName" placeholder="Your name" />
+                <div class="error" *ngIf="registerForm.get('displayName')?.touched && registerForm.get('displayName')?.invalid">
+                  Name should be more than 3 characters
+                </div>
+              </div>
 
-    <!-- زر التسجيل -->
-    <div class="w-full flex-column flex align-items-center justify-content-center">
-      <p-button
-        severity="info"
-        class="col-12 p-0"
-        type="submit"
-        label="Create Account"
-        [disabled]="registerForm.invalid || loading"
-      ></p-button>
-      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
-    </div>
-  </form>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input pInputText id="email" type="email" formControlName="email" placeholder="example@gmail.com" />
+                <div class="error" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
+                  Email not valid
+                </div>
+              </div>
 
-  <p>
-    Already have an account?
-    <a (click)="GoToLogin()">Sign In</a>
-  </p>
+              <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input pInputText id="phoneNumber" formControlName="phoneNumber" placeholder="Enter phone number" />
+                <div class="error" *ngIf="registerForm.get('phoneNumber')?.touched && registerForm.get('phoneNumber')?.invalid">
+                  Phone number must be between 10 and 15 digits
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="gender">Gender</label>
+                <p-autoComplete
+                  id="gender"
+                  formControlName="gender"
+                  [suggestions]="filteredGenders"
+                  (completeMethod)="filterGender($event)"
+                  [dropdown]="true"
+                  placeholder="Select or type gender"
+                ></p-autoComplete>
+                <div class="error" *ngIf="registerForm.get('gender')?.touched && registerForm.get('gender')?.invalid">
+                  Gender is required
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="password">Password</label>
+                <p-password formControlName="password" placeholder="Password"></p-password>
+                <div class="error" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
+                  <ul>
+                    <li>Start with a capital letter</li>
+                    <li>At least one number</li>
+                    <li>At least one special character (!@#$...)</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="flex justify-content-center align-items-center flex-column mt-4">
+                <p-button
+                  label="Next"
+                  severity="info"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  class="col-6 p-0"
+                  (onClick)="activateStep(2)"
+                  [disabled]="registerForm.invalid"
+                ></p-button>
+                <p>Already have an account? <a href="#" (click)="GoToLogin($event)">Sign In</a> </p>
+              </div>
+            </form>
+          </div>
+        </ng-template>
+      </p-step-panel>
+
+      <!-- STEP 2 -->
+      <p-step-panel [value]="2">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="interests-container">
+            <h2 class="step-title">🎯 Choose Your Interests</h2>
+            <p class="step-subtitle">
+              Pick a few topics you’d like to learn — we’ll personalize your experience.
+            </p>
+
+          <div class="interests-grid" *ngIf="categories.length > 0; else loading">
+            <p-togglebutton
+              *ngFor="let category of categories"
+              [onLabel]="category"
+              [offLabel]="category"
+              [(ngModel)]="categoryStates[category]"
+              (onChange)="onCategoryChange(category)"
+              class="interest-btn"
+            ></p-togglebutton>
+          </div>
+
+          <ng-template #loading>
+            <p>Loading categories...</p>
+          </ng-template>
+
+          </div>
+
+          <div class="flex pt-6 justify-content-center gap-3">
+            <p-button
+              (onClick)="activateStep(1)"
+              label="Back"
+              class="lg:col-2 md:col-4 sm:col-6 p-0"
+              severity="secondary"
+              icon="pi pi-arrow-left"
+            />
+            <p-button
+              label="Next"
+              severity="info"
+              icon="pi pi-arrow-right"
+              iconPos="right"
+              class="lg:col-2 md:col-4 sm:col-6 p-0"
+              (onClick)="activateStep(3)"
+              [disabled]="registerForm.invalid"
+            />
+          </div>
+        </ng-template>
+      </p-step-panel>
+
+
+
+      <!-- STEP 3 -->
+      <p-step-panel [value]="3">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="flex flex-column align-items-center justify-content-center gap-4" style="min-height: 16rem;">
+            <h2 class="text-xl font-semibold text-center">🎉 Account Created Successfully!</h2>
+            <img alt="success" src="https://primefaces.org/cdn/primeng/images/stepper/content.svg" width="200" />
+            <div class="flex w-full justify-content-center align-items-center pt-6 gap-3">
+              <p-button class="col-2 p-0" (onClick)="activateStep(2)" label="Back" severity="secondary" icon="pi pi-arrow-left" />
+              <p-button class="col-2 p-0" label="Create Account" icon="pi pi-check" severity="info" [disabled]="loading" (onClick)="register()" />
+            </div>
+            <div *ngIf="errorMessage" class="lg:col-6 md:col-8 sm:col-9 mt-4 p-0 p-3 flex jus content-error align-items-center justify-content-center">
+              {{ errorMessage }}
+            </div>
+          </div>
+        </ng-template>
+      </p-step-panel>
+    </p-step-panels>
+  </p-stepper>
 </div>

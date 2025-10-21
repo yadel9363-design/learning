@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(135deg, #ff9966, #ff5e62);
+  background: linear-gradient(135deg, #1e3a8a, #0369a1);
   padding-bottom: 60px;
   color: #333;
 }
@@ -20,7 +20,7 @@
   overflow: hidden;
 
   /* ✨ خلي الخلفية شفافة نسبياً */
-  background: linear-gradient(135deg, rgba(248,181,0,0.6), rgba(248,54,0,0.6));
+  background: linear-gradient(135deg, #1e3a8a, #0369a1, #036aa18c );
   background-size: 200% 200%;
   animation: waveMotion 8s ease-in-out infinite;
 
@@ -133,7 +133,7 @@
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 30px;
+  padding: 20px;
   width: 85%;
   margin-top: 0;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -262,6 +262,34 @@ input:focus {
 .p-radiobutton-checked .p-radiobutton-box .p-radiobutton-icon {
     background: #eee !important;
 }
+.p-dialog-content {
+  height: 100% !important;
+  display: flex;
+  align-items: self-end;
+  margin: 10px;
+}
+.notCropping .p-dialog{
+  height: 300px;
+}
+.isCropping .p-dialog{
+  height: 500px;
+  .p-dialog-content {
+    flex-direction: column !important;
+}
+}
+.box {
+  width: 100% !important;
+}
+}
+.box {
+  background-color: #eee !important;
+  color: #212121;
+  font-size: 1.4rem;
+  padding: 20px;
+  min-height: 200px;
+  height: auto;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 .text-warning {
   color: #d85356;
@@ -295,6 +323,17 @@ input:focus {
 }
 }
 
+@media (max-width: 550px) {
+  .info-grid  .info-item  .value{
+    font-size: 1rem;
+    color: #f9f9f9;
+    letter-spacing: 0.8px;
+    max-width: 150px;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+}
 @media (max-width: 767px) {
   .info-content {
     padding: .5rem;
@@ -310,6 +349,9 @@ input:focus {
   .phone .content {
     flex-wrap: wrap;
     justify-content: end !important;
+  }
+  .box-container {
+    flex-wrap: wrap !important;
   }
 }
 @keyframes waveMove {
@@ -354,4 +396,43 @@ input:focus {
 @keyframes starsMove {
   0% { background-position: 0 0; }
   100% { background-position: -300px 300px; }
+}
+.interests-section {
+  .interests-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #4b1d1d; // بني داكن جميل
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .interests-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+
+    .interest-pill {
+      padding: 0.6rem 1.4rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: linear-gradient(to right, #1e3a8a, #0369a1);
+      color: white;
+      box-shadow: 0 8px 16px #036aa183;
+      transition: 0.3s ease;
+      border-radius: 20px;
+      cursor: pointer;
+
+      &:hover {
+      transform: scale(1.05);
+      }
+    }
+
+    .no-interests {
+      font-size: 1rem;
+      color: #a78b8b;
+      font-style: italic;
+    }
+  }
 }

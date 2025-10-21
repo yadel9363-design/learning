@@ -13,6 +13,8 @@ import dayjs from 'dayjs';
 })
 export class HomeComponent implements OnInit {
   coursesBar: any = {};
+  data: any = [];
+  totalCourses:any = []
   optionsBar: any;
 
   platformId = inject(PLATFORM_ID);
@@ -27,17 +29,28 @@ initCharts() {
   this.courseService.getCourses().pipe(take(1)).subscribe((data: any) => {
     const grouped: Record<string, { count: number, categories: string[] }> = {};
 
-    Object.keys(data).forEach(catKey => {
-      const category = data[catKey];
+      const lengths = Object.entries(data).map(([key, val]) => {
+      const item = val as { value?: any[]; createdAt?: string };
+      return {
+        category: key,
+        count: item.value?.length || 0
+      };
+    });
+
+    const totalCourses = lengths.reduce((sum, item)=> sum + item.count, 0)
+    this.data = lengths.length;
+    this.totalCourses = totalCourses
+
+    Object.keys(data).forEach(key => {
+      const category = data[key];
       if (category && category.createdAt) {
         const dayStr = dayjs(category.createdAt).format('YYYY-MM-DD');
-
         if (!grouped[dayStr]) {
           grouped[dayStr] = { count: 0, categories: [] };
         }
 
         grouped[dayStr].count++;
-        grouped[dayStr].categories.push(catKey); // 🟢 حفظ اسم الكاتيجوري
+        grouped[dayStr].categories.push(key);
       }
     });
 
