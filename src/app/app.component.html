@@ -34,7 +34,9 @@
       <div class="m-3">
         <p-toast></p-toast>
         <router-outlet />
-        <div class="mt-6">
+        <div
+        *ngIf="(user$ | async)"
+         class="mt-6">
           <app-footer />
         </div>
       </div>

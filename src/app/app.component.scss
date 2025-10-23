@@ -157,3 +157,14 @@ $transition-type: ease-in-out;
   min-height: calc(100vh - 100px);
   max-height: 100%;
 }
+.showfooter {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.4s ease;
+}
+
+.hidefooter {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease;
+}
