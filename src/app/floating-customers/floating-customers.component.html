@@ -1,0 +1,10 @@
+<div class="floating-customers-wrapper mt-24 pb-24">
+  <div class="scroll-mask w-full flex gap-6 overflow-hidden">
+    <div class="scroll-content flex gap-6 animate-scroll">
+      <div class="customer-item" *ngFor="let customer of repeatedCustomers">
+        <i [class]="customer.icon"></i>
+        <span class="font-semibold text-lg text-surface-500 dark:text-white/64">{{ customer.name }}</span>
+      </div>
+    </div>
+  </div>
+</div>

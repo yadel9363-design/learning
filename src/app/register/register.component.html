@@ -114,9 +114,10 @@
 
               <div class="form-group">
                 <label for="password">Password</label>
-                <p-password formControlName="password" placeholder="Password"></p-password>
+                <p-password [toggleMask]="true" formControlName="password" placeholder="Password"></p-password>
                 <div class="error" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
                   <ul>
+                    <li>Use only EN characters</li>
                     <li>Start with a capital letter</li>
                     <li>At least one number</li>
                     <li>At least one special character (!@#$...)</li>

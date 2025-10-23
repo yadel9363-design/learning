@@ -1,123 +1,46 @@
-import { Component, OnInit, PLATFORM_ID, ChangeDetectorRef, inject } from '@angular/core';
-import { ChartModule } from 'primeng/chart';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CourseService } from '../../my-orders/service/course.service';
-import { take } from 'rxjs';
-import dayjs from 'dayjs';
+import { ChartModule } from 'primeng/chart';
+import { ButtonModule } from 'primeng/button';
+import { ActivatedRoute, Router, RouterModule, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { homeService } from '../service/home.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-home',
-  imports: [ChartModule, CommonModule],
+  standalone: true,
+  imports: [CommonModule, ChartModule, ButtonModule, RouterModule,ProgressSpinnerModule],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  coursesBar: any = {};
-  data: any = [];
-  totalCourses:any = []
-  optionsBar: any;
+  detailsData: any = {}; // ⬅️ يكون object
+  isDetailsPage = false;
 
-  platformId = inject(PLATFORM_ID);
-  private courseService = inject(CourseService);
-  private cd = inject(ChangeDetectorRef);
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private homeService: homeService
+  ) {}
 
-  ngOnInit() {
-    this.initCharts();
+  ngOnInit(): void {
+    this.homeService.getDetails().subscribe({
+      next: (data) => {
+        this.detailsData = data;
+      },
+      error: (err) => console.error('❌ Error loading details', err),
+    });
+
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd))
+      .subscribe(() => {
+        this.isDetailsPage = this.router.url.includes('chardetails');
+      });
   }
 
-initCharts() {
-  this.courseService.getCourses().pipe(take(1)).subscribe((data: any) => {
-    const grouped: Record<string, { count: number, categories: string[] }> = {};
-
-      const lengths = Object.entries(data).map(([key, val]) => {
-      const item = val as { value?: any[]; createdAt?: string };
-      return {
-        category: key,
-        count: item.value?.length || 0
-      };
-    });
-
-    const totalCourses = lengths.reduce((sum, item)=> sum + item.count, 0)
-    this.data = lengths.length;
-    this.totalCourses = totalCourses
-
-    Object.keys(data).forEach(key => {
-      const category = data[key];
-      if (category && category.createdAt) {
-        const dayStr = dayjs(category.createdAt).format('YYYY-MM-DD');
-        if (!grouped[dayStr]) {
-          grouped[dayStr] = { count: 0, categories: [] };
-        }
-
-        grouped[dayStr].count++;
-        grouped[dayStr].categories.push(key);
-      }
-    });
-
-    const labels = Object.keys(grouped).sort();
-    const counts = labels.map(day => grouped[day].count);
-
-    this.coursesBar = {
-      labels: labels.map(d => dayjs(d).format('MMM DD')),
-      datasets: [
-        {
-          label: 'عدد الكاتيجوريز',
-          data: counts,
-          backgroundColor: '#42A5F5',
-          hoverBackgroundColor: '#1E88E5',
-          hoverOffset: 8,
-          borderRadius: 6,
-          barPercentage: 0.5,
-          categoryPercentage: 0.6,
-          maxBarThickness: 15
-        }
-      ]
-    };
-
-    this.optionsBar = {
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: (context: any) => {
-              const dayIndex = context.dataIndex;
-              const dayKey = labels[dayIndex]; // YYYY-MM-DD
-              const dayCategories = grouped[dayKey]?.categories || [];
-              const names = dayCategories.join(', ');
-              return `${dayCategories.length} Categories [ ${names} ]`;
-            }
-          }
-        }
-      },
-      animation: {
-        duration: 600,
-        easing: 'easeOutQuart'
-      },
-      interaction: {
-        mode: 'nearest',
-        intersect: true
-      },
-      datasets: {
-        bar: {
-          hoverBackgroundColor: '#1E88E5',
-        }
-      },
-      scales: {
-        x: {
-          ticks: { color: '#666' },
-          grid: { display: false }
-        },
-        y: {
-          beginAtZero: true,
-          ticks: { stepSize: 2, color: '#666' },
-          grid: { drawBorder: false }
-        }
-      }
-    };
-
-    this.cd.markForCheck();
-  });
-}
-
+  goToDetails(index: number) {
+    localStorage.setItem('selectedIndex', index.toString());
+    this.router.navigate(['/home/chardetails']);
+  }
 }

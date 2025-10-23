@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, Output, ViewChild, inject , EventEmitter } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { AvatarModule } from 'primeng/avatar';
@@ -12,7 +12,6 @@ import { MenuModule } from 'primeng/menu';
 import { DrawerService } from '../sidebar/service/sidebar.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { ChangeDetectorRef } from '@angular/core';
-
 
 @Component({
   selector: 'app-navbar',
@@ -41,6 +40,9 @@ export class NavbarComponent implements OnInit {
   @ViewChild('menu') menu: any;
   menuOpen = false;
  photoURL?: string;
+isSidebarOpen = false;
+
+  @Output() togglebutton = new EventEmitter<boolean>();
 
   toggleDrawer() {
     this.drawerService.open();
@@ -56,7 +58,7 @@ export class NavbarComponent implements OnInit {
         this.photoURL = user.photoURL ?? undefined;
         this.setupMenu();
         this.setupMenuMobile();
-        this.cdr.detectChanges(); // 👈 يجبر PrimeNG على التحديث
+        this.cdr.detectChanges();
       }
     });
   }
@@ -127,5 +129,9 @@ setupMenuMobile() {
 toggleMenu(event: Event) {
   this.menu.toggle(event);
   this.menuOpen = !this.menuOpen;
+}
+toggleSidebar() {
+  this.togglebutton.emit(true);
+  this.isSidebarOpen = !this.isSidebarOpen;
 }
 }

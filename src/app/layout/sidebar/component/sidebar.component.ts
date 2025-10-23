@@ -48,7 +48,8 @@ export class SidebarComponent implements OnInit {
 
   private buildMenu() {
     this.itemsList = [
-      { label: 'Activities', routerLink: 'home', icon: 'fa-solid fa-house' },
+      { label: 'Home', routerLink: 'home', icon: 'fa-solid fa-house' },
+      { label: 'Activities', routerLink: 'activities', icon: 'fa-solid fa-chart-line' },
       { label: 'Courses', routerLink: 'products', icon: 'fa-solid fa-layer-group' },
       { label: 'Orders', routerLink: 'orders', icon: 'fa-solid fa-server' },
     ];
@@ -56,7 +57,6 @@ export class SidebarComponent implements OnInit {
     if (this.isAdmin) {
       this.itemsList.push(
         { label: 'Manage Orders', routerLink: 'admin/orders', icon: 'fa-solid fa-book-tanakh' },
-        { label: 'Manage Products', routerLink: 'admin/products', icon: 'fa-solid fa-book-tanakh' }
       );
     }
   }

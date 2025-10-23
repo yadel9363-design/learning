@@ -1,124 +1,156 @@
-@media (min-width: 991px) {
-.content{
-  width: calc(100% - 300px);
+@use 'sass:map';
+@use 'sass:math';
+
+// 🌈 متغيرات عامة
+$sidebar-width: 300px;
+$transition-speed: 0.4s;
+$transition-type: ease-in-out;
+
+// 🌙 الثيم الداكن والفاتح
+:root {
+  --main-bg-content: #f8f9fa;
+  --main-text-content: #222;
+  --boxShadow-color: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
-.image-container {
-  display: block;
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --main-bg-content: #121212;
+    --main-text-content: #fff;
+  }
 }
-.isLoggedIn {
-  width: 100%;
-}
-}
-@media (max-width: 991px) {
-.content{
-  width: 100%;
-}
-.image-container {
-  display: none;
-}
-.isLoggedIn {
-  width: 100%;
-}
-}
-.content {
-  background: var(--main-bg-content);
-  color: var(--main-text-content);
-  height: auto;
-  right: 0;
-  position: absolute;
-  top: 0;
-  overflow: hidden;
-  max-height: 100vh;
-}
+
+// 🧱 الحاويات الأساسية
 .container {
-  height: auto;
+  position: relative;
   min-height: 100vh;
-  position: absolute;
+  width: 100%;
+  overflow-x: hidden; // ✅ يمنع الخروج برا الشاشة
 }
+
 .navbar {
   height: 100px;
-  box-shadow: var(--boxShadow-color);
+  box-shadow: 0px 3px 1px 0 rgb(1 105 161 / 17%);
   position: relative;
+  z-index: 1001;
 }
 
-.custom-date {
-  background-color: #ccc;
-  border-radius: 10px;
-  span {
-    color: #fff;
-  }
+// 🧭 السايدبار
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: $sidebar-width;
+  height: 100vh;
+  background: var(--main-bg-content);
+  box-shadow:
+    0 3px 0px -12px rgba(0, 0, 0, 0.56), 0 4px 12px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+  transform: translateX(-100%);
+  transition: transform $transition-speed $transition-type;
+  z-index: 1000;
+  overflow-y: auto;
 }
+
+.sidebar-toggle {
+  transform: translateX(0);
+}
+
+// 🧩 المحتوى الرئيسي
+.content {
+  position: relative;
+  background: var(--main-bg-content);
+  color: var(--main-text-content);
+  min-height: 100vh;
+  width: 100%;
+  margin-left: 0;
+  padding: 0;
+  transition:
+    margin-left $transition-speed $transition-type,
+    width $transition-speed $transition-type; // ✅ حركة ناعمة من ناحية السايدبار فقط
+  box-sizing: border-box;
+}
+
+// ✅ عند فتح السايدبار
+.content-toggle {
+  margin-left: $sidebar-width;
+  width: calc(100% - #{$sidebar-width}); // ✅ المحتوى يتقلص من ناحية الشمال فقط
+}
+
+// 👤 في حالة تسجيل الدخول
 .isLoggedIn {
+  width: 100%;
   margin: 0 !important;
 }
-.sidebar-container {
-  min-height: 100vh !important;
-  box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2) !important;
-  position: absolute;
-  top: 0;
-  height: 100%;
-  bottom: 0;
-}
-.image-container {
-  height: 100vh;
-  width: 50%;
-}
-.image-container-none {
-  display: none;
-}
-@media (prefers-color-scheme: dark) {
-  .content {
-    background: #121212 !important;
-    color: #ffffff !important;
-  }
 
+// 🪄 الثيم الداكن
+@media (prefers-color-scheme: dark) {
   .custom-date {
     background: #7777;
     border: 1px solid #333;
   }
-  .content-router, .contentrouter-isLoggedIn {
-  min-height: calc(100vh - 100px);
-  max-height: 100%;
-  padding-top: 20px;
-}
-.content-router {
-  &::before {
+
+  .content-router,
+  .contentrouter-isLoggedIn {
+    min-height: calc(100vh - 100px);
+    max-height: 100%;
+    padding-top: 20px;
+  }
+
+  .content-router::before {
     content: "";
     position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(0, 0, 0, 0.2);
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
   }
-}
-}
-@media (prefers-color-scheme: light) {
-.content-router {
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(255, 255, 255, 0.1);
-  }
-}
 }
 
+@media (prefers-color-scheme: light) {
+  .content-router::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+// 📱 استجابة الموبايل
+@media (max-width: 991px) {
+  .sidebar-container {
+    display: none !important;
+  }
+
+  .sidebar-toggle {
+    transform: translateX(0);
+  }
+
+  .content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .content-toggle {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+// 📸 محتوى الصفحة
 .contentrouter-isLoggedIn {
   height: calc(100vh - 100px);
   overflow: auto;
 }
-.content-router, .contentrouter-isLoggedIn {
+
+.content-router,
+.contentrouter-isLoggedIn {
   padding-top: 20px;
   position: relative;
+  background: #eee;
 }
+
 .content-router {
-    background-image:
-  linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
-  url(../assets/images/img3.png);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+    url(../assets/images/img3.png);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

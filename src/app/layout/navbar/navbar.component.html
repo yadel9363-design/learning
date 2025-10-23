@@ -7,10 +7,15 @@
           icon="pi pi-angle-right"
           type="button"
           (click)="toggleDrawer()"
-        >
-        </p-button>
+        />
       </div>
     </div>
+    <p-button
+      class="username sidebar round"
+      [icon]="isSidebarOpen ? 'pi pi-angle-right' : 'pi pi-angle-left'"
+      type="button"
+      (click)="toggleSidebar()"
+    />
   </ng-template>
 
   <ng-template #end>

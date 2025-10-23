@@ -10,24 +10,18 @@
   [responsiveOptions]="responsiveOptions"
 >
   <ng-template pTemplate="item" let-category>
-    <div class="border rounded p-3 mx-2 text-center">
+    <div  (click)="showDialog(category.key)" class="border rounded p-3 mx-2 text-center">
       <div class="mb-3">
         <img
           [src]="category.image"
           alt="{{ category.key }}"
           class="w-full rounded"
-          height="200"
+          height="250"
         />
       </div>
 
-      <div class="flex flex-column p-3 align-items-center">
-        <h4 class="font-semibold mb-2">{{ category.key }}</h4>
-          <p-button
-            label="View Course"
-            icon="pi pi-arrow-right"
-            severity="info"
-            (click)="showDialog(category.key)"
-          ></p-button>
+      <div class="flex flex-column align-items-center">
+        <h4 class="font-semibold">{{ category.key }}</h4>
       </div>
     </div>
   </ng-template>
@@ -104,55 +98,129 @@
 
     <div *ngIf="categories.length">
       <div
-        class="courses-grid"
+        class="courses"
         *ngFor="let category of categories"
       >
         <ng-container *ngIf="category.key === selectedCategory">
-          <div class="img">
-            <img
-              [src]="category.image"
-              alt="{{ category.key }}"
-              class="w-full h-full rounded"
-              height="200"
-            />
-          </div>
-          <div class="content">
+          <div class="courses-grid">
+            <div class="img">
+              <img
+                [src]="category.image"
+                alt="{{ category.key }}"
+                class="w-full h-full rounded"
+                height="200"
+              />
+            </div>
+            <div class="content">
 
-                <div class="course-card">
-                  <p-accordion>
-                    @for (course of category.value.value; track course.name; let i = $index) {
-                      <p-accordion-panel [value]="i">
-                        <p-accordion-header>
-                          <div class="flex align-items-center justify-content-between gap-2">
-                            <h3 class="m-0">
-                              <i class="pi pi-graduation-cap mr-2"></i>{{ course.name }}
-                            </h3>
-                            <span class="text-sm">
-                              ( {{ course.createdAt | date: 'mediumDate' }} )
-                            </span>
-                          </div>
-                        </p-accordion-header>
-                        <p-accordion-content>
-                          <p class="m-0 text-color-secondary">{{ course.description }}</p>
-                        </p-accordion-content>
-                      </p-accordion-panel>
-                    }
-                  </p-accordion>
+              <div class="course-card">
+                <p-accordion>
+                  @for (course of category.value.value; track course.name; let i = $index) {
+                    <p-accordion-panel [value]="i">
+                      <p-accordion-header>
+                        <div class="flex align-items-center justify-content-between gap-2">
+                          <h3 class="m-0">
+                            <i class="pi pi-graduation-cap mr-2"></i>{{ course.name }}
+                          </h3>
+                          <span class="text-sm">
+                            ( {{ course.createdAt | date: 'mediumDate' }} )
+                          </span>
+                        </div>
+                      </p-accordion-header>
+                      <p-accordion-content>
+                        <p class="m-0 text-color-secondary">{{ course.description }}</p>
+                      </p-accordion-content>
+                    </p-accordion-panel>
+                  }
+                </p-accordion>
+              </div>
+              <div class="bannerContainer">
+                <div
+                  #boxRef
+                  class="box"
+                  *ngFor="let item of data; let i = index"
+                  [attr.data-aos]="item.animation"
+                >
+                  <div class="number-customer">
+                    <h2 class="counter">{{ item.displayedNumber }}</h2>
+                  </div>
+                  <h3>{{ item.name }}</h3>
+                  <p>{{ item.opinion }}</p>
+                </div>
+              </div>
+
+            </div>
+            </div>
+            <div class="plans-container">
+              <div class="text-center mb-5">
+                <h2 class="title">Pricing Plans</h2>
+                <p class="subtitle">Choose the plan that fits your needs — simple, transparent, and flexible.</p>
+              </div>
+
+              <div class="grid">
+                <!-- Basic -->
+                <div class="col-12 md:col-6 lg:col-4 plan">
+                  <div class="plan-card">
+                    <h3 class="plan-title">Basic</h3>
+                    <p class="plan-desc">Perfect for individuals</p>
+
+                    <div class="price mb-4">
+                      <span class="amount">$9</span><span class="period">/month</span>
+                    </div>
+
+                    <ul class="features mb-4">
+                      <li><i class="pi pi-check-circle"></i> Access to core features</li>
+                      <li><i class="pi pi-check-circle"></i> Email support</li>
+                      <li><i class="pi pi-check-circle"></i> Community access</li>
+                    </ul>
+
+                    <p-button  label="Buy Now" severity="info" class="w-full"></p-button>
+                  </div>
                 </div>
 
+                <!-- Premium -->
+                <div class="col-12 md:col-6 lg:col-4 plan">
+                  <div class="plan-card premium">
+                    <div class="tag">Most Popular</div>
+                    <h3 class="plan-title">Premium</h3>
+                    <p class="plan-desc">For growing teams</p>
 
-            <div class="bannerContainer">
-              <div
-                #boxRef
-                class="box"
-                *ngFor="let item of data; let i = index"
-                [attr.data-aos]="item.animation"
-              >
-                <div class="number-customer">
-                  <h2 class="counter">{{ item.displayedNumber }}</h2>
+                    <div class="price mb-4">
+                      <span class="amount">$29</span><span class="period">/month</span>
+                    </div>
+
+                    <ul class="features mb-4">
+                      <li><i class="pi pi-check-circle"></i> All Basic features</li>
+                      <li><i class="pi pi-check-circle"></i> Priority support</li>
+                      <li><i class="pi pi-check-circle"></i> Custom integrations</li>
+                      <li><i class="pi pi-check-circle"></i> Analytics dashboard</li>
+                    </ul>
+
+                    <p-button  label="Buy Now" class="w-full"></p-button>
+                  </div>
                 </div>
-                <h3>{{ item.name }}</h3>
-                <p>{{ item.opinion }}</p>
+
+                <!-- Enterprise -->
+                <div class="col-12 md:col-6 lg:col-4 plan">
+                  <div class="plan-card">
+                    <h3 class="plan-title">Enterprise</h3>
+                    <p class="plan-desc">For large organizations</p>
+
+                    <div class="price mb-4">
+                      <span class="amount">$49</span><span class="period">/month</span>
+                    </div>
+
+                    <ul class="features mb-4">
+                      <li><i class="pi pi-check-circle"></i> All Premium features</li>
+                      <li><i class="pi pi-check-circle"></i> Dedicated support</li>
+                      <li><i class="pi pi-check-circle"></i> Advanced reporting</li>
+                      <li><i class="pi pi-check-circle"></i> SLA guarantees</li>
+                      <li><i class="pi pi-check-circle"></i> Onboarding assistance</li>
+                    </ul>
+
+                    <p-button  label="Buy Now" severity="info" class="w-full"></p-button>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="flex w-full justify-content-end">
@@ -163,10 +231,9 @@
               class="mt-4"
               ></p-button>
             </div>
-
-          </div>
         </ng-container>
       </div>
+
     </div>
   </ng-container>
 </p-dialog>

@@ -11,15 +11,27 @@ import { UserAuthGuard } from './shared/services/user-auth-guard.service';
 import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './layout/profile/profile.component';
 import { FavouriteComponent } from './core/favourite/favourite.component';
+import { activities } from './core/activities/activities.component';
+import { ChardetailsComponent } from './core/chardetails/chardetails.component';
 
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
     { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
-    { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+    { path: 'activities', component: activities, canActivate: [AuthGuard] },
     { path: 'orders', component: MyOrdersComponent, canActivate: [AuthGuard] },
     { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+    {
+      path: 'home',
+      component: HomeComponent,
+      canActivate: [AuthGuard],
+      children: [
+        {
+           path: 'chardetails', component: ChardetailsComponent, canActivate: [AuthGuard] ,
+        }
+      ]
+     },
     { path: 'favourite', component: FavouriteComponent, canActivate: [AuthGuard] },
     { path: 'admin/orders', component: AdminOrdersComponent,
        canActivate: [AuthGuard, UserAuthGuard] },

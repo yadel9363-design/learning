@@ -1,4 +1,4 @@
-import { Component, NgZone, Inject, PLATFORM_ID, OnInit } from '@angular/core';
+import { Component, NgZone, Inject, PLATFORM_ID, OnInit, Input, Output } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { NavbarComponent } from './layout/navbar/navbar.component';
@@ -12,6 +12,7 @@ import { AppUser } from './shared/DTO/user.model';
 import { filter, switchMap } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
 import { Auth } from '@angular/fire/auth';
+import { FooterComponent } from './layout/footer/footer.component';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ import { Auth } from '@angular/fire/auth';
     NavbarComponent,
     RouterOutlet,
     SidebarComponent,
+    FooterComponent,
     ToastModule,
   ],
   templateUrl: './app.component.html',
@@ -32,6 +34,11 @@ export class AppComponent implements OnInit {
   lastSignInDate: Date | null = null;
   firstLoginInProgress = false;
   showLayout = true;
+  sidebarVisible = false;
+
+toggleSidebar() {
+  this.sidebarVisible = !this.sidebarVisible;
+}
 
   constructor(
     private authService: AuthService,

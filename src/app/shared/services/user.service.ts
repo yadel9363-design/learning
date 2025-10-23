@@ -11,13 +11,15 @@ import { Auth, user } from '@angular/fire/auth';
 import { Observable, of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 import { AppUser } from '../DTO/user.model';
+import { httpsCallable, Functions } from '@angular/fire/functions';
+
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private db = inject(Database);
   private envInjector = inject(EnvironmentInjector);
   private auth: Auth = inject(Auth);
-
+ private functions = inject(Functions);
   private runInCtx<T>(fn: () => T): T {
     return runInInjectionContext(this.envInjector, fn);
   }
@@ -148,7 +150,6 @@ async getUserByEmail(email: string): Promise<AppUser | null> {
   return this.runInCtx(async () => {
     const usersRef = ref(this.db, 'users');
     const snapshot = await get(usersRef);
-
     if (!snapshot.exists()) {
       // ✅ قاعدة البيانات فاضية
       return null;
@@ -165,6 +166,16 @@ async getUserByEmail(email: string): Promise<AppUser | null> {
     return user ?? null;
   });
 }
+  async getUserCount() {
+    // ⬇️ هنا عرف شكل الداتا اللي الفنكشن هترجعه
+    const callable = httpsCallable<unknown, { totalUsers: number }>(
+      this.functions,
+      'getUserCount'
+    );
 
+    const result = await callable({});
+    console.log('👥 Total users:', result.data.totalUsers);
+    return result.data.totalUsers;
+  }
 
 }

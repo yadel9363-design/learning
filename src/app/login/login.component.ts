@@ -7,8 +7,10 @@ import {
   EnvironmentInjector,
   runInInjectionContext,
   ChangeDetectorRef,
+  Inject,
+  PLATFORM_ID,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -76,35 +78,37 @@ export class LoginComponent implements OnInit {
     private userService: UserService,
     private messageService: MessageService,
     private injector: EnvironmentInjector,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
-  async ngOnInit() {
-    console.log('🔹 LoginComponent initialized.');
+ngOnInit() {
+  console.log('🔹 LoginComponent initialized.');
 
-    // ✅ لو المستخدم موجود بالفعل → يروح مباشرةً للصفحة الرئيسية
+  if (isPlatformBrowser(this.platformId)) {
+    // ✅ الكود اللي بيتعامل مع localStorage
     const loggedUser = localStorage.getItem('user');
     if (loggedUser) {
       this.zone.run(() => this.router.navigateByUrl('/home'));
       return;
     }
+  }
 
-    // ✅ مراقبة حالة Firebase Auth
-    runInInjectionContext(this.injector, () => {
-      authState(this.auth).subscribe(async (user) => {
-        this.zone.run(async () => {
-          if (user) {
-            console.log('✅ Logged in user:', user);
-            this.user = user;
-            this.cd.detectChanges();
-          } else {
-            this.user = null;
-            this.cd.detectChanges();
-          }
-        });
+  runInInjectionContext(this.injector, () => {
+    authState(this.auth).subscribe(async (user) => {
+      this.zone.run(async () => {
+        if (user) {
+          console.log('✅ Logged in user:', user);
+          this.user = user;
+          this.cd.detectChanges();
+        } else {
+          this.user = null;
+          this.cd.detectChanges();
+        }
       });
     });
-  }
+  });
+}
 
   getControl(name: string) {
     return this.loginForm.get(name);

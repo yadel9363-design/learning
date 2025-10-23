@@ -1,71 +1,58 @@
-@media (max-width: 991px) {
-  ::ng-deep .p-chart canvas {
-  min-width: 100%;
-  min-height: 100%;
-}
-}
-.box {
-  height: 150px;
-  width: 300px;
-  background: #fff;
-  border-radius: 10px;
-  transition: 0.3s ease;
-  &:hover {
-    box-shadow: 0 2px 8px 3px rgba(0, 0, 0, 0.1);
-  }
-  span{
-    font-size: 1.4rem;
-  }
-}
-.Categories {
-  h2, i {
-    color: var(--info-color);
-  }
-}
-.Courses {
-  h2, i {
-    color: var(--danger-color);
-  }
-}
-.card-smallChart {
-  background: #fff;
-  padding: 20px;
-  border-radius: 15px;
-}
-.dashboard {
-  display: flex;
-  border-radius: 10px;
-  flex-wrap: wrap;
-  width: 100%;
-
-  .chart-card {
-    background: #fff;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    width: 100%;
-  }
-
-  .gauges {
+.container {
+  .context {
+    position: absolute;
+    width: calc(100% - 32px);
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    width: 30%;
-    .gauge-card {
-      background: #fff;
-      padding: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      text-align: center;
-
-      h4 { margin: 0; font-weight: 600; }
-      h2 { margin: 0.5rem 0; font-size: 1.8rem; }
-      p { color: #666; font-size: 0.9rem; }
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+    text-align: center;
+    color: #fff;
+  h1 span {
+    font-size: 60px;
+  }
+  }
+  .img-home {
+    border-radius: 15px;
+    height: 50vh;
+    overflow: hidden;
+    position: relative;
+  }
+  .desc {
+    font-size: 1.1rem;
+    letter-spacing: 1.1px;
+  }
+  .container-box {
+    .char-box {
+      border: 1px solid #ccc !important;
+      border-radius: 15px;
+      transition: 0.3s ease-in;
+      img {
+        border-radius: 15px;
+      }
+      span {
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 10px;
+        i {
+          color: gold;
+        }
+      }
+      &:hover {
+        box-shadow: 0 2px 8px 3px rgba(0, 0, 0, 0.3);
+        background-color: #eee;
+      }
     }
   }
 }
-@media (prefers-color-scheme: dark) {
-    .chart-card {
-    background: #313131 !important;
+@media (max-width:991px) {
+  .container-box {
+    flex-wrap: wrap;
+    gap: 15px !important;
+  }
+}
+@media (max-width:767px) {
+  .img-home {
+    height: 60vh !important;
   }
 }

@@ -1,17 +1,27 @@
-<script src="https://www.gstatic.com/firebasejs/5.4.0/firebase.js"></script>
-
 <div
   class="flex align-items-center container w-full"
   [ngClass]="{ 'overflow-hidden': !(user$ | async) }"
 >
-  <!-- ✅ sidebar يظهر فقط عند تسجيل الدخول -->
-  <div *ngIf="user$ | async as user" class="sidebar-container flex align-items-center justify-content-center">
+  <div
+    *ngIf="user$ | async as user"
+    [ngClass]="{
+      'sidebar-container': true,
+      'sidebar-toggle': !sidebarVisible
+    }"
+    class="flex align-items-center justify-content-center"
+  >
     <app-sidebar />
   </div>
 
-  <div [ngClass]="{ 'content': (user$ | async), 'isLoggedIn': !(user$ | async) }">
+  <div
+    class="content"
+    [ngClass]="{
+      'content-toggle': !sidebarVisible && (user$ | async),
+      'isLoggedIn': !(user$ | async)
+    }"
+  >
     <div class="navbar">
-      <app-navbar />
+      <app-navbar (togglebutton)="toggleSidebar()" />
     </div>
 
     <div
@@ -24,6 +34,9 @@
       <div class="m-3">
         <p-toast></p-toast>
         <router-outlet />
+        <div class="mt-6">
+          <app-footer />
+        </div>
       </div>
     </div>
   </div>

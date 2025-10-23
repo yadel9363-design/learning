@@ -1,0 +1,52 @@
+<div class="char-details" *ngIf="item">
+  <div class="details-card">
+    <div class="text-section">
+      <h1>{{ item.label }} Career Accelerator</h1>
+      <p class="desc">{{ item.description }}</p>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="flex gap-2 align-items-center">
+            <i class="pi pi-star-fill"></i>
+            <span>{{ item.rate }}</span>
+          </div>
+          <p>average rating</p>
+        </div>
+      </div>
+
+      <div class="actions flex flex-wrap gap-3 align-items-center">
+        <p-button
+          class="sm:col-6 md:col-6 lg:col-4 p-0"
+          severity="info"
+          label="Get started"
+        ></p-button>
+        <span class="price">{{ item.price }}</span>
+      </div>
+    </div>
+
+    <div class="image-section">
+      <img
+        [ngStyle]="{ background: item.background }"
+        [src]="item.img"
+        alt="{{ item.label }}"
+      />
+    </div>
+  </div>
+</div>
+
+<!-- ✅ قسم الكورسات -->
+<div class="details-content" *ngIf="courses.length">
+  <h1>What you'll learn</h1>
+
+  <div class="courses-grid">
+    <div class="course-card" *ngFor="let c of courses">
+      <div class="card-header">
+        <h3>{{ c.title }}</h3>
+        <span class="level">{{ c.level }}</span>
+      </div>
+      <p class="duration">
+        <i class="pi pi-clock"></i> {{ c.duration }} hours
+      </p>
+    </div>
+  </div>
+</div>

@@ -81,6 +81,9 @@
 .isMobile {
   display: block;
 }
+.sidebar {
+  display: none !important;
+}
 }
 @media (prefers-color-scheme: dark) {
 ::ng-deep .username .p-button{

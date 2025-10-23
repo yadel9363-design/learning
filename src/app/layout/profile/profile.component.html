@@ -2,365 +2,354 @@
   <div class="profile-header">
     <div class="cover-photo"></div>
   </div>
-<div class="avatar-container">
-<img
-  [src]="photoURL || currentImage"
-  alt="Profile Image"
-  class="avatar"
-  (click)="fileInput.click()"
-  (error)="onImageError($event)"
-/>
-
-  <!-- <img
-    alt=""
-    *ngIf="loadingImage && !showSetNewImageMsg"
-    src="https://cdn.dribbble.com/users/347174/screenshots/2958807/charlie-loader.gif"
-    class="avatar"
-  />
-
-  <p *ngIf="showSetNewImageMsg && loadingImage" (click)="fileInput.click()" class="text-warning">
-    <i class="fa-regular fa-circle-user fa-2xl"></i> Set new image
-  </p> -->
-  <input #fileInput type="file" accept="image/*" hidden (change)="onFileChange($event)" />
-</div>
+  <div class="avatar-container">
+    <img [src]="photoURL || currentImage" alt="Profile Image" class="avatar" (click)="fileInput.click()"
+      (error)="onImageError($event)" />
+    <input #fileInput type="file" accept="image/*" hidden (change)="onFileChange($event)" />
+  </div>
 
 
 
-    <div class="User  flex gap-4 align-items-center">
-      <ng-container class="username-content" *ngIf="username?.displayName || userName; else RegisterUserName">
-        <h2
-        *ngIf="!isEditingUsername"
-         class="username">
-            {{ username?.displayName || 'username' }}
-            <img
-              *ngIf="username?.isAdmin"
-              src="assets/images/verify.png"
-              alt="verified"
-              class="verified"
-            />
-        </h2>
-        <i
-        *ngIf="!isEditingUsername"
-        (click)="startEditUsername()"
-         class="fa-solid fa-user-pen edit"></i>
+  <div class="User  flex gap-4 align-items-center">
+    <ng-container class="username-content" *ngIf="username?.displayName || userName; else RegisterUserName">
+      <h2 *ngIf="!isEditingUsername" class="username">
+        {{ username?.displayName || 'username' }}
+        <img *ngIf="username?.isAdmin" src="assets/images/verify.png" alt="verified" class="verified" />
+      </h2>
+      <i *ngIf="!isEditingUsername" (click)="startEditUsername()" class="fa-solid fa-user-pen edit"></i>
 
 
-        <div *ngIf="isEditingUsername" class="flex justify-content-between align-items-center gap-2 w-full">
-          <input
-            type="text"
-            [(ngModel)]="usernameInput"
-            placeholder="Enter gender"
-          />
+      <div *ngIf="isEditingUsername" class="flex justify-content-between align-items-center gap-2 w-full">
+        <input type="text" [(ngModel)]="usernameInput" placeholder="Enter gender" />
 
-          <p-button
-            icon="pi pi-save"
-            [disabled]="!usernameInput || loading"
-            (click)="saveUsernameEdit()"
-            severity="secondary"
-          ></p-button>
+        <p-button icon="pi pi-save" [disabled]="!usernameInput || loading" (click)="saveUsernameEdit()"
+          severity="secondary"></p-button>
 
-          <p-button
-            icon="pi pi-times"
-            (click)="CancelEditUsername()"
-            severity="secondary"
-          ></p-button>
-        </div>
+        <p-button icon="pi pi-times" (click)="CancelEditUsername()" severity="secondary"></p-button>
+      </div>
 
-        </ng-container>
-        <ng-template #RegisterUserName>
-          <div class="w-full">
-          <input
-          type="text"
-          placeholder="Enter phone number"
-          [(ngModel)]="usernameInput"
-          class="p-inputtext p-component"
-        />
-        </div>
-        </ng-template>
-    </div>
+    </ng-container>
+    <ng-template #RegisterUserName>
+      <div class="w-full">
+        <input type="text" placeholder="Enter phone number" [(ngModel)]="usernameInput"
+          class="p-inputtext p-component" />
+      </div>
+    </ng-template>
+  </div>
   <div class="profile-content glass-card">
-    <h3>Profile Details</h3>
-<div class="info-grid w-full flex flex-wrap">
-  <!-- Email -->
-   <div class="lg:col-6 md:col-6 sm:col-12 info-content">
-     <div class="info-item" *ngIf="username?.email">
-       <span class="label">📧 Email</span>
-        <ng-container *ngIf="username?.email || emailText; else RegisterEmail">
-          <div class="flex justify-content-between align-items-center gap-2 w-full flex-wrap">
-            <span *ngIf="!isEditingEmail" class="value flex">{{ username?.email }}</span>
-              <p-button
-                *ngIf="!isEditingEmail"
-                icon="pi pi-pencil"
-                (click)="startEditEmail()"
-                severity="secondary"
-              ></p-button>
+    <div class="flex w-full justify-content-center gap-4">
+      <h3 class="box-content glass" [ngClass]="{ 'glass': selectedTab === 'profile' }"
+        (click)="selectedTab = 'profile'">
+        Profile Details
+      </h3>
+      <h3 class="box-content" [ngClass]="{ 'glass': selectedTab === 'contact' }" (click)="selectedTab = 'contact'">
+        Contact us
+      </h3>
+    </div>
 
-              <div *ngIf="isEditingEmail" class="email-wrap flex justify-content-between align-items-center gap-2 w-full">
-              <input
-                type="email"
-                [(ngModel)]="EmailEditInput"
-                (input)="validateEmail()"
-                placeholder="Exm@gmail.com"
-                [ngClass]="{ 'input-error': EmailEditInput && !isEmailValid }"
-              />
+    <div *ngIf="selectedTab === 'profile'" class="info-grid w-full flex flex-wrap">
+      <!-- Email -->
+      <div class="lg:col-6 md:col-6 sm:col-12 info-content">
+        <div class="info-item" *ngIf="username?.email">
+          <span class="label">📧 Email</span>
+          <ng-container *ngIf="username?.email || emailText; else RegisterEmail">
+            <div class="flex justify-content-between align-items-center gap-2 w-full flex-wrap">
+              <span *ngIf="!isEditingEmail" class="value flex">{{ username?.email }}</span>
+              <p-button *ngIf="!isEditingEmail" icon="pi pi-pencil" (click)="startEditEmail()"
+                severity="secondary"></p-button>
 
-              <p-button
-                icon="pi pi-save"
-                label="Save"
-                [disabled]="!isEmailValid || loading"
-                (click)="saveEmailEdit()"
-                severity="secondary"
-              ></p-button>
+              <div *ngIf="isEditingEmail"
+                class="email-wrap flex justify-content-between align-items-center gap-2 w-full">
+                <input type="email" [(ngModel)]="EmailEditInput" (input)="validateEmail()" placeholder="Exm@gmail.com"
+                  [ngClass]="{ 'input-error': EmailEditInput && !isEmailValid }" />
 
-                <p-button
-                  icon="pi pi-times"
-                  (click)="CancelEditEmail()"
-                  severity="secondary"
-                ></p-button>
+                <p-button icon="pi pi-save" label="Save" [disabled]="!isEmailValid || loading" (click)="saveEmailEdit()"
+                  severity="secondary"></p-button>
+
+                <p-button icon="pi pi-times" (click)="CancelEditEmail()" severity="secondary"></p-button>
               </div>
 
-          </div>
-       </ng-container>
-
-        <ng-template #RegisterEmail>
-          <div class="w-full">
-            <input
-            type="text"
-            placeholder="Enter phone number"
-            [(ngModel)]="emailText"
-            class="p-inputtext p-component"
-          />
-          </div>
-        </ng-template>
-     </div>
-   </div>
-
-  <!-- Gender -->
-  <div class="lg:col-6 md:col-6 sm:col-12 info-content">
-    <div class="info-item">
-      <span class="label">🚻 Gender</span>
-
-  <ng-container *ngIf="username?.gender || gender; else genderSelect">
-      <div class="flex justify-content-between align-items-center gap-2 w-full">
-        <!-- الحالة العادية (عرض القيمة) -->
-        <span *ngIf="!isEditingGender" class="value">
-          {{ username?.gender || gender }}
-        </span>
-        <p-button
-          *ngIf="!isEditingGender"
-          icon="pi pi-pencil"
-          (click)="startEditGender()"
-          severity="secondary"
-        ></p-button>
-
-        <!-- الحالة عند الضغط على edit -->
-        <div *ngIf="isEditingGender" class="flex justify-content-between align-items-center gap-2 w-full">
-          <div
-            class="flex align-items-center justify-content-start flex-wrap gap-5"
-          >
-            <div class="flex align-items-center gap-2">
-              <label for="male">Male ♂️</label>
-              <p-radioButton
-                name="gender"
-                inputId="male"
-                value="Male"
-                [(ngModel)]="genderEditInput"
-              ></p-radioButton>
             </div>
-            <div class="flex align-items-center gap-2">
-              <label for="female">Female ♀️</label>
-              <p-radioButton
-                name="gender"
-                inputId="female"
-                value="Female"
-                [(ngModel)]="genderEditInput"
-              ></p-radioButton>
+          </ng-container>
+
+          <ng-template #RegisterEmail>
+            <div class="w-full">
+              <input type="text" placeholder="Enter phone number" [(ngModel)]="emailText"
+                class="p-inputtext p-component" />
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Gender -->
+      <div class="lg:col-6 md:col-6 sm:col-12 info-content">
+        <div class="info-item">
+          <span class="label">🚻 Gender</span>
+
+          <ng-container *ngIf="username?.gender || gender; else genderSelect">
+            <div class="flex justify-content-between align-items-center gap-2 w-full">
+              <!-- الحالة العادية (عرض القيمة) -->
+              <span *ngIf="!isEditingGender" class="value">
+                {{ username?.gender || gender }}
+              </span>
+              <p-button *ngIf="!isEditingGender" icon="pi pi-pencil" (click)="startEditGender()"
+                severity="secondary"></p-button>
+
+              <!-- الحالة عند الضغط على edit -->
+              <div *ngIf="isEditingGender" class="flex justify-content-between align-items-center gap-2 w-full">
+                <div class="flex align-items-center justify-content-start flex-wrap gap-5">
+                  <div class="flex align-items-center gap-2">
+                    <label for="male">Male ♂️</label>
+                    <p-radioButton name="gender" inputId="male" value="Male"
+                      [(ngModel)]="genderEditInput"></p-radioButton>
+                  </div>
+                  <div class="flex align-items-center gap-2">
+                    <label for="female">Female ♀️</label>
+                    <p-radioButton name="gender" inputId="female" value="Female"
+                      [(ngModel)]="genderEditInput"></p-radioButton>
+                  </div>
+                </div>
+
+
+
+
+
+
+                <div class="flex gap-2">
+                  <p-button icon="pi pi-save" [disabled]="!genderEditInput || loading" (click)="saveGenderEdit()"
+                    severity="secondary"></p-button>
+
+                  <p-button icon="pi pi-times" (click)="cancelEditGender()" severity="secondary"></p-button>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-template #genderSelect>
+            <div class="flex gap-2 items-center">
+              <div class="gender-options">
+                <div class="flex align-items-center justify-content-start flex-wrap gap-5">
+                  <div class="flex align-items-center gap-2">
+                    <label for="male">Male ♂️</label>
+                    <p-radioButton name="gender" inputId="male" value="Male" [(ngModel)]="genderInput"></p-radioButton>
+                  </div>
+                  <div class="flex align-items-center gap-2">
+                    <label for="female">Female ♀️</label>
+                    <p-radioButton name="gender" inputId="female" value="Female"
+                      [(ngModel)]="genderInput"></p-radioButton>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Phone -->
+      <div class="lg:col-6 md:col-6 sm:col-12 info-content phone">
+        <div class="info-item">
+          <span class="label">📱 Phone</span>
+
+          <ng-container *ngIf="username?.phoneNumber || phoneNumber; else RegisterPhone">
+            <div class="flex justify-content-between align-items-center gap-2 w-full">
+              <span *ngIf="!isEditingPhoneNumber" class="value">{{ username?.phoneNumber || phoneNumber }}</span>
+              <p-button *ngIf="!isEditingPhoneNumber" icon="pi pi-pencil" (click)="startEditPhoneNumber()"
+                severity="secondary"></p-button>
+
+              <div *ngIf="isEditingPhoneNumber"
+                class="flex content justify-content-between align-items-center gap-2 w-full">
+                <p-inputmask mask="999-99-999999" class="p-inputtext p-component" [(ngModel)]="PhoneEditInput"
+                  placeholder="012-**-******" (onComplete)="onPhoneComplete()" (onInput)="onPhoneInput()"
+                  [ngClass]="{ 'input-error': !isPhoneValid && PhoneEditInput }" />
+
+                <p-button icon="pi pi-save" label="Save" [disabled]="!isPhoneValid || loading" (click)="savePhoneEdit()"
+                  severity="secondary"></p-button>
+
+                <p-button icon="pi pi-times" (click)="CancelEditPhoneNumber()" severity="secondary"></p-button>
+              </div>
+
+            </div>
+          </ng-container>
+
+          <ng-template #RegisterPhone>
+            <div class="w-full">
+              <input type="text" placeholder="Enter phone number" [(ngModel)]="phoneInput"
+                class="p-inputtext p-component" />
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Account creation -->
+      <div *ngIf="user?.metadata?.creationTime" class="lg:col-6 md:col-6 sm:col-12 info-content">
+        <div class="info-item">
+          <span class="label">🗓️ Account Created</span>
+          <span class="value flex mt-3">
+            {{ user?.metadata?.creationTime | date: 'MMM d, y' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Last login -->
+      <div *ngIf="user?.metadata?.lastSignInTime" class="lg:col-6 md:col-6 sm:col-12 info-content">
+        <div class="info-item">
+          <span class="label">⏰ Last Login</span>
+          <span class="value flex mt-3">
+            {{ user?.metadata?.lastSignInTime | date: 'MMM d, y, h:mm a' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="col-12 info-content" *ngIf="username?.interests?.length">
+        <div class="info-item">
+          <div class="interests-section">
+            <h3 class="interests-title">🎯 Interests</h3>
+
+            <div class="interests-tags">
+              <ng-container *ngIf="username?.interests?.length; else noInterests">
+                <div *ngFor="let interest of username?.interests" class="interest-pill">
+                  {{ interest }}
+                </div>
+              </ng-container>
+
+              <ng-template #noInterests>
+                <span class="no-interests">No interests added yet</span>
+              </ng-template>
             </div>
           </div>
 
 
 
+        </div>
+      </div>
 
+      <!-- Save Button -->
+      <div *ngIf="genderInput || phoneInput" class="save mt-4 flex w-full justify-center">
+        <p-button label="Save" icon="pi pi-save" class="col-4 p-0" severity="info"
+          [disabled]="!genderInput && !phoneInput && loading" (click)="saveExtraInfo()"></p-button>
+      </div>
+    </div>
 
+    <div *ngIf="selectedTab === 'contact'"
+      class="contact-us flex flex-column justify-content-center align-items-center">
+      <div class="col-12 p-0 text-center mt-6">
+        <section>
+          <h2 class="hero-subtitle">
+            Discover how we strive to <br> provide unparalleled assistance
+          </h2>
+          <p class="hero-description">
+            We develop cutting-edge solutions and provide exceptional services to drive our clients’
+            success and exceed their expectations.
+          </p>
+        </section>
+      </div>
 
-          <div class="flex gap-2">
-          <p-button
-            icon="pi pi-save"
-            [disabled]="!genderEditInput || loading"
-            (click)="saveGenderEdit()"
-            severity="secondary"
-          ></p-button>
+      <div class="col-12 flex flex-wrap w-full flex justify-content-center align-items-center px-3 gap-4 mb-4 mt-6">
+        <div *ngFor="let item of boxs" pAnimateOnScroll enterClass="animate-enter fade-in-10 animate-duration-1000"
+          leaveClass="animate-leave fade-out-0" class="content sm:col-6 px-3 flex-column md:col-6 lg:col-3 flex">
+          <h2>{{ item.count }}</h2>
+          <p>{{ item.label }}</p>
+        </div>
 
-          <p-button
-            icon="pi pi-times"
-            (click)="cancelEditGender()"
-            severity="secondary"
-          ></p-button>
+      </div>
+
+      <div class="auto-scrolling mt-6">
+        <app-floating-customers [customers]="myCustomerList"></app-floating-customers>
+      </div>
+
+      <div
+      pAnimateOnScroll
+      enterClass="animate-enter fade-in-10 slide-in-from-t-20 animate-duration-1000"
+      leaveClass="animate-leave fade-out-0"
+      class="col-12 p-0 flex flex-column justify-content-center align-items-center mt-6 p-4">
+        <div class="contentText text-center">
+          <div class="bg-icon"><i class="fa-regular fa-circle-question fa-xl"></i></div>
+          <h1>
+            Frequently <br>
+            Asked Questions
+          </h1>
+          <p class="mt-2">
+            Find quick answers to common questions about our SaaS platform.
+          </p>
+        </div>
+        <div class="panel mt-4">
+          <div class="card flex justify-content-center">
+            <p-accordion value="0">
+              <p-accordion-panel value="0">
+                <p-accordion-header>
+                  <ng-template #toggleicon let-active="active">
+                    @if (active) {
+                    <i class="pi pi-minus"></i>
+                    } @else {
+                    <i class="pi pi-plus"></i>
+                    }
+                  </ng-template>
+                  <span class="flex items-center gap-2 w-full">
+                    <span class="font-bold whitespace-nowrap"> What features does your SaaS platform offer? </span>
+                  </span>
+                </p-accordion-header>
+                <p-accordion-content>
+                  <p class="m-0">
+                    Our platform offers a wide range of features including real-time collaboration, comprehensive
+                    dashboards, automated workflows, and robust security measures.
+                  </p>
+                </p-accordion-content>
+              </p-accordion-panel>
+              <p-accordion-panel value="1">
+                <p-accordion-header>
+                  <ng-template #toggleicon let-active="active">
+                    @if (active) {
+                    <i class="pi pi-minus"></i>
+                    } @else {
+                    <i class="pi pi-plus"></i>
+                    }
+                  </ng-template>
+                  <span class="flex items-center gap-2 w-full">
+                    <span class="font-bold whitespace-nowrap"> How secure is my data on your platform? </span>
+                  </span>
+                </p-accordion-header>
+                <p-accordion-content>
+                  <p class="m-0">
+                    We prioritize data security by implementing end-to-end encryption, regular security audits, and
+                    strict access controls. Your data is stored in secure, compliant data centers.
+                  </p>
+                </p-accordion-content>
+              </p-accordion-panel>
+              <p-accordion-panel value="2">
+                <p-accordion-header>
+                  <ng-template #toggleicon let-active="active">
+                    @if (active) {
+                    <i class="pi pi-minus"></i>
+                    } @else {
+                    <i class="pi pi-plus"></i>
+                    }
+                  </ng-template>
+                  <span class="flex items-center gap-2 w-full">
+                    <span class="font-bold whitespace-nowrap"> Can I integrate your platform with other tools we use?
+                    </span>
+                  </span>
+                </p-accordion-header>
+                <p-accordion-content>
+                  <p class="m-0">
+                    Yes, our platform supports integrations with various third-party applications through APIs and
+                    native connectors, allowing you to streamline your workflows and enhance productivity.
+                  </p>
+                </p-accordion-content>
+              </p-accordion-panel>
+            </p-accordion>
           </div>
         </div>
       </div>
-    </ng-container>
-
-    <ng-template #genderSelect>
-      <div class="flex gap-2 items-center">
-        <div class="gender-options">
-          <div
-            class="flex align-items-center justify-content-start flex-wrap gap-5"
-          >
-            <div class="flex align-items-center gap-2">
-              <label for="male">Male ♂️</label>
-              <p-radioButton
-                name="gender"
-                inputId="male"
-                value="Male"
-                [(ngModel)]="genderInput"
-              ></p-radioButton>
-            </div>
-            <div class="flex align-items-center gap-2">
-              <label for="female">Female ♀️</label>
-              <p-radioButton
-                name="gender"
-                inputId="female"
-                value="Female"
-                [(ngModel)]="genderInput"
-              ></p-radioButton>
-            </div>
-          </div>
-        </div>
-      </div>
-    </ng-template>
     </div>
   </div>
-
-  <!-- Phone -->
-  <div class="lg:col-6 md:col-6 sm:col-12 info-content phone">
-    <div class="info-item">
-      <span class="label">📱 Phone</span>
-
-      <ng-container *ngIf="username?.phoneNumber || phoneNumber; else RegisterPhone">
-        <div class="flex justify-content-between align-items-center gap-2 w-full">
-        <span *ngIf="!isEditingPhoneNumber" class="value">{{ username?.phoneNumber || phoneNumber }}</span>
-        <p-button
-          *ngIf="!isEditingPhoneNumber"
-          icon="pi pi-pencil"
-          (click)="startEditPhoneNumber()"
-          severity="secondary"
-        ></p-button>
-
-        <div *ngIf="isEditingPhoneNumber" class="flex content justify-content-between align-items-center gap-2 w-full">
-          <p-inputmask
-            mask="999-99-999999"
-            class="p-inputtext p-component"
-            [(ngModel)]="PhoneEditInput"
-            placeholder="012-**-******"
-            (onComplete)="onPhoneComplete()"
-            (onInput)="onPhoneInput()"
-            [ngClass]="{ 'input-error': !isPhoneValid && PhoneEditInput }"
-          />
-
-        <p-button
-          icon="pi pi-save"
-          label="Save"
-          [disabled]="!isPhoneValid || loading"
-          (click)="savePhoneEdit()"
-          severity="secondary"
-        ></p-button>
-
-          <p-button
-            icon="pi pi-times"
-            (click)="CancelEditPhoneNumber()"
-            severity="secondary"
-          ></p-button>
-        </div>
-
-        </div>
-      </ng-container>
-
-      <ng-template #RegisterPhone>
-        <div class="w-full">
-          <input
-          type="text"
-          placeholder="Enter phone number"
-          [(ngModel)]="phoneInput"
-          class="p-inputtext p-component"
-        />
-        </div>
-      </ng-template>
-    </div>
-  </div>
-
-  <!-- Account creation -->
-  <div *ngIf="user?.metadata?.creationTime" class="lg:col-6 md:col-6 sm:col-12 info-content">
-    <div class="info-item">
-      <span class="label">🗓️ Account Created</span>
-      <span class="value flex mt-3">
-        {{ user?.metadata?.creationTime | date: 'MMM d, y' }}
-      </span>
-    </div>
-  </div>
-
-  <!-- Last login -->
-  <div  *ngIf="user?.metadata?.lastSignInTime" class="lg:col-6 md:col-6 sm:col-12 info-content">
-    <div class="info-item">
-      <span class="label">⏰ Last Login</span>
-      <span class="value flex mt-3">
-        {{ user?.metadata?.lastSignInTime | date: 'MMM d, y, h:mm a' }}
-      </span>
-    </div>
-  </div>
-
-<div class="col-12 info-content" *ngIf="username?.interests?.length">
-  <div class="info-item">
-<div class="interests-section">
-  <h3 class="interests-title">🎯 Interests</h3>
-
-  <div class="interests-tags">
-    <ng-container *ngIf="username?.interests?.length; else noInterests">
-      <div *ngFor="let interest of username?.interests" class="interest-pill">
-        {{ interest }}
-      </div>
-    </ng-container>
-
-    <ng-template #noInterests>
-      <span class="no-interests">No interests added yet</span>
-    </ng-template>
-  </div>
 </div>
 
 
 
-  </div>
-</div>
-
-</div>
-
-<!-- Save Button -->
-<div *ngIf="genderInput || phoneInput" class="save mt-4 flex w-full justify-center">
-  <p-button
-    label="Save"
-    icon="pi pi-save"
-    class="col-4 p-0"
-    severity="info"
-    [disabled]="!genderInput && !phoneInput && loading"
-    (click)="saveExtraInfo()"
-  ></p-button>
-</div>
-
-  </div>
-</div>
-
-
-
-  <!-- Cropper dialog -->
-<p-dialog
-  header="Upload Image"
-  [(visible)]="showCropperDialog"
-  [modal]="true"
-  [closable]="false"
-  [style]="{ width: '700px' }"
-  [ngClass]="{'notCropping': !isCropping, 'isCropping': isCropping}"
-  [contentStyle]="{ overflow: 'auto' }"
->
+<!-- Cropper dialog -->
+<p-dialog header="Upload Image" [(visible)]="showCropperDialog" [modal]="true" [closable]="false"
+  [style]="{ width: '700px' }" [ngClass]="{'notCropping': !isCropping, 'isCropping': isCropping}"
+  [contentStyle]="{ overflow: 'auto' }">
   <ng-container *ngIf="!isCropping">
 
     <div class="flex justify-content-between w-full box-container align-items-start h-full gap-3 mt-4">
@@ -376,11 +365,8 @@
 
       <div class="flex flex-column box text-center gap-2">
         <p>Set the Original image?</p>
-        <p-button
-          label="Use Original"
-          (click)="selectedFile && saveImageDirectly(selectedFile)"
-          [disabled]="!selectedFile"
-          severity="info">
+        <p-button label="Use Original" (click)="selectedFile && saveImageDirectly(selectedFile)"
+          [disabled]="!selectedFile" severity="info">
         </p-button>
       </div>
 
@@ -388,26 +374,15 @@
   </ng-container>
 
   <ng-container *ngIf="isCropping">
-<image-cropper
-  *ngIf="isCropping && imageChangedEvent"
-  [imageChangedEvent]="imageChangedEvent"
-  [maintainAspectRatio]="true"
-  [aspectRatio]="1"
-  format="png"
-  outputType="base64"
-  (imageCropped)="imageCropped($event)">
-</image-cropper>
+    <image-cropper *ngIf="isCropping && imageChangedEvent" [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true" [aspectRatio]="1" format="png" outputType="base64"
+      (imageCropped)="imageCropped($event)">
+    </image-cropper>
 
-<div class="flex justify-content-end gap-2 mt-2">
-<p-button
-  label="Save Cropped"
-  [disabled]="!croppedImage"
-  (click)="saveCroppedImage()"
-  severity="success">
-</p-button>
-    <p-button label="Cancel" (click)="cancelCrop()" severity="danger"></p-button>
+    <div class="flex justify-content-end gap-2 mt-2">
+      <p-button label="Save Cropped" [disabled]="!croppedImage" (click)="saveCroppedImage()" severity="success">
+      </p-button>
+      <p-button label="Cancel" (click)="cancelCrop()" severity="danger"></p-button>
     </div>
   </ng-container>
 </p-dialog>
-
-

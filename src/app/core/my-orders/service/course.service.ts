@@ -33,7 +33,6 @@ export class CourseService {
   public getDocRef() {
     return doc(this.firestore, 'categories/Courses');
   }
-
   getCourses(): Observable<any> {
     return this.runInCtx(() => docData(this.getDocRef()));
   }

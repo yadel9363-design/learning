@@ -1,0 +1,77 @@
+@media (max-width: 991px) {
+  ::ng-deep .p-chart canvas {
+  min-width: 100%;
+  min-height: 100%;
+}
+}
+.box-categories {
+  background: oklch(83.7% .128 66.29);
+}
+.box-courses {
+  background: var(--primary-color);
+}
+.box {
+  color: #fff;
+  height: 150px;
+  width: 300px;
+  transition: 0.3s ease;
+  border-radius: 25px;
+  &:hover {
+    box-shadow: 0 2px 8px 3px rgba(0, 0, 0, 0.1);
+  }
+  span{
+    font-size: 1.4rem;
+  }
+}
+.Categories {
+  h2, i {
+    color: var(--info-color);
+  }
+}
+.Courses {
+  h2, i {
+    color: var(--danger-color);
+  }
+}
+.card-smallChart {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+}
+.dashboard {
+  display: flex;
+  border-radius: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+
+  .chart-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    width: 100%;
+  }
+
+  .gauges {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 30%;
+    .gauge-card {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      text-align: center;
+
+      h4 { margin: 0; font-weight: 600; }
+      h2 { margin: 0.5rem 0; font-size: 1.8rem; }
+      p { color: #666; font-size: 0.9rem; }
+    }
+  }
+}
+@media (prefers-color-scheme: dark) {
+    .chart-card {
+    background: #313131 !important;
+  }
+}

@@ -74,7 +74,7 @@
   /* ✨ لمعان وحركة */
   animation:
     starsTwinkle 3s ease-in-out infinite alternate,
-    starsMove 20s linear infinite;
+    starsMove 30s linear infinite;
   filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
 }
 
@@ -126,6 +126,20 @@
       }
     }
   }
+.box-content{
+  padding: 5px 20px;
+  cursor: pointer;
+}
+.glass {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.05)
+  );
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+}
 
 /* 💎 Glassmorphism Card */
 .glass-card {
@@ -335,6 +349,9 @@ input:focus {
 }
 }
 @media (max-width: 767px) {
+   h3.box-content {
+    font-size: 20px !important;
+  }
   .info-content {
     padding: .5rem;
     width: 100%;
@@ -353,6 +370,12 @@ input:focus {
   .box-container {
     flex-wrap: wrap !important;
   }
+  .contact-us {
+  .hero-subtitle {
+    font-size: 25px !important;
+    padding: 0 20px;
+  }
+}
 }
 @keyframes waveMove {
   0% {
@@ -390,6 +413,44 @@ input:focus {
 @keyframes starsTwinkle {
   0%, 100% { opacity: 0.6; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.05); }
+}
+@keyframes slidedown-icon {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(20px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.slidedown-icon {
+  animation: slidedown-icon;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+.animate-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.fade-in-10 {
+  animation: fadeInUp 1s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 
@@ -433,6 +494,81 @@ input:focus {
       font-size: 1rem;
       color: #a78b8b;
       font-style: italic;
+    }
+  }
+}
+.contact-us {
+  background: var(--primary-color);
+  min-height: 70vh;
+  position: relative;
+  border-radius: 25px;
+  .hero-subtitle {
+    font-size: 50px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  .hero-description {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #b3c5eb;
+    line-height: 1.5;
+  }
+  .content {
+    background: transparent;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    padding: 15px 10px;
+    text-align: center;
+    min-height: 100px;
+    min-width: 250px;
+  }
+  .bg-icon {
+    display: flex;
+    justify-content: center;
+    i {
+    background: var(--primary-color);
+    padding: 25px;
+    width: 60px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  }
+}
+.auto-scrolling {
+  overflow: hidden;
+  max-width: 100%;
+}
+::ng-deep {
+  .p-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .p-accordionheader {
+    border-radius: 15px !important;
+    background: transparent;
+    border: 1px solid #fff !important;
+    color: #fff !important;
+    padding: 20px 30px;
+    &:hover {
+      background: transparent !important;
+      }
+    }
+    .p-accordionpanel:not(.p-disabled).p-accordionpanel-active > .p-accordionheader {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    background: transparent !important;
+    }
+    .p-accordioncontent-content {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding: 20px 30px;
+    }
+    .p-accordionpanel {
+    border: none;
     }
   }
 }

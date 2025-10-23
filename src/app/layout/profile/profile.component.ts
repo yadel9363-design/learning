@@ -4,7 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ImageCropperComponent, ImageCroppedEvent } from 'ngx-image-cropper';
 import { Auth, updateProfile, User } from '@angular/fire/auth';
-import { Storage, ref as storageRef, uploadString, getDownloadURL, connectStorageEmulator } from '@angular/fire/storage';
+import { Storage, ref as storageRef, uploadString, getDownloadURL } from '@angular/fire/storage';
 import { Database } from '@angular/fire/database';
 import { UserService } from '../../shared/services/user.service';
 import { AuthService } from '../../shared/services/auth.service';
@@ -14,6 +14,9 @@ import { MessageService } from 'primeng/api';
 import { InputMaskModule } from 'primeng/inputmask';
 import { HttpClient } from '@angular/common/http';
 import { AppUser } from '../../shared/DTO/user.model';
+import { AnimateOnScrollModule } from 'primeng/animateonscroll';
+import { AccordionModule } from 'primeng/accordion';
+import { FloatingCustomersComponent } from '../../floating-customers/floating-customers.component';
 
 @Component({
   selector: 'app-profile',
@@ -25,7 +28,10 @@ import { AppUser } from '../../shared/DTO/user.model';
     ImageCropperComponent,
     FormsModule,
     RadioButtonModule,
-    InputMaskModule
+    InputMaskModule,
+    AnimateOnScrollModule,
+    AccordionModule,
+    FloatingCustomersComponent
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
@@ -49,6 +55,7 @@ export class ProfileComponent implements OnInit {
   hideLinkTimeout: any;
   currentImage = 'https://cdn.dribbble.com/users/347174/screenshots/2958807/charlie-loader.gif';
   selectedFile: File | null = null;
+  selectedTab: 'profile' | 'contact' = 'profile';
 
   showCropper = false;
   loading = false;
@@ -74,29 +81,57 @@ export class ProfileComponent implements OnInit {
   private zone = inject(NgZone);
   private cdr = inject(ChangeDetectorRef);
 
-  async ngOnInit(): Promise<void> {
-    if (window.location.hostname === 'localhost') {
-      runInInjectionContext(this.injector, () => {
-        connectStorageEmulator(this.storage, 'localhost', 9199);
-      });
+  boxs=[
+    {
+      count: '+20',
+      label: 'years of experience'
+    },
+    {
+      count: '+10K',
+      label: '10,000 successful projects.'
+    },
+    {
+      count: '99%',
+      label: '99% customer satisfaction.'
+    },
+    {
+      count: '+15',
+      label: 'over 15 awards.'
     }
+  ]
+    myCustomerList = [
+    {
+      name: 'Trimzales',
+      icon: 'fa-solid fa-meteor'
+    },
+    {
+      name: 'ZenTrailMs',
+      icon: 'fa-solid fa-bolt'
+    },
+    {
+      name: 'BriteMank',
+      icon: 'fa-solid fa-fire'
+    },
+    // ضيف العملاء الباقيين هنا
+  ];
 
-    this.authService.user$.subscribe(async (user) => {
-      this.user = user || null;
-      if (user) {
-        const dbUser = await this.userService.getUserById(user.uid);
-        this.username = dbUser ? { ...user, ...dbUser } : user;
-        setTimeout(() => this.showLoadingThenFallback(), 5000);
-      } else {
-        this.username = null;
-      }
-      this.cdr.detectChanges();
-    });
+async ngOnInit(): Promise<void> {
+  this.authService.user$.subscribe(async (user) => {
+    this.user = user || null;
+    if (user) {
+      const dbUser = await this.userService.getUserById(user.uid);
+      this.username = dbUser ? { ...user, ...dbUser } : user;
+      setTimeout(() => this.showLoadingThenFallback(), 5000);
+    } else {
+      this.username = null;
+    }
+    this.cdr.detectChanges();
+  });
 
-    this.userService.getCurrentUserData().subscribe((user) => {
-      if (user?.isAdmin) this.userService.updateOldUsers();
-    });
-  }
+  this.userService.getCurrentUserData().subscribe((user) => {
+    if (user?.isAdmin) this.userService.updateOldUsers();
+  });
+}
 
   onPhoneComplete() { this.isPhoneValid = true; }
   onPhoneInput() { this.isPhoneValid = (this.PhoneEditInput || '').replace(/\D/g, '').length === 11; }
@@ -472,5 +507,8 @@ async savePhoneEdit() {
   }
 onSelectedFile(event:any){
   console.log('event on click',event)
+}
+onContentChange(event:any){
+
 }
 }
