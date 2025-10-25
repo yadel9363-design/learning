@@ -17,7 +17,8 @@
           <div class="flex flex-column">
             <p-iconfield>
               <p-inputicon><i class="pi pi-key"></i></p-inputicon>
-              <input pInputText formControlName="password" type="password" placeholder="Password" />
+              <!-- <input pInputText formControlName="password" type="password" placeholder="Password" /> -->
+              <p-password [feedback]="false" [toggleMask]="true" formControlName="password" placeholder="Password"></p-password>
             </p-iconfield>
             <small *ngIf="getControl('password')?.touched && getControl('password')?.invalid">{{ getErrorMessage('password') }}</small>
           </div>

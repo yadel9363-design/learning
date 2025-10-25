@@ -199,29 +199,72 @@
           </span>
         </div>
       </div>
-
-      <div class="col-12 info-content" *ngIf="username?.interests?.length">
+      <!-- 🎯 Interests Section -->
+      <div class="lg:col-12 md:col-12 sm:col-12 info-content interests" *ngIf="username">
         <div class="info-item">
-          <div class="interests-section">
-            <h3 class="interests-title">🎯 Interests</h3>
+          <span class="label">🎯 Interests</span>
 
-            <div class="interests-tags">
-              <ng-container *ngIf="username?.interests?.length; else noInterests">
+          <ng-container *ngIf="username?.interests?.length; else RegisterInterests">
+            <div class="flex justify-content-between align-items-center gap-2 flex-wrap w-full">
+
+              <!-- ✅ عرض الاهتمامات -->
+              <div class="interests-content flex flex-wrap gap-2 align-items-center">
                 <div *ngFor="let interest of username?.interests" class="interest-pill">
                   {{ interest }}
                 </div>
-              </ng-container>
+              </div>
 
-              <ng-template #noInterests>
-                <span class="no-interests">No interests added yet</span>
-              </ng-template>
+              <!-- زر تعديل -->
+              <p-button
+                *ngIf="!isEditingInterests"
+                icon="pi pi-pencil"
+                (click)="startEditInterests()"
+                severity="secondary">
+              </p-button>
+
+
+              <div *ngIf="isEditingInterests" class="interests-toggle-grid mt-3">
+                <ng-container *ngIf="!isLoadingCategories; else loadingCats">
+                  <p-togglebutton
+                    *ngFor="let category of categories"
+                    [onLabel]="category"
+                    [offLabel]="category"
+                    [ngModel]="categoryStates[category]"
+                    (ngModelChange)="onCategoryChange(category, $event)"
+                    class="interest-btn"
+                  ></p-togglebutton>
+                </ng-container>
+
+                <ng-template #loadingCats>
+                  <p-progress-spinner styleClass="w-3rem h-3rem" strokeWidth="4"></p-progress-spinner>
+                </ng-template>
+
+                <div class="flex gap-2 mt-3">
+                  <p-button icon="pi pi-save" label="Save" (click)="saveInterests()" severity="secondary"></p-button>
+                  <p-button icon="pi pi-times" label="Cancel" (click)="cancelEditInterests()" severity="secondary"></p-button>
+                </div>
+              </div>
+
             </div>
-          </div>
+          </ng-container>
 
-
-
+          <!-- ✅ أول مرة يدخل -->
+          <ng-template #RegisterInterests>
+            <div class="interests-toggle-grid flex flex-column gap-2 mt-2">
+              <p-togglebutton
+                *ngFor="let category of categories"
+                [onLabel]="category"
+                [offLabel]="category"
+                [ngModel]="categoryStates[category]"
+                (ngModelChange)="onCategoryChange(category, $event)"
+                class="interest-btn"
+              ></p-togglebutton>
+            </div>
+          </ng-template>
         </div>
       </div>
+
+
 
       <!-- Save Button -->
       <div *ngIf="genderInput || phoneInput" class="save mt-4 flex w-full justify-center">

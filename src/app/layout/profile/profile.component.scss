@@ -190,6 +190,8 @@
     }
   }
 }
+
+
 input, ::ng-deep .p-inputtext .p-inputmask  {
   background: rgba(255, 255, 255, 0.5) !important;
   border: 1px solid #eee !important;
@@ -571,4 +573,103 @@ input:focus {
     border: none;
     }
   }
+}
+.info-content.interests {
+  .info-item {
+    background: rgba(255, 255, 255, 0.15);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-radius: 18px;
+    padding: 18px 22px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    .label {
+      display: block;
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      color: #e0e0e0;
+      letter-spacing: 0.5px;
+    }
+
+    .interest-pill {
+      background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      cursor: default;
+
+      &:hover {
+        background: linear-gradient(135deg, #3b82f6, #0ea5e9);
+      }
+    }
+
+    input.p-inputtext {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border-radius: 8px;
+      padding: 8px 12px;
+      transition: border-color 0.3s, background 0.3s;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      &:focus {
+        border-color: #3b82f6;
+        background: rgba(255, 255, 255, 0.2);
+        outline: none;
+      }
+    }
+    .no-interests {
+      color: #ccc;
+      font-style: italic;
+      margin-top: 5px;
+    }
+    .interests-content {
+      background: var(--primary-color);
+      padding: 1rem;
+      border-radius: 15px;
+    }
+  }
+}
+.interests-toggle-grid {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 10px !important;
+
+  ::ng-deep .interest-btn {
+    .p-togglebutton-content {
+      background: rgba(0, 0, 0, 0.1) ;
+      color: #212121;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      padding: 8px 18px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    &:hover {
+       box-shadow: 0 5px 15px rgba(59, 130, 246, 0.5) !important;
+       transform: translateY(0) !important;
+    }
+  }
+}
+::ng-deep .p-togglebutton-checked .p-togglebutton-content {
+  background: linear-gradient(135deg, #0ea5e9, #3b82f6) !important;
+  color: #fff !important;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5) !important;
 }

@@ -29,6 +29,7 @@
       transition: 0.3s ease-in;
       img {
         border-radius: 15px;
+        object-fit: contain;
       }
       span {
         border: 1px solid #ccc;
@@ -54,5 +55,8 @@
 @media (max-width:767px) {
   .img-home {
     height: 60vh !important;
+  }
+  .context h1 {
+    font-size: 20px !important;
   }
 }

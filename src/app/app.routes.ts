@@ -28,7 +28,7 @@ export const routes: Routes = [
       canActivate: [AuthGuard],
       children: [
         {
-           path: 'chardetails', component: ChardetailsComponent, canActivate: [AuthGuard] ,
+           path: 'chardetails/:id', component: ChardetailsComponent, canActivate: [AuthGuard] ,
         }
       ]
      },

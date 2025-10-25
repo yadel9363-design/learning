@@ -24,7 +24,7 @@ import { FocusTrapModule } from 'primeng/focustrap';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { AutoFocusModule } from 'primeng/autofocus';
-
+import { PasswordModule } from 'primeng/password';
 import { Auth, GoogleAuthProvider, signInWithPopup, signInWithCredential, User } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, setDoc } from '@angular/fire/firestore';
 import { authState } from '@angular/fire/auth';
@@ -49,6 +49,7 @@ import { UniquenessValidator } from '../shared/DTO/unique.validators';
     AutoFocusModule,
     ToggleButtonModule,
     ToastModule,
+    PasswordModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
@@ -83,7 +84,6 @@ export class LoginComponent implements OnInit {
   ) {}
 
 ngOnInit() {
-  console.log('🔹 LoginComponent initialized.');
 
   if (isPlatformBrowser(this.platformId)) {
     // ✅ الكود اللي بيتعامل مع localStorage
@@ -134,19 +134,16 @@ ngOnInit() {
     try {
       const user = await this.authService.loginWithEmail(Email!, password!);
       this.user = user;
-      const isFirstTime = await this.authService.isFirstTimeUser(user.uid);
 
-      if (isFirstTime) {
-        // 🆕 مستخدم جديد → عرض الاهتمامات
-        this.showInterests = true;
-        await this.loadCategories();
-      } else {
-        // 🔁 مستخدم قديم → دخول مباشر
         localStorage.setItem('user', JSON.stringify(user));
         this.zone.run(() => this.router.navigateByUrl('/home'));
-      }
 
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login successful' });
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Login successful',
+        styleClass: 'custom-cloud-toast'
+       });
     } catch (error: any) {
       let message = 'Something went wrong';
       if (error?.code === 'auth/invalid-credential') message = 'Invalid email or password';

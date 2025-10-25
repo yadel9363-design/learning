@@ -32,3 +32,54 @@ body {
                "Helvetica Neue", Arial, "Noto Sans", sans-serif,
                "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+.p-toast-message {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25) !important;
+  padding: 1rem 1.5rem !important;
+  color: #212121 !important;
+  animation: cloudFadeIn 0.5s ease forwards !important; /* ✅ animation فعالة */
+
+  .p-toast-summary {
+    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+    color: #212121 !important;
+  }
+
+  .p-toast-detail {
+    opacity: 0.9 !important;
+    color: #212121 !important;
+  }
+  /* ✅ لون أيقونة النجاح والخطأ بالأسود */
+.p-toast-message-icon {
+  color: #000 !important;
+}
+
+/* ✅ لون زر الإغلاق الأسود */
+.p-toast-icon-close {
+  color: #000 !important;
+  opacity: 0.8 !important;
+  transition: 0.3s ease !important;
+}
+
+.p-toast-icon-close:hover {
+  opacity: 1 !important;
+  transform: scale(1.1) !important;
+}
+
+}
+
+/* ✅ الأنيميشن */
+@keyframes cloudFadeIn {
+  0% {
+    opacity: 0 !important;
+    transform: translateY(10px) scale(0.95) !important;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) !important;
+  }
+}

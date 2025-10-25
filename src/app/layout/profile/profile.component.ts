@@ -17,6 +17,9 @@ import { AppUser } from '../../shared/DTO/user.model';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { AccordionModule } from 'primeng/accordion';
 import { FloatingCustomersComponent } from '../../floating-customers/floating-customers.component';
+import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-profile',
@@ -31,7 +34,9 @@ import { FloatingCustomersComponent } from '../../floating-customers/floating-cu
     InputMaskModule,
     AnimateOnScrollModule,
     AccordionModule,
-    FloatingCustomersComponent
+    FloatingCustomersComponent,
+    ToggleButtonModule,
+    ProgressSpinnerModule
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
@@ -48,6 +53,7 @@ export class ProfileComponent implements OnInit {
   gender = '';
   usernameInput = '';
   genderEditInput = '';
+  newInterest = '';
   PhoneEditInput = '';
   EmailEditInput = '';
   genderInput = '';
@@ -56,6 +62,8 @@ export class ProfileComponent implements OnInit {
   currentImage = 'https://cdn.dribbble.com/users/347174/screenshots/2958807/charlie-loader.gif';
   selectedFile: File | null = null;
   selectedTab: 'profile' | 'contact' = 'profile';
+  categories: string[] = [];
+  categoryStates: { [key: string]: boolean } = {};
 
   showCropper = false;
   loading = false;
@@ -70,6 +78,9 @@ export class ProfileComponent implements OnInit {
   isCropping = false;
   loadingImage = false;
   private isUploading = false;
+  isEditingInterests = false;
+  isLoadingCategories = false;
+
 
   private db = inject(Database);
   private auth = inject(Auth);
@@ -80,6 +91,7 @@ export class ProfileComponent implements OnInit {
   private messageService = inject(MessageService);
   private zone = inject(NgZone);
   private cdr = inject(ChangeDetectorRef);
+  private firestore = inject(Firestore);
 
   boxs=[
     {
@@ -121,7 +133,7 @@ async ngOnInit(): Promise<void> {
     if (user) {
       const dbUser = await this.userService.getUserById(user.uid);
       this.username = dbUser ? { ...user, ...dbUser } : user;
-      setTimeout(() => this.showLoadingThenFallback(), 5000);
+      this.loadCategories();
     } else {
       this.username = null;
     }
@@ -505,10 +517,80 @@ async savePhoneEdit() {
     this.loading = false;
   }
   }
-onSelectedFile(event:any){
-  console.log('event on click',event)
-}
-onContentChange(event:any){
 
+startEditInterests() {
+  this.isEditingInterests = true;
 }
+cancelEditInterests() {
+  this.isEditingInterests = false;
+}
+
+
+async loadCategories() {
+  return runInInjectionContext(this.injector, async () => {
+    try {
+      this.isLoadingCategories = true;
+      const refDoc = doc(this.firestore, 'categories', 'Courses');
+      const docSnap = await getDoc(refDoc);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        this.categories = Object.keys(data || {});
+
+        // ✅ تفعيل التصنيفات اللي المستخدم مختارها بالفعل
+        this.categories.forEach(
+          (cat) => (this.categoryStates[cat] = this.username?.interests?.includes(cat) || false)
+        );
+      } else {
+        this.categories = [];
+        console.warn('⚠️ No categories found.');
+      }
+    } catch (err) {
+      console.error('❌ Error loading categories:', err);
+      this.categories = [];
+    } finally {
+      this.isLoadingCategories = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
+
+onCategoryChange(category: string, isSelected: boolean) {
+  this.categoryStates[category] = isSelected;
+
+  // تحديث القيمة محلياً
+  const selected = Object.keys(this.categoryStates).filter((c) => this.categoryStates[c]);
+  this.username!.interests = [...selected];
+  this.cdr.detectChanges();
+}
+
+async saveInterests() {
+  if (!this.username) return;
+
+  const selected = Object.keys(this.categoryStates).filter((c) => this.categoryStates[c]);
+
+  try {
+    await this.userService.updateUser(this.username.uid, { interests: selected });
+
+    // ✅ تحديث القيمه محلياً
+    this.username.interests = [...selected];
+    this.isEditingInterests = false;
+    this.cdr.detectChanges();
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Updated',
+      detail: '🎯 Interests saved successfully!',
+    });
+  } catch (err) {
+    console.error('❌ Error saving interests:', err);
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to save interests. Please try again.',
+    });
+  }
+}
+
+
 }

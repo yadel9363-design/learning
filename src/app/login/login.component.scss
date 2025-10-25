@@ -57,6 +57,28 @@ input.ng-invalid.ng-touched {
   .login .p-button {
     width: 100%;
   }
+  .p-password, .p-password .p-inputtext {
+    width: 100%;
+  }
+  .custom-success-toast {
+  background: linear-gradient(135deg, #0369a1, #1e3a8a);
+  color: #fff;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 6px 18px rgba(3, 105, 161, 0.3);
+  border-left: 6px solid #22c55e;
+  animation: fadeSlideIn 0.5s ease;
+
+  .p-toast-summary {
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .p-toast-detail {
+    opacity: 0.9;
+    font-size: 0.95rem;
+  }
+}
 }
 .interests-container {
   max-width: 700px;
@@ -167,5 +189,15 @@ input.ng-invalid.ng-touched {
     z-index: 1;
     bottom: 4px;
     color: #666;
+  }
+}
+@keyframes fadeSlideIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
