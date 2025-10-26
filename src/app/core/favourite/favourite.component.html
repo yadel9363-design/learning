@@ -1,1 +1,33 @@
-<p>favourite works!</p>
+<div class="interests-container">
+  <h2 class="step-title">🎯 Choose Your Interests</h2>
+  <p class="step-subtitle">
+    Pick a few topics you’d like to learn — we’ll personalize your experience.
+  </p>
+
+  <ng-container *ngIf="!isLoading; else loading">
+    <div class="interests-grid">
+      <p-togglebutton
+        *ngFor="let category of categories"
+        [onLabel]="category"
+        [offLabel]="category"
+        [(ngModel)]="categoryStates[category]"
+        (ngModelChange)="onCategoryChange(category, $event)"
+        class="interest-btn">
+      </p-togglebutton>
+    </div>
+
+    <!-- زرار Continue داخل login فقط -->
+    <p-button
+      *ngIf="insideLogin"
+      label="Continue"
+      [disabled]="selectedCategories.length === 0"
+      (onClick)="completeSelection()"
+      class="continue-btn">
+    </p-button>
+  </ng-container>
+
+  <ng-template #loading>
+    <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+    <p class="text-center mt-2">Loading interests...</p>
+  </ng-template>
+</div>

@@ -6,17 +6,17 @@ import { ImageCropperComponent, ImageCroppedEvent } from 'ngx-image-cropper';
 import { Auth, updateProfile, User } from '@angular/fire/auth';
 import { Storage, ref as storageRef, uploadString, getDownloadURL } from '@angular/fire/storage';
 import { Database } from '@angular/fire/database';
-import { UserService } from '../../shared/services/user.service';
-import { AuthService } from '../../shared/services/auth.service';
+import { UserService } from '../../../shared/services/user.service';
+import { AuthService } from '../../../shared/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { MessageService } from 'primeng/api';
 import { InputMaskModule } from 'primeng/inputmask';
 import { HttpClient } from '@angular/common/http';
-import { AppUser } from '../../shared/DTO/user.model';
+import { AppUser } from '../../../shared/DTO/user.model';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { AccordionModule } from 'primeng/accordion';
-import { FloatingCustomersComponent } from '../../floating-customers/floating-customers.component';
+import { FloatingCustomersComponent } from '../floating-customers/floating-customers.component';
 import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -133,6 +133,7 @@ async ngOnInit(): Promise<void> {
     if (user) {
       const dbUser = await this.userService.getUserById(user.uid);
       this.username = dbUser ? { ...user, ...dbUser } : user;
+      this.showLoadingThenFallback();
       this.loadCategories();
     } else {
       this.username = null;
@@ -198,10 +199,8 @@ async showLoadingThenFallback() {
   // أولًا: اعرض اللودر
   this.currentImage = 'https://cdn.dribbble.com/users/347174/screenshots/2958807/charlie-loader.gif';
 
-  // انتظر 5 ثواني قبل أي تبديل
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  await new Promise(resolve => setTimeout(resolve, 3000));
 
-  // لو مازالت مفيش صورة من Firebase، اعرض الصورة الافتراضية
   if (!this.photoURL) {
     this.currentImage = 'assets/images/img4.png';
   } else {
@@ -214,12 +213,12 @@ async showLoadingThenFallback() {
 onImageError(event: Event) {
   const img = event.target as HTMLImageElement;
   img.src = 'assets/images/img4.png';
-  img.onerror = null; // منع الدخول في حلقة لانهائية
+  img.onerror = null;
 }
 // عند رفع الصورة
 async saveCroppedImage() {
   if (!this.username || !this.croppedImage) return;
-  if (this.isUploading) return; // ✅ منع التكرار
+  if (this.isUploading) return;
   this.isUploading = true;
   this.loading = true;
   this.loadingImage = true;

@@ -2,11 +2,17 @@
   <div class="profile-header">
     <div class="cover-photo"></div>
   </div>
-  <div class="avatar-container">
-    <img [src]="photoURL || currentImage" alt="Profile Image" class="avatar" (click)="fileInput.click()"
-      (error)="onImageError($event)" />
-    <input #fileInput type="file" accept="image/*" hidden (change)="onFileChange($event)" />
-  </div>
+<div class="avatar-container">
+  <img
+    [src]="currentImage"
+    alt="Profile Image"
+    class="avatar"
+    (click)="fileInput.click()"
+    (error)="onImageError($event)"
+  />
+  <input #fileInput type="file" accept="image/*" hidden (change)="onFileChange($event)" />
+</div>
+
 
 
 

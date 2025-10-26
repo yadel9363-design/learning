@@ -9,8 +9,8 @@ import { HomeComponent } from './core/home/component/home.component';
 import { AuthGuard } from './shared/services/auth-guard.service';
 import { UserAuthGuard } from './shared/services/user-auth-guard.service';
 import { RegisterComponent } from './register/register.component';
-import { ProfileComponent } from './layout/profile/profile.component';
-import { FavouriteComponent } from './core/favourite/favourite.component';
+import { ProfileComponent } from './layout/profile/components/profile.component';
+import { favouriteComponent } from './core/favourite/favourite.component';
 import { activities } from './core/activities/activities.component';
 import { ChardetailsComponent } from './core/chardetails/chardetails.component';
 
@@ -32,7 +32,7 @@ export const routes: Routes = [
         }
       ]
      },
-    { path: 'favourite', component: FavouriteComponent, canActivate: [AuthGuard] },
+    { path: 'favourite', component: favouriteComponent, canActivate: [AuthGuard] },
     { path: 'admin/orders', component: AdminOrdersComponent,
        canActivate: [AuthGuard, UserAuthGuard] },
     { path: 'admin/products', component: AdminProductsComponent,

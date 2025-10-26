@@ -23,7 +23,7 @@
       <div class="container-box flex justify-content-center mt-4 gap-3 px-3">
         <div
           *ngFor="let item of detailsData.label; let i = index"
-          class="char-box cursor-pointer sm:col-12 md:col-5 overflow-hidden p-3 lg:col-4"
+          class="char-box cursor-pointer col-12 sm:col-12 md:col-5 overflow-hidden p-3 lg:col-4"
           (click)="goToDetails(item, i)"
         >
           <img

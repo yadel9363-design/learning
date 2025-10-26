@@ -144,22 +144,6 @@ p-stepper {
 .p-password, .p-password .p-inputtext {
   width: 100%;
 }
-.p-togglebutton {
-  background: var(--info-color) !important;
-  border: 1px solid var(--info-color) !important;
-  color: #fff !important;
-  border-radius: 50px;
-  padding: 0.6rem 1.5rem;
-  font-weight: 500;
-  transition: all 0.25s ease-in-out;
-  color: #334155;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-.p-togglebutton-checked .p-togglebutton-content {
-  span.p-togglebutton-label {
-    color: var(--info-color) !important;
-  }
-}
 }
 
 @media (max-width: 991px) {

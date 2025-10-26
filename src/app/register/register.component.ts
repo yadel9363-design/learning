@@ -1,4 +1,4 @@
-import { Component, EnvironmentInjector, runInInjectionContext, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, EnvironmentInjector, runInInjectionContext, OnInit, NgZone, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,9 +9,10 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { PasswordModule } from 'primeng/password';
 import { StepperModule } from 'primeng/stepper';
 import { ToggleButtonModule } from 'primeng/togglebutton';
-import { Firestore, collection, collectionData, doc, docData } from '@angular/fire/firestore';
+import { Firestore, doc, docData } from '@angular/fire/firestore';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { favouriteComponent } from '../core/favourite/favourite.component';
 
 @Component({
   selector: 'app-register',
@@ -26,23 +27,24 @@ import { MessageService } from 'primeng/api';
     StepperModule,
     ToggleButtonModule,
     FormsModule,
-    ToastModule
+    ToastModule,
+    favouriteComponent
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  registerForm: FormGroup;
-  errorMessage: string | null = null;
-  categories: string[] = [];
-  selectedCategories: string[] = [];
-  categoryStates: { [key: string]: boolean } = {};
+  @ViewChild(favouriteComponent) favouriteSelector!: favouriteComponent;
 
+  registerForm: FormGroup;
+  selectedCategories: string[] = [];
   genderOptions = ['Male', 'Female'];
   filteredGenders: string[] = [];
 
   activeStep = 1;
   loading = false;
+  errorMessage: string | null = null;
+  onLogin = false;
 
   constructor(
     private fb: FormBuilder,
@@ -70,26 +72,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.loadCategories();
-  }
-
-loadCategories() {
-  runInInjectionContext(this.injector, async () => {
-    const ref = doc(this.firestore, 'categories', 'Courses');
-    docData(ref).subscribe((snap: any) => {
-      if (snap) {
-        this.categories = Object.keys(snap);
-        this.categories.forEach(cat => (this.categoryStates[cat] = false));
-        this.cd.detectChanges();
-        console.log('✅ Categories loaded:', this.categories);
-      } else {
-        console.log('⚠️ No data found in categories/Courses');
-      }
-    });
-  });
-}
-
+  ngOnInit(): void {}
 
   activateStep(step: number) {
     this.errorMessage = null;
@@ -98,9 +81,12 @@ loadCategories() {
 
   filterGender(event: any) {
     const query = event.query.toLowerCase();
-    this.filteredGenders = this.genderOptions.filter(g =>
-      g.toLowerCase().includes(query)
-    );
+    this.filteredGenders = this.genderOptions.filter(g => g.toLowerCase().includes(query));
+  }
+
+  onInterestsSelected(selected: string[]) {
+    this.selectedCategories = selected;
+    console.log('✅ Interests Selected:', this.selectedCategories);
   }
 
   async register(event?: Event) {
@@ -110,6 +96,10 @@ loadCategories() {
       this.registerForm.markAllAsTouched();
       return;
     }
+
+    // ✅ استدعاء القيم من المكون الفرعي
+    const selectedFromChild = this.favouriteSelector?.selectedCategories || [];
+    this.selectedCategories = [...new Set([...this.selectedCategories, ...selectedFromChild])];
 
     const { displayName, email, password, phoneNumber, gender } = this.registerForm.value;
     this.loading = true;
@@ -130,8 +120,7 @@ loadCategories() {
         detail: 'Account created successfully',
       });
 
-      setTimeout(() => this.router.navigateByUrl('/home'), 1500);
-
+      setTimeout(() => this.router.navigateByUrl('/home'), 1000);
     } catch (error: any) {
       let message = 'Something went wrong';
       if (error?.code === 'auth/email-already-in-use') {
@@ -146,16 +135,6 @@ loadCategories() {
       });
     } finally {
       this.loading = false;
-    }
-  }
-
-  onCategoryChange(category: string) {
-    if (this.categoryStates[category]) {
-      if (!this.selectedCategories.includes(category)) {
-        this.selectedCategories.push(category);
-      }
-    } else {
-      this.selectedCategories = this.selectedCategories.filter(c => c !== category);
     }
   }
 

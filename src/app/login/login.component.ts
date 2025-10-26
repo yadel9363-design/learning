@@ -31,6 +31,7 @@ import { authState } from '@angular/fire/auth';
 import { AuthService } from '../shared/services/auth.service';
 import { UserService } from '../shared/services/user.service';
 import { UniquenessValidator } from '../shared/DTO/unique.validators';
+import { favouriteComponent } from '../core/favourite/favourite.component';
 
 @Component({
   selector: 'app-login',
@@ -49,7 +50,8 @@ import { UniquenessValidator } from '../shared/DTO/unique.validators';
     AutoFocusModule,
     ToggleButtonModule,
     ToastModule,
-    PasswordModule
+    PasswordModule,
+    favouriteComponent
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
@@ -64,7 +66,7 @@ export class LoginComponent implements OnInit {
   categories: string[] = [];
   categoryStates: { [key: string]: boolean } = {};
   selectedCategories: string[] = [];
-
+  onLogin = true
   loginForm = new FormGroup({
     Email: new FormControl('', [Validators.required, Validators.email], UniquenessValidator.CheckUniqueValidator),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
@@ -287,4 +289,11 @@ async completeInterests() {
       }
     });
   }
+
+
+
+  onInterestsSelected(selected: string[]) {
+  this.selectedCategories = selected;
+  this.completeInterests();
+}
 }

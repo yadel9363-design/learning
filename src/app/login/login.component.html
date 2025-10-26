@@ -24,7 +24,7 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-2 mt-5">
+        <div class="flex align-items-center gap-2 mt-5 mb-3">
           <p-checkbox id="accept" name="accept" value="Accept" />
           <label for="accept">I agree to the terms and conditions.</label>
         </div>
@@ -48,28 +48,9 @@
 </div>
 
 <ng-template #interestsTemplate>
-  <div class="interests-container">
-    <h2 class="step-title">🎯 Choose Your Interests</h2>
-    <p class="step-subtitle">Pick a few topics you’d like to learn — we’ll personalize your experience.</p>
-
-    <div *ngIf="!isLoadingCategories; else loading">
-      <div class="interests-grid">
-        <p-togglebutton
-          *ngFor="let category of categories"
-          [onLabel]="category"
-          [offLabel]="category"
-          [ngModel]="categoryStates[category]"
-          (ngModelChange)="categoryStates[category] = $event; onCategoryChange(category)"
-          class="interest-btn">
-        </p-togglebutton>
-      </div>
-
-      <p-button label="Continue" [disabled]="selectedCategories.length === 0" (click)="completeInterests()" class="continue-btn"></p-button>
-    </div>
-
-    <ng-template #loading>
-      <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-      <p class="text-center mt-2">Loading interests...</p>
-    </ng-template>
-  </div>
+<app-favourite-selector
+  *ngIf="showInterests"
+  (interestsSelected)="onInterestsSelected($event)"
+  [insideLogin]="true">
+</app-favourite-selector>
 </ng-template>
