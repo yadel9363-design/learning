@@ -82,24 +82,7 @@ data = [
 ];
 
   ngOnInit() {
-    this.courseService
-      .getCourses()
-      .pipe(take(1))
-      .subscribe((data) => {
-        this.courses = data;
-        if (this.courses) {
-          this.categories = Object.entries(this.courses).map(([key, value]) => ({
-            key,
-            value,
-            image: this.getCategoryImage(key),
-          }));
-
-          if (this.categories.length > 0) {
-            this.selectedCategory = this.categories[0].key;
-            this.activeIndex = 0;
-          }
-        }
-      });
+    this.loadCourses()
       this.setAnimationsForDevice()
   }
   setAnimationsForDevice() {
@@ -247,4 +230,39 @@ showDialog(key: string) {
         encodeURIComponent(categoryKey)
     );
   }
+
+
+
+
+  loadCourses() {
+  this.courseService
+    .getCourses()
+    .pipe(take(1))
+    .subscribe((data) => {
+      this.courses = data;
+      if (this.courses) {
+        this.categories = Object.entries(this.courses).map(([key, value]: any) => ({
+          key,
+          value: {
+            ...value,
+            value: value.value.map((course: any) => ({
+              ...course,
+              originalPrice: course.price ?? value.price ?? 0,
+              discountedPrice: +((course.price ?? value.price ?? 0) * 0.7).toFixed(2)
+            }))
+          },
+          image: this.getCategoryImage(key),
+        }));
+
+        if (this.categories.length > 0) {
+          this.selectedCategory = this.categories[0].key;
+          this.activeIndex = 0;
+        }
+      }
+    });
+}
+get selectedCategoryData() {
+  return this.categories.find(cat => cat.key === this.selectedCategory);
+}
+
 }

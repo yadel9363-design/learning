@@ -100,7 +100,6 @@ ngOnInit() {
     authState(this.auth).subscribe(async (user) => {
       this.zone.run(async () => {
         if (user) {
-          console.log('✅ Logged in user:', user);
           this.user = user;
           this.cd.detectChanges();
         } else {

@@ -1,0 +1,24 @@
+{
+  "images": [
+    {
+      "img": "assets/images/CO1.webp",
+      "title": "Buy now to get offer"
+    },
+    {
+      "img": "assets/images/CO.png",
+      "title": "Learn more and make your tasks"
+    },
+    {
+      "img": "assets/images/CO2.png",
+      "title": "Here you will find your courses"
+    },
+    {
+      "img": "assets/images/CO3.jpg",
+      "title": "Online traning courses with our team"
+    },
+    {
+      "img": "assets/images/CO4.webp",
+      "title": "Traning and develop your self"
+    }
+  ]
+}

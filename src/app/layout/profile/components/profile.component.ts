@@ -130,6 +130,7 @@ export class ProfileComponent implements OnInit {
 async ngOnInit(): Promise<void> {
   this.authService.user$.subscribe(async (user) => {
     this.user = user || null;
+    console.log('user', user)
     if (user) {
       const dbUser = await this.userService.getUserById(user.uid);
       this.username = dbUser ? { ...user, ...dbUser } : user;

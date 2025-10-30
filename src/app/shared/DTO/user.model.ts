@@ -8,4 +8,5 @@ export interface AppUser {
   gender?: string | null;
   isAdmin?: boolean;
   interests?: string[];
+  offerClaimed: boolean
 }

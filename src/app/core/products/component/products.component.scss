@@ -237,6 +237,19 @@
     padding-bottom: 0.5rem;
   }
 
+  .price-summary {
+    font-size: 1.2rem;
+    font-weight: 600;
+    background: var(--primary-color);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 25px;
+  .old-price {
+    text-decoration: none;
+  }
+}
+
+
   .category-title {
     font-size: 1.5rem;
     font-weight: 600;

@@ -13,30 +13,32 @@ import { ProfileComponent } from './layout/profile/components/profile.component'
 import { favouriteComponent } from './core/favourite/favourite.component';
 import { activities } from './core/activities/activities.component';
 import { ChardetailsComponent } from './core/chardetails/chardetails.component';
+import { CoursesComponent } from './core/courses/components/courses.component';
 
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
-    { path: 'activities', component: activities, canActivate: [AuthGuard] },
-    { path: 'orders', component: MyOrdersComponent, canActivate: [AuthGuard] },
-    { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-    {
-      path: 'home',
-      component: HomeComponent,
-      canActivate: [AuthGuard],
-      children: [
-        {
-           path: 'chardetails/:id', component: ChardetailsComponent, canActivate: [AuthGuard] ,
-        }
-      ]
-     },
-    { path: 'favourite', component: favouriteComponent, canActivate: [AuthGuard] },
-    { path: 'admin/orders', component: AdminOrdersComponent,
-       canActivate: [AuthGuard, UserAuthGuard] },
-    { path: 'admin/products', component: AdminProductsComponent,
-       canActivate: [AuthGuard, UserAuthGuard] },
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: '**', component: NotFoundComponent, canActivate: [AuthGuard] } // not found page
+  { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
+  { path: 'courses', component: CoursesComponent, canActivate: [AuthGuard] },
+  { path: 'activities', component: activities, canActivate: [AuthGuard] },
+  { path: 'orders', component: MyOrdersComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+          path: 'chardetails/:id', component: ChardetailsComponent, canActivate: [AuthGuard] ,
+      }
+    ]
+    },
+  { path: 'favourite', component: favouriteComponent, canActivate: [AuthGuard] },
+  { path: 'admin/orders', component: AdminOrdersComponent,
+      canActivate: [AuthGuard, UserAuthGuard] },
+  { path: 'admin/products', component: AdminProductsComponent,
+      canActivate: [AuthGuard, UserAuthGuard] },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', component: NotFoundComponent, canActivate: [AuthGuard] } // not found page
 ];

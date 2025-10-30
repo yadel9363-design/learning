@@ -1,0 +1,63 @@
+<div class="container" *ngIf="imagesData?.images?.length">
+  <div class="welcome-img">
+    <p-galleria
+      [value]="imagesData.images"
+      [autoPlay]="false"
+      [circular]="true"
+      [transitionInterval]="4000"
+      [showThumbnails]="false"
+      [showItemNavigators]="true"
+      [showIndicators]="true"
+      [containerStyle]="{ 'max-width': '1000px' }"
+      (onItemChange)="triggerAnimation()"
+    >
+      <ng-template pTemplate="item" let-item>
+        <div class="course-image">
+          <div class="img-box">
+            <img [src]="item.img" alt="{{ item.title }}" class="fade-img" />
+            <div class="overlay">
+              <div class="text-card">
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.desc }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-galleria>
+  </div>
+<div
+ class="container-boxs"
+>
+  <div
+  pAnimateOnScroll
+  enterClass="animate-enter fade-in-10 slide-in-from-t-20 animate-duration-1000"
+  leaveClass="animate-leave fade-out-0"
+  *ngFor="let cat of categories"
+  class="category-box p-4">
+    <h2 class="category-title">{{ cat.key }}</h2>
+
+    <div class="courses-list">
+      <div *ngFor="let course of cat.value.value" class="course-item">
+        <h4>{{ course.name }}</h4>
+      </div>
+    </div>
+
+    <div class="price-box">
+      <span class="old-price">E£ {{ cat.value.originalPrice }}</span>
+      <span class="new-price">E£ {{ cat.value.discountedPrice }}</span>
+      <span class="discount-badge">-30%</span>
+    </div>
+
+    <div class="action mt-3 flex w-full justify-content-center align-items-center">
+      <p-button
+      label="Add Cart"
+      class="button"
+      />
+    </div>
+  </div>
+</div>
+
+
+
+</div>

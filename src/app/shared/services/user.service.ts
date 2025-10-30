@@ -21,7 +21,7 @@ export class UserService {
   private auth: Auth = inject(Auth);
  private functions = inject(Functions);
 
- 
+
   private runInCtx<T>(fn: () => T): T {
     return runInInjectionContext(this.envInjector, fn);
   }
@@ -163,5 +163,14 @@ async getUserByEmail(email: string): Promise<AppUser | null> {
     console.log('👥 Total users:', result.data.totalUsers);
     return result.data.totalUsers;
   }
+async markOfferClaimed(uid: string) {
+  const userRef = ref(this.db, `users/${uid}`);
+  await update(userRef, { offerClaimed: true });
+}
 
+    async hasClaimedOffer(uid: string): Promise<boolean> {
+    const userRef = ref(this.db, `users/${uid}/offerClaimed`);
+    const snapshot = await get(userRef);
+    return snapshot.exists() && snapshot.val() === true;
+  }
 }

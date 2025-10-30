@@ -88,13 +88,20 @@
   styleClass="course-dialog"
 >
   <ng-container *ngIf="selectedCategory">
-    <div class="dialog-header w-full justify-content-between align-items-center gap-3 flex-wrap">
-      <div class="flex align-items-center gap-2">
-        <i class="pi pi-book" style="font-size: 1.5rem; color: var(--primary-color)"></i>
-        <h2 class="category-title">{{ selectedCategory }}</h2>
-      </div>
-        <h2 class="category-price">€ 2,900.00</h2>
-    </div>
+<div class="dialog-header flex flex-wrap justify-content-between align-items-center gap-3">
+  <div class="flex align-items-center gap-2">
+    <i class="pi pi-book" style="font-size: 1.5rem; color: var(--info-color)"></i>
+    <h2 class="category-title m-0">{{ selectedCategory }}</h2>
+  </div>
+
+<div class="flex align-items-center gap-2 price-summary" *ngIf="selectedCategoryData">
+  <span class="old-price">
+    E£ {{ selectedCategoryData.value.value[0]?.originalPrice }}
+  </span>
+</div>
+
+</div>
+
 
     <div *ngIf="categories.length">
       <div

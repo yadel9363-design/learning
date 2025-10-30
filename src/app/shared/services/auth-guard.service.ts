@@ -12,7 +12,6 @@ export class AuthGuard implements CanActivate {
   private injector = inject(EnvironmentInjector);
 
   async canActivate(): Promise<boolean | UrlTree> {
-    // نشغّل authState داخل Injection Context لتجنّب التحذيرات المتعلقة بالـ Zone/Injection
     const user = await runInInjectionContext(this.injector, () =>
       firstValueFrom(authState(this.auth))
     );

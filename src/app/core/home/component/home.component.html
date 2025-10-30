@@ -1,4 +1,12 @@
 <ng-container *ngIf="!isDetailsPage">
+
+<p-message severity="success" *ngIf="offerClaimed == false">
+  <span [innerHTML]="dockText"></span>
+  <p class="cursor-pointer" (click)="openOffer()">
+    <span class="offer-text">Get offer</span>
+    <i class="fa fa-angle-right"></i>
+  </p>
+</p-message>
   <div class="container" *ngIf="detailsData?.label?.length">
     <div class="container-banner">
       <div class="context mt-6 pt-6 flex flex-column">
@@ -13,6 +21,144 @@
 
       <img src="assets/images/home.png" alt="" class="w-full img-home" />
     </div>
+
+<section class="stories-section">
+  <h2>Join others transforming their lives through learning</h2>
+
+  <div class="stories-container">
+    <div class="story-card">
+      <i class="fa-solid fa-quote-left quote-icon"></i>
+      <p>
+        NextLevel was rated the <strong>most popular online course or certification program</strong>
+        for learning how to code according to
+        <a href="#">StackOverflow’s 2023 Developer survey</a>.
+      </p>
+
+      <div class="story-logo">
+        <i class="fa-brands fa-stack-overflow"></i>
+        <span>37,076 responses collected</span>
+      </div>
+
+      <a href="#" class="story-link">View Web Development courses <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <div class="story-card">
+      <i class="fa-solid fa-quote-left quote-icon"></i>
+      <p>
+        NextLevel was truly a <strong>game-changer</strong> and a
+        <strong>great guide</strong> for me as we brought Dimensional to life.
+      </p>
+
+      <div class="story-user">
+        <div class="user-icon purple">
+          <i class="fa-solid fa-user-astronaut"></i>
+        </div>
+        <div>
+          <h4>Alvin Lim</h4>
+          <span>Technical Co-Founder, CTO at Dimensional</span>
+        </div>
+      </div>
+
+      <a href="#" class="story-link">View this iOS & Swift course <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <div class="story-card">
+      <i class="fa-solid fa-quote-left quote-icon"></i>
+      <p>
+        NextLevel gives you the ability to be persistent. I learned exactly what I needed
+        to know in the real world. It helped me sell myself to
+        <strong>get a new role.</strong>
+      </p>
+
+      <div class="story-user">
+        <div class="user-icon blue">
+          <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <div>
+          <h4>William A. Wachlin</h4>
+          <span>Partner Account Manager at Amazon Web Services</span>
+        </div>
+      </div>
+
+      <a href="#" class="story-link">View this AWS course <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <div class="story-card">
+      <i class="fa-solid fa-quote-left quote-icon"></i>
+      <p>
+        With NextLevel Business employees were able to marry the two together, technology
+        and consultant soft skills... to help <strong>drive their careers forward.</strong>
+      </p>
+
+      <div class="story-user">
+        <div class="user-icon teal">
+          <i class="fa-solid fa-user-graduate"></i>
+        </div>
+        <div>
+          <h4>Ian Stevens</h4>
+          <span>Head of Capability Development, Publicis Sapient</span>
+        </div>
+      </div>
+
+      <a href="#" class="story-link">Read full story <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <div class="view-all">
+    <a href="#">View all stories <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+</section>
+
+
+  <div class="cert-section mt-6">
+    <div class="cert-content">
+      <div class="text-area">
+        <h2>Get certified and get ahead in your career</h2>
+        <p>
+          Prep for certifications with comprehensive courses, practice tests,
+          and special offers on exam vouchers.
+        </p>
+        <a class="flex gap-3 mt-4 align-items-center link">
+          <span>Explore certifications and vouchers</span>
+          <i class="pi pi-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="cert-cards">
+        <div class="cert-card">
+          <div class="icon-wrapper comptia">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div class="card-body">
+            <h3>CompTIA</h3>
+            <p>Cloud, Networking, Cybersecurity</p>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="icon-wrapper aws">
+            <i class="fa-brands fa-aws"></i>
+          </div>
+          <div class="card-body">
+            <h3>AWS</h3>
+            <p>Cloud, AI, Coding, Networking</p>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="icon-wrapper pmi">
+            <i class="fa-solid fa-diagram-project"></i>
+          </div>
+          <div class="card-body">
+            <h3>PMI</h3>
+            <p>Project & Program Management</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
     <div class="remaning mt-6">
       <h1>Ready to reimagine your career?</h1>
@@ -45,8 +191,32 @@
         </div>
       </div>
     </div>
+
+
+<section class="report-section mt-6">
+  <div class="report-content">
+    <h2>Get the 2026 <span>Global Learning & Skills Trends Report</span></h2>
+    <p>
+      If you or your organization are looking for help navigating change and AI transformation,
+      you’ll find a roadmap for action in our popular annual report.
+    </p>
+    <a href="#" class="report-btn">
+      <i class="fa-solid fa-download"></i> Download now
+    </a>
   </div>
 
+  <div class="report-visual">
+    <div class="report-glass">
+      <img src="assets/images/GT.png" alt="G-Trending image" />
+    </div>
+  </div>
+</section>
+
+
+
+
+
+  </div>
   <div
     class="w-full h-full flex justify-content-center align-items-center"
     *ngIf="!detailsData?.label?.length"
@@ -58,3 +228,47 @@
 <ng-container *ngIf="isDetailsPage">
   <router-outlet></router-outlet>
 </ng-container>
+
+
+<p-dialog
+  [(visible)]="showOffer"
+  [modal]="true"
+  [dismissableMask]="true"
+  [showHeader]="false"
+  [baseZIndex]="10000"
+  class="gift"
+  [style]="{
+    width: '480px',
+    padding: '0',
+    'border-radius': '20px',
+    'background': 'transparent',
+    'box-shadow': 'none'
+  }"
+  [contentStyle]="{
+    'background': 'transparent',
+    'box-shadow': 'none',
+    'border-radius': '20px',
+    'padding': '0'
+  }"
+>
+  <div class="special-gift-popup">
+    <div class="gift-icon">🎁</div>
+
+    <div class="gift-card">
+      <h2 class="title">SPECIAL GIFT</h2>
+      <p class="subtitle now-text">Receive 30% off<br />on your first order!</p>
+
+      <form [formGroup]="userForm" (ngSubmit)="submit()">
+          <div class="flex flex-column gap-3 input-container">
+            <p-iconfield>
+              <p-inputicon><i class="pi pi-envelope"></i></p-inputicon>
+              <input pInputText formControlName="Email" required name="email" type="email" placeholder="Email" />
+            </p-iconfield>
+          </div>
+          <div class="enter-btn">
+            <p-button type="submit" label="ENTER"></p-button>
+          </div>
+      </form>
+    </div>
+  </div>
+</p-dialog>

@@ -37,7 +37,7 @@
     overflow: hidden;
     z-index: 1;
 
-    /* 🌟 نجوم واضحة */
+/* 🌟 نجوم واضحة */
 &::before {
   content: '';
   position: absolute;
@@ -79,21 +79,21 @@
 }
 
 
-    /* 🌠 Shooting star */
-    &::after {
-      content: '';
-      position: absolute;
-      top: -10%;
-      left: 80%;
-      width: 3px;
-      height: 120px;
-      background: linear-gradient(45deg, rgba(255,255,255,1), transparent);
-      border-radius: 50%;
-      opacity: 1  !important;
-      animation: shootingStar 3s linear infinite;
-      z-index: 4;
-      filter: drop-shadow(0 0 8px white);
-    }
+  /* 🌠 Shooting star */
+&::after {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: 80%;
+  width: 3px;
+  height: 120px;
+  background: linear-gradient(45deg, rgba(255,255,255,1), transparent);
+  border-radius: 50%;
+  opacity: 1  !important;
+  animation: shootingStar 3s linear infinite;
+  z-index: 4;
+  filter: drop-shadow(0 0 8px white);
+}
   }
 
   .avatar-container,
@@ -378,6 +378,9 @@ input:focus {
     padding: 0 20px;
   }
 }
+.contact-us  .content {
+  min-width: 100% !important;
+}
 }
 @keyframes waveMove {
   0% {
@@ -524,7 +527,7 @@ input:focus {
     padding: 15px 10px;
     text-align: center;
     min-height: 100px;
-    min-width: 250px;
+    min-width: 200px;
   }
   .bg-icon {
     display: flex;
