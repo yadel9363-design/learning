@@ -338,6 +338,41 @@
     border: none !important;
     color: #fff;
 }
+.price-box {
+  text-align: center;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.7rem;
+  flex-wrap: wrap;
+}
+.old-price {
+  text-decoration: line-through;
+  color: #fff;
+  font-size: 1.1rem;
+  background-color: #ff006e80;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.new-price {
+  color: var(--info-color);
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.discount-badge {
+  background: #212121;
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 30px;
+  letter-spacing: 0.5px;
+  align-items: center;
+  display: flex;
+}
 }
 .border {
     padding: 0 !important;
@@ -427,7 +462,7 @@
     .border {
       padding: 1rem !important;
       text-align: center;
-      min-height: 350px;
+      min-height: 300px;
       max-height: auto !important;
       min-width: 200px !important;
       img {
@@ -620,5 +655,11 @@
   }
    .plan {
   padding: 10px;
+}
+}
+@media (max-width:991px) {
+.price-box {
+  width: 100%;
+  justify-content: space-between;
 }
 }

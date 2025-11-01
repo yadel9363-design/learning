@@ -19,6 +19,8 @@ import { DialogModule } from 'primeng/dialog';
 import { PaginatorModule } from 'primeng/paginator';
 import { AccordionModule } from 'primeng/accordion';
 import AOS from 'aos';
+import { UserService } from '../../../shared/services/user.service';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-products',
@@ -44,7 +46,10 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   activeIndex: number = 0;
   first1: number = 0;
   visible: boolean = false;
+  offerClaimed: boolean | null = null;
   private courseService = inject(CourseService);
+  private userService = inject(UserService);
+  private authService = inject(AuthService);
 
   @ViewChildren('tabRef') tabElements!: QueryList<ElementRef>;
   @ViewChildren('boxRef', { read: ElementRef }) boxElements!: QueryList<ElementRef>;
@@ -234,12 +239,13 @@ showDialog(key: string) {
 
 
 
-  loadCourses() {
+  async loadCourses() {
   this.courseService
     .getCourses()
     .pipe(take(1))
     .subscribe((data) => {
       this.courses = data;
+      console.log('data', data)
       if (this.courses) {
         this.categories = Object.entries(this.courses).map(([key, value]: any) => ({
           key,
@@ -260,6 +266,16 @@ showDialog(key: string) {
         }
       }
     });
+
+      const authUser = await new Promise<any>((resolve) => {
+    const unsub = this.authService['auth'].onAuthStateChanged((u) => {
+      resolve(u);
+      unsub();
+    });
+  });
+      let u = await this.userService.getUserById(authUser.uid);
+
+        this.offerClaimed = u?.offerClaimed ?? false;
 }
 get selectedCategoryData() {
   return this.categories.find(cat => cat.key === this.selectedCategory);

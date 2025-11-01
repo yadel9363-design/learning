@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { ButtonModule } from 'primeng/button';
@@ -18,6 +18,7 @@ import { UniquenessValidator } from '../../../shared/DTO/unique.validators';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { ref, get } from '@angular/fire/database';
+import { Carousel, CarouselModule } from 'primeng/carousel';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +36,7 @@ import { ref, get } from '@angular/fire/database';
     ReactiveFormsModule,
     IconFieldModule,
     InputIconModule,
+    CarouselModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -42,12 +44,62 @@ import { ref, get } from '@angular/fire/database';
 export class HomeComponent implements OnInit {
   detailsData: any = {};
   isDetailsPage = false;
-
   checkFoundUser: any;
   nowText = 'NOW';
   dockText = `Stop searching for everything. <span class="now-text">${this.nowText}</span> Get access to get offer.`;
   showOffer = false;
   offerClaimed: boolean | null = null;
+
+  testimonials = [
+    {
+      title: 'Great Experience',
+      text: `We’ve been able to scale operations effortlessly thanks to the intuitive dashboards and the helpful support team.`,
+      author: 'Anna White',
+      role: 'Operations Lead at Softly',
+      img: 'assets/images/SS.webp',
+    },
+    {
+      title: 'Outstanding Customer Support',
+      text: `The customer support team is always responsive and helpful. The detailed spending reports have given us great insights into our financial health.`,
+      author: 'Sophia Lee',
+      role: 'CFO at GreenTech',
+      img: 'assets/images/SS3.webp',
+    },
+    {
+      title: 'Exceptional Service and Reliability',
+      text: `Using this SaaS platform has significantly streamlined our operations. The real-time collaboration and dashboards have been game changers.`,
+      author: 'Emily Johnson',
+      role: 'Marketing Manager at TechCorp',
+      img: 'assets/images/SS2.jpg',
+    },
+  ];
+
+  currentIndex = 1; // الكارت الأوسط (المفعّل)
+
+  getCardClass(i: number): string {
+    if (i === this.currentIndex) return 'active';
+    if (i === this.getLeftIndex()) return 'faded-left';
+    if (i === this.getRightIndex()) return 'faded-right';
+    return 'hidden';
+  }
+
+  getLeftIndex(): number {
+    return (this.currentIndex - 1 + this.testimonials.length) % this.testimonials.length;
+  }
+
+  getRightIndex(): number {
+    return (this.currentIndex + 1) % this.testimonials.length;
+  }
+
+  next() {
+    this.currentIndex = (this.currentIndex + 1) % this.testimonials.length;
+  }
+
+  prev() {
+    this.currentIndex =
+      (this.currentIndex - 1 + this.testimonials.length) % this.testimonials.length;
+  }
+
 
   userForm = new FormGroup({
     Email: new FormControl('', [Validators.required, Validators.email], UniquenessValidator.CheckUniqueValidator)
@@ -120,7 +172,7 @@ async checkUser() {
     await this.userService.save(newUserData);
     u = await this.userService.getUserById(authUser.uid);
   } else {
-    // لو موجود بس مافيش interests نضيفها
+
     if (!u.interests || !Array.isArray(u.interests)) {
       await this.userService.updateUser(authUser.uid, { interests: authUser.interests || [] });
       u.interests = authUser.interests || [];

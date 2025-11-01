@@ -94,11 +94,24 @@
     <h2 class="category-title m-0">{{ selectedCategory }}</h2>
   </div>
 
-<div class="flex align-items-center gap-2 price-summary" *ngIf="selectedCategoryData">
+<div class="flex align-items-center gap-2 price-summary" *ngIf="selectedCategoryData && !offerClaimed">
   <span class="old-price">
     E£ {{ selectedCategoryData.value.value[0]?.originalPrice }}
   </span>
 </div>
+<!-- <div class="flex align-items-center gap-2 price-summary" *ngIf="selectedCategoryData && offerClaimed">
+  <span class="old-price">
+    E£ {{ selectedCategoryData.value.value[0]?.discountedPrice }}
+  </span>
+</div> -->
+    <div class="price-box" *ngIf="selectedCategoryData && offerClaimed">
+      <span class="new-price">E£ {{ selectedCategoryData.value.value[0]?.discountedPrice }}</span>
+      <p class="flex gap-2">
+      <span class="old-price">E£ {{  selectedCategoryData.value.value[0]?.originalPrice }}</span>
+      <span class="discount-badge">-30%</span>
+      </p>
+    </div>
+
 
 </div>
 

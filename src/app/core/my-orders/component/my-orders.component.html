@@ -54,7 +54,7 @@
           <p-button *ngIf="isAdmin"
                     icon="pi pi-trash"
                     class="col-6 p-0"
-                    severity="primary"
+                    severity="danger"
                     (click)="openDeleteCategoryFromDB(category.key)">
           </p-button>
         </td>
@@ -95,7 +95,7 @@
         <p-button icon="pi pi-trash"
                   *ngIf="isAdmin"
                   (click)="deleteCourse(i)"
-                  severity="primary"></p-button>
+                  severity="danger"></p-button>
       </div>
     </div>
 

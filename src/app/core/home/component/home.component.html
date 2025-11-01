@@ -22,93 +22,35 @@
       <img src="assets/images/home.png" alt="" class="w-full img-home" />
     </div>
 
-<section class="stories-section">
-  <h2>Join others transforming their lives through learning</h2>
-
-  <div class="stories-container">
-    <div class="story-card">
-      <i class="fa-solid fa-quote-left quote-icon"></i>
-      <p>
-        NextLevel was rated the <strong>most popular online course or certification program</strong>
-        for learning how to code according to
-        <a href="#">StackOverflow’s 2023 Developer survey</a>.
-      </p>
-
-      <div class="story-logo">
-        <i class="fa-brands fa-stack-overflow"></i>
-        <span>37,076 responses collected</span>
+<div class="testimonial-carousel">
+  <div class="testimonial-track">
+    <div
+      class="testimonial-card"
+      *ngFor="let item of testimonials; let i = index"
+      [ngClass]="getCardClass(i)"
+    >
+      <div class="testimonial-content">
+        <h4>{{ item.title }}</h4>
+        <p>{{ item.text }}</p>
+        <div class="author">{{ item.author }}</div>
+        <div class="role">{{ item.role }}</div>
       </div>
 
-      <a href="#" class="story-link">View Web Development courses <i class="fa-solid fa-arrow-right"></i></a>
-    </div>
-
-    <div class="story-card">
-      <i class="fa-solid fa-quote-left quote-icon"></i>
-      <p>
-        NextLevel was truly a <strong>game-changer</strong> and a
-        <strong>great guide</strong> for me as we brought Dimensional to life.
-      </p>
-
-      <div class="story-user">
-        <div class="user-icon purple">
-          <i class="fa-solid fa-user-astronaut"></i>
-        </div>
-        <div>
-          <h4>Alvin Lim</h4>
-          <span>Technical Co-Founder, CTO at Dimensional</span>
-        </div>
+      <div class="testimonial-img">
+        <img alt="" [src]="item.img" [alt]="item.author" />
       </div>
-
-      <a href="#" class="story-link">View this iOS & Swift course <i class="fa-solid fa-arrow-right"></i></a>
-    </div>
-
-    <div class="story-card">
-      <i class="fa-solid fa-quote-left quote-icon"></i>
-      <p>
-        NextLevel gives you the ability to be persistent. I learned exactly what I needed
-        to know in the real world. It helped me sell myself to
-        <strong>get a new role.</strong>
-      </p>
-
-      <div class="story-user">
-        <div class="user-icon blue">
-          <i class="fa-solid fa-user-tie"></i>
-        </div>
-        <div>
-          <h4>William A. Wachlin</h4>
-          <span>Partner Account Manager at Amazon Web Services</span>
-        </div>
-      </div>
-
-      <a href="#" class="story-link">View this AWS course <i class="fa-solid fa-arrow-right"></i></a>
-    </div>
-
-    <div class="story-card">
-      <i class="fa-solid fa-quote-left quote-icon"></i>
-      <p>
-        With NextLevel Business employees were able to marry the two together, technology
-        and consultant soft skills... to help <strong>drive their careers forward.</strong>
-      </p>
-
-      <div class="story-user">
-        <div class="user-icon teal">
-          <i class="fa-solid fa-user-graduate"></i>
-        </div>
-        <div>
-          <h4>Ian Stevens</h4>
-          <span>Head of Capability Development, Publicis Sapient</span>
-        </div>
-      </div>
-
-      <a href="#" class="story-link">Read full story <i class="fa-solid fa-arrow-right"></i></a>
     </div>
   </div>
 
-  <div class="view-all">
-    <a href="#">View all stories <i class="fa-solid fa-arrow-right"></i></a>
+  <div class="testimonial-controls">
+    <p-button class="nav-btn left" (click)="prev()">
+      <i class="pi pi-arrow-left"></i>
+    </p-button>
+    <p-button class="nav-btn right" (click)="next()">
+      <i class="pi pi-arrow-right"></i>
+    </p-button>
   </div>
-</section>
-
+</div>
 
   <div class="cert-section mt-6">
     <div class="cert-content">
