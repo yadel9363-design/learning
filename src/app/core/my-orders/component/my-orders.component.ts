@@ -12,8 +12,6 @@ import { UserService } from '../../../shared/services/user.service';
 import { AppUser } from '../../../shared/DTO/user.model';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { InputGroup } from 'primeng/inputgroup';
 
 @Component({
   selector: 'app-my-orders',
@@ -27,9 +25,7 @@ import { InputGroup } from 'primeng/inputgroup';
     FormsModule,
     CommonModule,
     TagModule,
-    ToastModule,
-    InputGroupAddonModule,
-    InputGroup
+    ToastModule
   ],
   templateUrl: './my-orders.component.html',
   styleUrls: ['./my-orders.component.scss']

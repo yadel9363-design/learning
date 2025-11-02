@@ -262,7 +262,6 @@
         width: fit-content;
         &:hover {
           background: #1366d6;
-          transform: translateY(-2px);
           cursor: pointer;
         }
       }
@@ -695,15 +694,14 @@ p-dialog.gift {
 
       i {
         font-size: 1.3rem;
-        color: #0f172a;
+        color: #0f172a !important;
       }
 
       &:hover {
-        background: #0f172a;
-        i {
-          color: #fff;
+        background: #ccc;
+        .p-button {
+          color: #212121 !important;
         }
-        transform: translateY(-3px);
       }
     }
   }

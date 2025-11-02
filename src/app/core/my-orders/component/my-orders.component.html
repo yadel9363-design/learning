@@ -3,7 +3,6 @@
   <h3 class="m-0">Categories</h3>
 
   <span class="p-input-icon-left">
-    <p-inputgroup>
     <input
       pInputText
       type="text"
@@ -11,10 +10,6 @@
       placeholder="Search Category..."
       class="p-inputtext-sm"
     />
-    <p-inputgroup-addon>
-        <p-button icon="pi pi-search" severity="secondary" variant="text" />
-    </p-inputgroup-addon>
-</p-inputgroup>
   </span>
 </div>
   <p-table   *ngIf="courses && (courses | keyvalue) as categories"

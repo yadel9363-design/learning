@@ -33,7 +33,14 @@
     >
       <div class="m-3">
         <p-toast></p-toast>
-        <router-outlet />
+<ng-container *ngIf="!isLoading || !(user$ | async); else showLoading">
+  <router-outlet></router-outlet>
+</ng-container>
+
+<ng-template #showLoading>
+  <app-loading></app-loading>
+</ng-template>
+
         <div
         *ngIf="(user$ | async)"
          class="mt-6">

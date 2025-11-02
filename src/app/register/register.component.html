@@ -105,6 +105,7 @@
                   [suggestions]="filteredGenders"
                   (completeMethod)="filterGender($event)"
                   [dropdown]="true"
+                  [readonly]="true"
                   placeholder="Select or type gender"
                 ></p-autoComplete>
                 <div class="error" *ngIf="registerForm.get('gender')?.touched && registerForm.get('gender')?.invalid">

@@ -1,0 +1,113 @@
+.error-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+}
+
+.error-box {
+  background: #fff;
+  border-radius: 25px;
+  box-shadow: 0 6px 20px rgba(255, 105, 180, 0.1);
+  text-align: center;
+  width: 450px;
+  padding: 3rem 2.5rem 2.5rem;
+  position: relative;
+  border-top: 6px solid #ff6fa5;
+
+  .icon-circle {
+    width: 70px;
+    height: 70px;
+    border: 2px solid #ff6fa5;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ff6fa5;
+    font-size: 1.8rem;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin-bottom: 0.4rem;
+  }
+
+  .subtitle {
+    color: #9a9a9a;
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .illustration {
+    margin: 3.2rem 0;
+
+    .line {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      position: relative;
+      padding: 0 10px;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 3px;
+        background: #e0e0e0;
+      }
+
+      .dot {
+        width: 5px;
+        background: #212112;
+        border-radius: 50%;
+        position: relative;
+        height: var(--height);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 14px;
+          height: 14px;
+          background: #ff4f8b;
+          border-radius: 50%;
+        }
+
+        span {
+          position: absolute;
+          top: -40px;
+          font-size: 1.8rem;
+          font-weight: 600;
+          color: #ff4f8b;
+        }
+      }
+    }
+  }
+
+  ::ng-deep .btn .p-button {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background: #d8432f;
+      transform: translateY(-2px);
+    }
+  }
+}

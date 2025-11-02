@@ -7,6 +7,7 @@ import {
   ViewChildren,
   AfterViewInit,
   AfterViewChecked,
+  OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
@@ -21,6 +22,7 @@ import { AccordionModule } from 'primeng/accordion';
 import AOS from 'aos';
 import { UserService } from '../../../shared/services/user.service';
 import { AuthService } from '../../../shared/services/auth.service';
+
 
 @Component({
   selector: 'app-products',
@@ -42,7 +44,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   courses: any = {};
   categories: any[] = [];
   selectedCategory: string | null = null;
-  activeAccordionIndex: number | null = null;
+  activeAccordionIndex: number[] = [];
   activeIndex: number = 0;
   first1: number = 0;
   visible: boolean = false;
@@ -199,8 +201,10 @@ data = [
 showDialog(key: string) {
   this.selectedCategory = key;
   this.visible = true;
-
+  this.activeAccordionIndex = [];
   setTimeout(() => {
+  const dialogContent = document.querySelector('.p-dialog-content');
+  if (dialogContent) dialogContent.scrollTop = 0; // ✅ يرجّع لأعلى
   AOS.init({ duration: 800, once: false, offset: 50 });
   AOS.refresh();
   this.data.forEach((item) => (item.displayedNumber = 0));
@@ -212,6 +216,9 @@ showDialog(key: string) {
 
   this.data.forEach((_, i) => this.animateCounter(i));
 }, 400);
+}
+resetAccordion() {
+  this.activeAccordionIndex = [];
 }
 
 

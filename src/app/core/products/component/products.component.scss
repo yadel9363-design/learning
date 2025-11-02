@@ -240,7 +240,6 @@
   .price-summary {
     font-size: 1.2rem;
     font-weight: 600;
-    background: var(--primary-color);
     color: #fff;
     padding: 10px 20px;
     border-radius: 25px;
@@ -588,7 +587,6 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
-      transform: translateY(-6px);
       box-shadow: 0 6px 20px rgba(0, 0, 0, .15);
     }
 
@@ -626,6 +624,7 @@
         align-items: center;
         color: #334155;
         margin-bottom: .75rem;
+        overflow: hidden;
 
         i {
           color: #22c55e;
@@ -656,6 +655,9 @@
    .plan {
   padding: 10px;
 }
+}
+::ng-deep .pi:before {
+    backface-visibility: visible !important;
 }
 @media (max-width:991px) {
 .price-box {

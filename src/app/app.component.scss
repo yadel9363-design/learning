@@ -168,3 +168,20 @@ $transition-type: ease-in-out;
   visibility: hidden;
   transition: opacity 0.4s ease;
 }
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content > .w-full {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.m-3 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
